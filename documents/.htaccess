@@ -1,0 +1,13 @@
+# protection for this folder
+# rewrite the document requests like documentID.jpg | documentID.VERSION.jpg
+# copy this and rename it to .htaccess
+
+Options +FollowSymlinks
+RewriteEngine on
+
+# version-pattern: documentX.VERY.Suffix
+RewriteRule ^document([0-9]+)\.([0-9]+)\.(.+)$ ../webservice.rest.php?area=textobjectdetail&action=get&actionsub=document&textobjectId=$1&textobjectVersionId=$2 [NC]
+RewriteRule ^document([0-9]+)\.(.+)$ ../webservice.rest.php?area=textobjectdetail&action=get&actionsub=document&textobjectId=$1 [NC]
+
+# user-icon
+# RewriteRule ^user([0-9]+)\.([0-9]+)\.(.+)$ ../webservice.rest.php?area=user&action=get&actionsub=document&userId=$1&userPictureType=$2 [NC]

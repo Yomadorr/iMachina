@@ -1,0 +1,26 @@
+
+installation guide
+
+[FilesystemPath]
+(WebSeite)
+
+1. database: install sql-database (best with phpmyadmin)
+1.1 generate new database imachina
+1.2 import into this database
+
+2 protection against direct access: protect all uploaded files
+2.1 go to the folder documents
+2.2 copy htaccess 
+2.3 rename this copy to .htaccess
+
+3 configs of the system: change /config.php (spec)
+3.1 mailserver
+3.2 etc
+
+4. init: init everything (first entries in database etc)
+4.1 calls /install.php on your webserver 
+
+5. cronjobs: install cronjob (for reminders etc)
+5.1 you have to enter /cronjob.php
+
+6. tests

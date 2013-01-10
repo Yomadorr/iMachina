@@ -1,0 +1,71 @@
+<html>
+
+<!-- jquery -->
+<script src="jquery.min.js"></script> 
+<!-- jquery ui -->
+<script src="jqueryui.min.js"></script> 
+
+<script>
+	function fileChange()
+	{
+		// alert("fileChange()");
+		var fileList= document.getElementById("fileA").files;
+		alert("list: "+fileList.length);
+		var file=fileList[0];
+		if (!file)
+		{
+			alert("not found!");
+			return;
+		}
+		
+		// infos ...
+		$("#fileName").html("Filename: ---"+file.name);
+		$("#fileSize").html("Size: ---"+file.size);
+		$("#fileType").html("FileTyp: ---"+file.type);
+		
+		// create an object ...
+		
+		// tests ...
+		uploadFile( 1416 , file );
+	}
+	
+		function uploadFile( textobjectId, file )
+		{
+			var htmlAnswer="";
+			
+			var formData=new FormData();
+				formData.append("documentfile",file);
+			var client=new XMLHttpRequest();
+
+			if (!file) return;
+			
+			client.onError = function(e) { alert("upload problem"); }
+			client.onUploadProgress = function(e) {  }
+			client.onload = function(e) { /* alert("Uploaded");*/  }
+			client.onreadystatechange = function() 
+			{
+				// alert(" -- "+);
+		   		if (client.readyState != 4)  {  return; }
+			   	// alert(""+client.responseText);
+			   	
+			   	htmlAnswer=client.responseText;
+			   	alert("----"+htmlAnswer);
+			}
+			client.open("POST","webservice.rest.php?area=textobjectdetail&action=update&actionsub=document&textobjectId="+textobjectId);
+			client.send(formData);
+
+		}
+
+</script>
+
+	<body>
+		<form action="" method='post' enctype='multipart/form-data' multiple >
+			<input type='file' name='file' id='fileA' onChange="fileChange()" class='margin-10px;'  >
+		</form>
+		
+		<div id='fileName'> ABC</div>
+		<div id='fileSize'> </div>
+		<div id='fileType'> </div>
+		<progress id='progress' style='margin-top 10px;'></div>
+	</body>
+</html>

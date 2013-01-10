@@ -1,0 +1,569 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"is",
+				"isSelected"
+			],
+			[
+				"getCateg",
+				"getCategoryForIndex"
+			],
+			[
+				"arrC",
+				"arrCategories"
+			],
+			[
+				"arr",
+				"arrCategories"
+			],
+			[
+				"insert",
+				"insertRecord"
+			],
+			[
+				"td",
+				"td"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "classes/FrameworkDim.php",
+			"settings":
+			{
+				"buffer_size": 4033,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "adminevaluationother.php",
+			"settings":
+			{
+				"buffer_size": 71223,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "adminevaluationother.service.php",
+			"settings":
+			{
+				"buffer_size": 2353,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "classes/FrameworkDimVal.php",
+			"settings":
+			{
+				"buffer_size": 4764,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "classes/App.php",
+			"settings":
+			{
+				"buffer_size": 44075,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "classes/Display.php",
+			"settings":
+			{
+				"buffer_size": 14899,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Applications/MAMP/htdocs/cineogame/index.html",
+			"settings":
+			{
+				"buffer_size": 921,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Applications/MAMP/htdocs/toss/includes/header.fhnw.inc.php",
+		"/Applications/MAMP/htdocs/toss/userexcercise.php",
+		"/Applications/MAMP/htdocs/toss/userreadtext.php",
+		"/Applications/MAMP/htdocs/toss/userexcercisetaskwritetext.php",
+		"/Applications/MAMP/htdocs/toss/stylesplatform.css",
+		"/Applications/MAMP/htdocs/toss/classes/Display.php",
+		"/Applications/MAMP/htdocs/toss/userresult.php",
+		"/Applications/MAMP/htdocs/toss/userevaluationother.php",
+		"/Applications/MAMP/htdocs/toss/userevaluationself.php",
+		"/Applications/MAMP/htdocs/toss/userclose.php",
+		"/Applications/MAMP/htdocs/toss/account.php",
+		"/Applications/MAMP/htdocs/toss/includes/content.php",
+		"/Applications/MAMP/htdocs/toss/index.php",
+		"/Applications/MAMP/htdocs/toss/jqueryaddons.js",
+		"/Applications/MAMP/htdocs/toss/includes/contentlogin.php",
+		"/Applications/MAMP/htdocs/toss/classes/TaskWriteText.php",
+		"/Applications/MAMP/htdocs/toss/userevaluationself.service.php",
+		"/Applications/MAMP/htdocs/toss/classes/App.php",
+		"/Applications/MAMP/htdocs/toss/classes/FrameworkDimVal.php",
+		"/Applications/MAMP/htdocs/toss/adminevaluationother.service.php",
+		"/Applications/MAMP/htdocs/toss/classes/FrameworkDim.php",
+		"/Applications/MAMP/htdocs/toss/appdeconstruct.php",
+		"/Applications/MAMP/htdocs/toss/appinstance.php",
+		"/Applications/MAMP/htdocs/toss/classes/TaskEvaluation.php",
+		"/Applications/MAMP/htdocs/toss/admin.php",
+		"/Applications/MAMP/htdocs/toss/userexcercisetaskwritetext.service.php",
+		"/Applications/MAMP/htdocs/toss/classes/TaskWriteTextDocument.php",
+		"/Applications/MAMP/htdocs/toss/classes/ExcerciseTask.php",
+		"/Applications/MAMP/htdocs/toss/classes/ExcerciseTaskStatus.php",
+		"/Applications/MAMP/htdocs/toss/adminusers.php",
+		"/Applications/MAMP/htdocs/toss/admin.service.start.php",
+		"/Applications/MAMP/htdocs/toss/admin.service.stop.php",
+		"/Applications/MAMP/htdocs/toss/classes/User.php",
+		"/Applications/MAMP/htdocs/toss/adminuser.service.php",
+		"/Applications/MAMP/htdocs/toss/includes/header.account.inc.php",
+		"/Applications/MAMP/htdocs/toss/includes/footer.inc.php",
+		"/Applications/MAMP/htdocs/toss/adminservices.php",
+		"/Applications/MAMP/htdocs/toss/adminservices_.php",
+		"/Applications/MAMP/htdocs/toss/classes/Session.php",
+		"/Applications/MAMP/htdocs/toss/includes/header.inc.php"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"storeDimensionVal",
+			"comment",
+			"ajax",
+			"setFrameworkDimVal",
+			"addCategory",
+			"storedimensionVal",
+			"getFrameworkDimValValueByDim",
+			"getFrameworkDimValValueCommentByDim",
+			"addComment(",
+			"addCategory\naddComment",
+			"	if ($action==\"overview\")\n	{\n		$output=\"\";\n		// $refId=$evaluationObj->taskevaluationFrameworkRef;\n		$refId=1;\n		$frameworkObj=$app->getFrameworkById( $refId );\n		$output=$output.Display::displayFramework($app,$frameworkObj,\"other\",-1);\n	\n	}",
+			"addComment",
+			"comment",
+			"addComment",
+			"addCategory",
+			"category",
+			"addCategory",
+			"category",
+			"addCategory\naddCategory\naddCategory\naddCategory",
+			"addCategory\naddCategory\naddCategory",
+			"addCategory\naddCategory",
+			"addCategory",
+			"frameworkDim",
+			"framework",
+			"both",
+			"&reg;",
+			".",
+			"red",
+			"self",
+			"self.png",
+			"containeraccount",
+			"excerciseObject",
+			"h4",
+			"excerciseObject",
+			"h4",
+			"excerciseId",
+			"offene",
+			"getTheseExcercises",
+			"getAllExcercisesByStatus",
+			"offene schreib",
+			"offene",
+			"containertosscontent",
+			"debugSessionContainer",
+			"imag",
+			"beretis",
+			"eina",
+			"ausblenden",
+			"border",
+			"storeDimensionVal",
+			"ajax",
+			"javascript:set",
+			"displayFramework",
+			"Display",
+			"javascript",
+			"border",
+			"table",
+			"classEvaluationText",
+			"Einstellungen",
+			"beurteil",
+			"beurteilen",
+			"inspectorevaluationotheroverview",
+			"frameworkObj",
+			"inspectorevaluationother",
+			"Beurteilung",
+			"beurteilung",
+			"result",
+			"stroe",
+			"FrameworkDimVal",
+			"storeDimension",
+			"action: 'store'",
+			"store",
+			"categories",
+			"inspectorFormContent",
+			"inspektor",
+			"displayUnderLineInComment",
+			"is",
+			"strDebugHere",
+			"displayCommentObject",
+			"displayComments",
+			"collect",
+			"displayComments()",
+			"displayComments",
+			"toActualComment",
+			"toActual",
+			"updateTo",
+			"update",
+			"updateTo",
+			"Category",
+			"getCategoryForIndex",
+			"formCommenttoActualComment",
+			"toactualcomment",
+			"updateInspectorPropertiesToActualComment",
+			"toactualcomment",
+			"Actual",
+			"actual",
+			"updateTo",
+			"formSelectSelection",
+			".category",
+			"formSelectSelection",
+			"selection",
+			"actualComment.category",
+			"formCommentToActualComment",
+			"updateInspectorPropertiesToActualComment",
+			"toactualComment",
+			"formActual",
+			"form",
+			"comment",
+			"Comment",
+			"n Comment",
+			"n Comment()",
+			"displayFormComment",
+			"displayCommentObjectInInspector",
+			"displayCommentObject",
+			"displayComment",
+			"select",
+			"selectComment",
+			"select",
+			"Einstellungen",
+			"alle",
+			"einstellungen",
+			"getCategoryIndexForId",
+			"category",
+			"set",
+			"setFrame",
+			"commentInspectorFrameworkDimId",
+			"formSelectSelection",
+			"==0",
+			"==-1"
+		],
+		"highlight": false,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": false
+	},
+	"groups":
+	[
+		{
+			"selected": 6,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "classes/FrameworkDim.php",
+					"settings":
+					{
+						"buffer_size": 4033,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2281,
+								2281
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 565.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "adminevaluationother.php",
+					"settings":
+					{
+						"buffer_size": 71223,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								68595,
+								68635
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 211.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "adminevaluationother.service.php",
+					"settings":
+					{
+						"buffer_size": 2353,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1195,
+								1195
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1000.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "classes/FrameworkDimVal.php",
+					"settings":
+					{
+						"buffer_size": 4764,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								94,
+								94
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "classes/App.php",
+					"settings":
+					{
+						"buffer_size": 44075,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								34225,
+								34225
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 17306.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "classes/Display.php",
+					"settings":
+					{
+						"buffer_size": 14899,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								11848,
+								11865
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 4854.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "/Applications/MAMP/htdocs/cineogame/index.html",
+					"settings":
+					{
+						"buffer_size": 921,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								220,
+								220
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 13.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 0.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 225.0,
+	"status_bar_visible": true
+}

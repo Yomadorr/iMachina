@@ -1,0 +1,47 @@
+/* platform styles */
+
+body, p { font-family: helvetica, arial, sans serif; font-size: 16px; color: #555555;  }
+h1 { font-size: 32px; color: green; font-weight: normal; margin: 0px; padding-top: 16px; padding-bottom:8px; margin-top: 16px; margin-bottom:8px;  } 
+h2 { font-size: 24px; color: green; font-weight: normal; margin: 0px; padding-top: 14px; padding-bottom:7px; margin-top: 14px; margin-bottom:7px;  } 
+h3 { font-size: 18px; color: green; font-weight: normal; margin: 0px; padding-top: 12px; padding-bottom:6px; margin-top: 12px; margin-bottom:6px;font-weight: bold; padding-bottom:4px; margin-bottom:0px; } 
+h4 { font-size: 16px; color: green; font-weight: normal; margin: 0px; padding-top: 10px; padding-bottom:5px; margin-top: 10px; margin-bottom:5px; } 
+
+a, a hover { color: #990000 ; text-decoration: none;  } /* #5E9400 */
+
+input[type=submit], input[type=button], button {
+    border: 1px solid #000;
+    background: #CAD9AE;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+    border-radius: 0px;
+}
+
+
+
+.detailComponentGeneric { border: 1px dotted gray; }
+
+/* different styles for textobjects */
+.detailThreadPlainTreeContainer { border-bottom: 1px solid #999999;  padding-top: 10px; }
+.detailThreadPlainTreeContainerMenuPoint, .detailThreadPlainTreeContainerMenuPointActive, .detailThreadPlainTreeContainerMenuPointAll { border-top: 1px solid black; border-left: 1px solid black;   border-right: 1px solid black; padding-left: 10px; padding-right: 10px;  display: inline; background: #ccccc; }
+
+.detailThreadPlainTreeContainerMenuPointAll  { height: 15px; }
+.detailThreadPlainTreeContainerMenuPointAllRight { float:right; background: #ccccc;}
+
+.detailThreadPlainTreeContainerMenuPointActive  { background: white; padding-bottom: 1px; background: #cccccc; }
+
+.detailThreadPlainTreeContainerMenuPoint {  }
+.detailThreadPlainTreeContainerMenuPointSpacer { border-bottom: 1px solid black; width: 10px; display:inline; }
+.detailThreadPlainTreeContainerMenuPointSplit { _border-top: 1px solid black; border-left: 1px solid #999999; border-right: 1px solid #999999;  height: 7px; background-image: url(styles/default/imgs/TextObjectThreadPlainBackground.jpg);}
+
+
+/* objects */
+.detailContainer {  padding-top: 10px; padding-bottom: 5px;}
+
+
+.detailThreadPlainContainer {  padding-top: 10px; padding-bottom: 5px; padding-left: 4px; padding-right: 10px; border-bottom: 1px solid black; border-left: 1px solid black; border-right: 1px solid black; }
+.detailThreadPlainContainerSplit { border-top: 1px solid black; border-left: 1px solid black; border-right: 1px solid black;  height: 50px; background-image: url(styles/default/imgs/TextObjectThreadPlainBackground.jpg); }
+
+.detailThreadPlainListViewStart { border-bottom: 1px solid black; border-left: 1px solid black;   border-right: 1px solid black; padding-left: 10px; padding-right: 10px;  display: inline; background: #ccccc; }
+.detailThreadPlainListView { border-top: 1px solid black; border-left: 1px solid black;   border-right: 1px solid black; padding-left: 10px; padding-right: 10px;  display: inline; background: #ccccc; }
+.detailThreadPlainListViewStop { border-top: 1px solid black; border-left: 1px solid black;   border-right: 1px solid black; padding-left: 10px; padding-right: 10px;  display: inline; background: #ccccc; }
+
