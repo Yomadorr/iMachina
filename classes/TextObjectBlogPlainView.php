@@ -28,7 +28,6 @@
             {
                 $str=parent::viewDetailCore( $app, $userId );
 
-
                 /*
                 $str=$str."---";
                 echo("<pre>");

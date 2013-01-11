@@ -10,6 +10,9 @@
             // status - default draft ... 
             var $textobjectStatus="draft"; // published/draft/deleted
 
+            // turn into editmode after insertion ... 
+            var $textobjectFrontEndInsertToEditDialog=true;
+
     		function TextObjectBlogPlain()
             {
                 // overwrite here ...

@@ -486,7 +486,7 @@
 										$str=$str."\n    <td>";
 
 	//									$str=$str."\n   <div class='detailContainerContentActionsComments' onClick=\"doCommand".$this->getDivIdOrRef()."('comments')\" ></div>";
-										if ($this->getRuleAccessMatrix($app,$userId)->isWritable()) $str=$str."\n   <div class='detailContainerContentActionsEdit' id='detailContainerContentActionsEdit".$this->getIdOrRef()."'   onClick=\"doCommandTextObject(".$this->getIdOrRef().",'edit','detailContainerContentActionsEdit".$this->getIdOrRef()."')\" ></div>";
+										$str=$str.$this->viewActionCommanEditIcon( $app, $userId );
 										
 										$str=$str."\n   </td>";
 
@@ -495,9 +495,8 @@
 
 										// todo: access here!
 										// todo: problem
-										$divIdRule="detailContainerContentActionsRule".$this->getIdOrRef()."";
-										// if ($this->getRuleAccessMatrix($app,$userId)->isWritable()) 
-										$str=$str."\n   <div class='detailContainerContentActionsRule' id='$divIdRule' onClick=\"doCommandRuleOnTextObject('rule',".$this->getIdOrRef().",'$divIdRule')\"  ></div>";
+										$str=$str.$this->viewActionCommandRuleIcon( $app,$userId );
+
 	//									$str=$str."\n   <div class='detailContainerContentActionsAdd'   onClick=\"doCommand".$this->getDivIdOrRef()."('add')\"  ></div>";
 										//$str=$str."\n</div>";
 										$str=$str."\n    </td>";
@@ -590,9 +589,8 @@
 										$str=$str."\n    </td>";
 
 										$str=$str."<td>";
-										if ($this->textobjectObject->innerCommentType=="visual")
-											if ($this->getRuleAccessMatrix($app,$userId)->isCommentable()) 
-												$str=$str."\n   <div class='detailContainerContentActionsAddPostIt' id='detailContainerContentActionsAddPostIt".$this->getIdOrRef()."' onClick=\"doCommandTextObject(".$this->getIdOrRef().",'addpostit','detailContainerContentActionsAddPostIt".$this->getIdOrRef()."')\"  ></div>";
+										$str=$str."".$this->viewActionCommanAddVisualIcon( $app,$userId );
+
 	//									$str=$str."\n   <div class='detailContainerContentActionsAdd'   onClick=\"doCommand".$this->getDivIdOrRef()."('add')\"  ></div>";
 										//$str=$str."\n</div>";
 										$str=$str."\n    </td>";
@@ -706,13 +704,57 @@
 										$str=$str."\n   <tr><td>";
 											$str=$str."\n   <div class='detailContainerContentActionsComments' id='detailContainerContentActionsComments".$this->getIdOrRef()."' onClick=\"doCommandTextObject(".$this->getIdOrRef().",'comments','detailContainerContentActionsComments".$this->getIdOrRef()."')\" ></div>";
 										$str=$str."\n   </td><td>";
-											if ($this->getRuleAccessMatrix($app,$userId)->isCommentable()) $str=$str."\n   <div class='detailContainerContentActionsAdd' id='detailContainerContentActionsAdd".$this->getIdOrRef()."'  onClick=\"doCommandTextObject(".$this->getIdOrRef().",'add','detailContainerContentActionsAdd".$this->getIdOrRef()."')\"  ></div>";
+											$str=$str.$this->viewActionCommanAddIcon( $app, $userId );
 										$str=$str."\n   </td><tr>";
 										$str=$str."\n   </table>";
 										//$str=$str."\n</div>";
 
 										return $str;
 									}
+
+											// commands
+											function viewActionCommanEditIcon( $app, $userId )
+											{
+												$str="";
+												if ($this->getRuleAccessMatrix($app,$userId)->isWritable()) $str=$str."\n   <div class='detailContainerContentActionsEdit' id='detailContainerContentActionsEdit".$this->getIdOrRef()."'   onClick=\"doCommandTextObject(".$this->getIdOrRef().",'edit','detailContainerContentActionsEdit".$this->getIdOrRef()."')\" ></div>";
+												return $str;
+											}
+											function viewActionCommandRuleIcon( $app, $userId )
+											{
+												$str="";
+													$divIdRule="detailContainerContentActionsRule".$this->getIdOrRef()."";
+													// if ($this->getRuleAccessMatrix($app,$userId)->isWritable()) 
+													$str=$str."\n   <div class='detailContainerContentActionsRule' id='$divIdRule' onClick=\"doCommandRuleOnTextObject('rule',".$this->getIdOrRef().",'$divIdRule')\"  ></div>";
+												return $str;
+											}
+
+											function viewActionCommanAddIcon( $app, $userId )
+											{
+												$str="";
+												
+												if ($this->getRuleAccessMatrix($app,$userId)->isCommentable()) $str=$str."\n   <div class='detailContainerContentActionsAdd' id='detailContainerContentActionsAdd".$this->getIdOrRef()."' ".$this->viewOnAddClick("detailContainerContentActionsAdd".$this->getIdOrRef())."' ".$this->viewOnAddClick()." ></div>";
+												
+												return $str;
+											}
+												function viewActionCommandAddIconCommentable( $app, $userId )
+												{
+													return $this->getRuleAccessMatrix($app,$userId)->isCommentable();
+												}
+
+												function viewOnAddClick( $divId="" )
+												{
+													 return " onClick=\"doCommandTextObject(".$this->getIdOrRef().",'add','$divId')\" ";
+												}
+
+											function viewActionCommanAddVisualIcon( $app, $userId )
+											{
+												$str="";
+												if ($this->textobjectObject->innerCommentType=="visual")
+													if ($this->getRuleAccessMatrix($app,$userId)->isCommentable()) 
+														$str=$str."\n   <div class='detailContainerContentActionsAddPostIt' id='detailContainerContentActionsAddPostIt".$this->getIdOrRef()."' onClick=\"doCommandTextObject(".$this->getIdOrRef().",'addpostit','detailContainerContentActionsAddPostIt".$this->getIdOrRef()."')\"  ></div>";
+												return $str;
+											}
+
 
 									function viewSideActionsComments( $app, $userId )
 									{
@@ -1272,7 +1314,7 @@
 								                                		// $strMember=$strMember."<br>id: ".$memberObject->textobjectId."<br>";
 								                                			// $strMember=$memberObjectView->viewFormExtendedCoreContentForm( "".$memberDef->memberRefName  );	
 								                                			$strMember=$memberObjectView->viewFormExtendedCoreContentForm( "".$memberObject->textobjectId  );	
-								                                		$strMember=$strMember."<input type=button value='update' onClick=\"updateTextObjectDetailMember(".$this->textobjectObject->textobjectId.", '".$memberObject->textobjectRefName."','".$memberObject->textobjectId."')\">";
+								                                		$strMember=$strMember."<input type=button value='Set' onClick=\"updateTextObjectDetailMember(".$this->textobjectObject->textobjectId.", '".$memberObject->textobjectRefName."','".$memberObject->textobjectId."')\">";
 								                                	$strMember=$strMember."</form>";
 
 								                                	

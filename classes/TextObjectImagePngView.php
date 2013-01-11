@@ -71,6 +71,9 @@
 					return $str;								
 				}
 
+				// just a little bit crazy ...
+				
+
 
 		
 	}

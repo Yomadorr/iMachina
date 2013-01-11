@@ -747,6 +747,72 @@
 
 		}	
 
+		// update member
+		/*
+			update
+		*/
+		if ($action=="updatemember")
+		{
+			// echo("textobjectdetail.update");
+
+			// check access
+			// 1. go up always with member (=refname!="")
+			// 2. check latest not member (=refname='')
+
+			// get tree here ...   
+			echo("---".$textobjectFromWeb->getArgument());
+			$textobjectId="".$textobjectFromWeb->textobjectId;
+
+	          $arrTree=$app->getTreeUpForIdDirectExt( $textobjectId, $userId );
+	          for ($a=0;$a<count($arrTree);$a++)
+	          {
+	          	 $treeObj=$arrTree[$a];
+	          	 echo("<br>$a ".$treeObj->textobjectId." ".$treeObj->getArgument());
+	          }
+	          // echo("<pre>");print_r($arrTree);echo("</pre>");
+	          $baseIndex=$app->getIndexMemberBaseObject( $arrTree );
+			   echo("<br>baseIndex: ".$baseIndex);
+			  if ($baseIndex==-1)
+			  {
+
+			  	 	// echo("error");
+			  		// lock this security issue
+			  		$app->log("updatemember","".$textobjectId,$userId);
+
+			  }
+			  if ($baseIndex!=-1)
+			  {		         
+		          $baseObject=$arrTree[$baseIndex];
+		          // print_r($baseObject);
+		          $textobjectBaseId=$baseObject->textobjectId;
+		          // echo($textobjectBaseId);
+		          // check this
+					// $baseObject=$app->getTextObjectById($textobjectBaseId, $userId);
+					$ruleaccessmatrixObj=$app->getRuleAccessMatrixByTextObjectId( $textobjectBaseId, $userId );
+					// $output=$output."<br>TextObjectId: ".$textobjectObj->textobjectId." UserID: $userId Matrix:".$ruleaccessmatrixObj->debug();
+
+					if (!$ruleaccessmatrixObj->isWritable())
+					{
+						$msg="Sorry you can't change anything here @rule.access.error.noaccess";
+						$output=$output.TextObjectView::viewErrorMessage( "edit", $msg );
+					}
+
+					if ($ruleaccessmatrixObj->isWritable())
+					{
+						// updatemember
+						// ok?
+						// update this
+						// echo("---".$textobjectFromWeb->getArgument());
+						$textobjectObject=$app->getTextObjectById($textobjectId, $userId);
+						$textobjectObject->setArgument($textobjectFromWeb->getArgument());
+						$app->updateTextObject($textobjectObject, $userId);
+					}	
+
+			  }
+
+		}
+
+
 		// get 
 		if ($action=="get")
 		{

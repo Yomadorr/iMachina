@@ -132,8 +132,11 @@
     	var $textobjectCreate;
     	var $textobjectUpdate;
     	
-    	// members
+	    	// temp ... var $textobjectFrontEndInsertToEditDialog=true;
+    		var $textobjectFrontEndInsertToEditDialog=false;
 
+    	// members
+            
     	// definition
     	// (add on things)
 

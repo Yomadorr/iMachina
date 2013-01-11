@@ -126,7 +126,7 @@ input[type=textarea] {
 
 						.detailContainerContentActionsEdit { _float: left; width: 15px; height: 15px;  border: 0px solid #999999; background-image: url(imgs/ContentActionsEdit.png);  }
 						.detailContainerContentActionsRule { _float: right; width: 15px; height: 15px;  border: 0px solid #999999; background-image: url(imgs/ContentActionsRule.png);  }
-						.detailContainerContentActionsAdd { _float: right; width: 15px; height: 15px;  border: 0px solid #999999;  background-image: url(imgs/ContentActionsAdd.png);   }
+						.detailContainerContentActionsAdd { _float: right;  width: 15px; height: 15px;  border: 0px solid #999999;  background-image: url(imgs/ContentActionsAdd.png);   }
 						.detailContainerContentActionsAddPostIt { _float: right; width: 15px; height: 15px; border: 0px solid #999999;  background-image: url(imgs/ContentActionsAddPostIt.png);  }
 						.detailContainerContentActionsComments { _float: left; width: 15px; height: 15px; border: 0px solid #999999;  background-image: url(imgs/ContentActionsComments.png);  }
 

@@ -114,7 +114,7 @@
 
   // TODO: * nice to have 
   // 0.0 * access control also on the layer of appmethodes > possiblity: load and mark with TextObject { var $access=true;  }
-
+  
   
   ShowHistory
   - ...
@@ -152,13 +152,20 @@
     // - design
     // - 
 
+    // nicetohave:
+    // - insert a member-object > open directly detail form ... example: link
+    // - new object > scroll to this object ... 
+
     // bugs
     // - javascript-history: problem going forward and back - conten will not be found! load with return works ... 
-    // - 
+    // - updateTextObject > ref? memberupdate > update baseobect (getBaseMember!)
+
+
 
 		// version 
-    var $version=0.7; // versions ...
+    var $version=0.71; // versions ... 
 
+    // 0.71 members update 50% integrated! (open: tinymce & upload objects!)
     // 0.7 members bug fix & first implementation of member update
     // 0.69 small bug fixes
     // 0.68 new todos
@@ -1708,11 +1715,11 @@ echo("<br>App.install().<br>");
 				// onUpdate
 				$argObj->onUpdate($this,$userId);
 
-		    $this->fundamentalUpdateTextObject($argObj); 		
+		    $this->fundamentalUpdateTextObject($argObj); 	
 
         // complex
         // update if there is more
-        // todo: update
+        // todo: update  members > update update-date in textobject!
 
         // add textobjectversion
         $this->insertTextObjectVersion($argObj->textobjectId,"update",$userId);
@@ -1907,6 +1914,28 @@ echo("<br>App.install().<br>");
                         return $i;
                     //}
 
+                  }
+                }
+
+                return -1;
+            }
+        
+           
+            // member has refName!=""
+            function getIndexMemberBaseObject( $arrTopDown )
+            {
+                // get last hyperthread 
+                for ($i=count($arrTopDown)-1;$i>=0;$i--)
+                { 
+                  $obj=$arrTopDown[$i];
+                  if ($obj->textobjectRefName=="")
+                  {
+                      if ($i==(count($arrTopDown)-1))
+                      {
+                          return -1;
+                      }
+
+                      return $i;
                   }
                 }
 

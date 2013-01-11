@@ -627,47 +627,7 @@ tinyMCE.init({
                                            textobjectPositionX=$('#FormAddDatatextobjectPositionX').val();
                                            textobjectPositionY=$('#FormAddDatatextobjectPositionY').val();
 
-
                                         // alert("insertTextObject() textobjectArgument= "+textobjectArgument+" textobjectType="+textobjectType+" / textobjectTypeSub="+textobjectTypeSub+" textobjectCommentType="+textobjectCommentType);
-
-                                        // members?
-                                        // add the second content ...
-<?    
-/*                                    
-                                        $memberAddOns="
-                                        // echo("<br>".$this->textobjectObject->textobjectId.".INSERT".$this->textobjectObject->textobjectType."/".$this->textobjectObject->textobjectTypeSub."/".$this->textobjectObject->hasMembers()."");
-// not yet implemented correctly
-if (false)
-                                        if ($this->textobjectObject->hasMembers())
-                                        {
-                                             for ($m=0;$m<count($this->textobjectObject->arrMembers);$m++)
-                                            {
-                                                // get them and insert them here!
-                                                $memberDef=$this->textobjectObject->arrMembers[$m]; 
-                                                // viewFormExtendedCoreContentForm( $addDivAction="", $showMemberForms=false ) 
-                                                // $str=$str."$m 
-                                                if ($memberDef->textobjectObject!=null)
-                                                {
-                                                    //$str=$str."$m 
-                                                    $memberObject=$memberDef->textobjectObject;
-                                                    $memberObjectView=$app->getTextObjectViewFor($memberObject, $userId);   
-                                                    // echo("<pre>");print_r($memberObjectView);echo("</pre>");
-                                                    $labelName=$memberDef->memberRefName;
-
-                                                    // todo tinymce
-                                                    // 1FormDatatextobjectArgumentAddtitle
-                                                       textobjectMember".$labelName."Argument=''+$('#".$this->getDivIdOrRef()."FormDatatextobjectArgumentAdd".$labelName."Add').val(); 
-                                                    $memberAddOns=$memberAddOns.", textobjectMember".$labelName."Argument: textobjectMember".$labelName."Argument 
-                                                
-                                                }
-                                            }
-                                        }
-
-*/
-?>
-                                         // alert('$memberAddOns');
-                                        
-                                           // alert('Insert".$this->getDivIdOrRef()."'+textobjectRef+'  '+textobjectArgument+'('+textobjectType+'/'+textobjectTypeSub+'--'+textobjectPositionX+'|'+textobjectPositionY);
                                         
                                            $.ajax({
                                             url: 'webservice.rest.php',
@@ -683,29 +643,54 @@ if (false)
                                                  if (result.indexOf('error')!=-1) { alert('Error in creating!'+result); return; }  
                                                  if (result.indexOf('error')==-1) {
                                                         var newId=result; 
-                                            // insert normal comment (add below)
+                                                    // insert normal comment (add below)
 
-                                                // todo: something else ..
-                                                if (commentType=="") 
-                                                {
-                                                    // alert('Add inserted record here: '+'#'+divTextobjectIdBase+'Comments');
-                                                     $('#'+divTextobjectIdBase+'Comments').append( $('<div>').load('webservice.rest.php?area=textobjectdetail&action=get&actionsub=listview&textobjectId='+newId) );                                              
-                                                }
+                                                        // todo: something else ..
+                                                        if (commentType=="") 
+                                                        {
+                                                            // alert('Add inserted record here: '+'#'+divTextobjectIdBase+'Comments');
+                                                             $('#'+divTextobjectIdBase+'Comments').append( $('<div>').load('webservice.rest.php?area=textobjectdetail&action=get&actionsub=listview&textobjectId='+newId) );                                              
+                                                        }
 
-                                                if (commentType=="visual") 
-                                                {
-                                                                $('#'+divTextobjectIdBase+'CommentsVisual').append( $('<div>').load('webservice.rest.php?area=textobjectdetail&action=get&actionsub=listviewvisual&textobjectId='+newId) );                                              
-                                                }
+                                                        if (commentType=="visual") 
+                                                        {
+                                                                        $('#'+divTextobjectIdBase+'CommentsVisual').append( $('<div>').load('webservice.rest.php?area=textobjectdetail&action=get&actionsub=listviewvisual&textobjectId='+newId) );                                              
+                                                        }
 
-                                                //              $('#".$this->getDivIdBase()."'+newId).css( 'background', '#ffcccc' );
-                                                //     alert('#".$this->getDivIdBase()."'+newId); 
-                                                //          $('#".$this->getDivId()."Comments').append( $('<div>').load('webservice.rest.php?area=textobjectdetail&action=get&actionsub=container&textobjectId='+newId) );
-                                                            // version 1: close the div here .. 
-                                                            $('#detailComponentFormAdd').slideToggle('fast');
-                                                            // version 2 or add on ..: select
-                                                            selectTextObjectAdd( textobjectRef , 'text', 'plain', '*' );
+                                                        //              $('#".$this->getDivIdBase()."'+newId).css( 'background', '#ffcccc' );
+                                                        //     alert('#".$this->getDivIdBase()."'+newId); 
+                                                        //          $('#".$this->getDivId()."Comments').append( $('<div>').load('webservice.rest.php?area=textobjectdetail&action=get&actionsub=container&textobjectId='+newId) );
+                                                                    // version 1: close the div here .. 
+                                                                    $('#detailComponentFormAdd').slideToggle('fast');
+                                                                    // version 2 or add on ..: select
+                                                                    selectTextObjectAdd( textobjectRef , 'text', 'plain', '*' );
 
-                                                 } // result  
+
+                                                        // todo: case hasMembers > turn into edit if has members!
+                                                        // check types!!!
+                                                        // alert("Types: "+textobjectType+"/"+textobjectTypeSub);
+                                                        var flagEdit=false;
+                                                        <?
+                                                            // textobjectFrontEndInsertToEditDialog
+                                                            // public types
+                                                            for ($z=0;$z<count($app->arrPublicTypes);$z++)
+                                                            {
+                                                                $obj=$app->arrPublicTypes[$z];
+                                                                if ($obj->textobjectFrontEndInsertToEditDialog==true) 
+                                                                 echo("\n  if ((textobjectType=='".$obj->textobjectType."')&&(textobjectTypeSub=='".$obj->textobjectTypeSub."')) flagEdit=true; ");
+                                                            }
+                                                        
+                                                        ?>
+                                                        if (flagEdit)
+                                                        {
+                                                             doCommandTextObject( newId, "edit", 'detailComponentFormAdd' );
+                                                        }
+
+                                                        // scroll to this object ...
+                                                        // todo: ?
+
+
+                                            } // result  
                                             
                                             // error IndexOf()!=-1
 
@@ -715,6 +700,7 @@ if (false)
 
                                          //  } 
                                 }
+
 
   
                      // updateObject
@@ -911,10 +897,8 @@ if (false)
                             var textobjectArgument="";
                             // Form2444DatatextobjectArgument
                             textobjectArgument=$('#Form'+memberId+'DatatextobjectArgument').val();
-                            alert("updateTextObjectDetailMember() "+textobjectArgument);
+                            // alert("updateTextObjectDetailMember() "+textobjectArgument);
 
-                            // update ajax ...
-                            var textobjectArgument="";
                     /*
                             // todo direct here!! if exisits ... 
                             // simple form
@@ -938,9 +922,7 @@ if (false)
                             context: document.body
                            }).done(function( result ) { 
                              //alert('saved '+result); 
-
-//                                reloadTextObject( textobjectId, 'core' );
-                        
+                                reloadTextObject( textobjectId, 'core' );
                             });
                         }                        
 

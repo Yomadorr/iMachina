@@ -281,6 +281,15 @@
 //				$str=$str."\n   ".$this->viewCommentsCommentTypeVisual( $app, $userId )."";
 				$str=$str."\n   ".$this->viewComments( $app, $userId )."";
 
+					// add icon at the end ...
+					if ($this->viewActionCommandAddIconCommentable( $app, $userId ))
+					{
+						$str=$str."<div style='padding-top: 30px;' >";
+							// solve this visual problem!
+							$str=$str."<div id='commentDetailFooterAdd".$this->getIdOrRef()."'  ".$this->viewOnAddClick( 'commentDetailFooterAdd'.$this->getIdOrRef())." valign=top><span style='vertical-alignment: top; valign: top; vertical-align:text-top;' valign=top><div class='detailContainerContentActionsAdd' style='vertical-alignment: top; valign: top; vertical-align:text-top;'></div> Add comment</span></div>";
+						$str=$str."</div>";
+					}
+
 				$str=$str."".$this->viewFooter();
 				$str=$str."</div>";
 
@@ -377,6 +386,10 @@
 						}
 
 					}
+					// todo: added this / changed this here!
+					$str=$str."</div>";
+
+
 
 				return $str;
 			}
