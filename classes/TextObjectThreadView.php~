@@ -286,7 +286,7 @@
 					{
 						$str=$str."<div style='padding-top: 30px;' >";
 							// solve this visual problem!
-							$str=$str."<div id='commentDetailFooterAdd".$this->getIdOrRef()."'  ".$this->viewOnAddClick( 'commentDetailFooterAdd'.$this->getIdOrRef())." valign=top><span style='vertical-alignment: top; valign: top; vertical-align:text-top;' valign=top><div class='detailContainerContentActionsAdd' style='vertical-alignment: top; valign: top; vertical-align:text-top;' title='Add Comment'></div> Add comment</span></div>";
+							$str=$str."<div id='commentDetailFooterAdd".$this->getIdOrRef()."'  ".$this->viewOnAddClick( 'commentDetailFooterAdd'.$this->getIdOrRef())." valign=top><span style='vertical-alignment: top; valign: top; vertical-align:text-top;' valign=top><div class='detailContainerContentActionsAdd' style='vertical-alignment: top; valign: top; vertical-align:text-top;'></div> Add comment</span></div>";
 						$str=$str."</div>";
 					}
 

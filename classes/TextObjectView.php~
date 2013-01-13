@@ -702,7 +702,7 @@
 										//$str=$str."\n<div class='detailContainerContentActionsBottom'>";
 										$str=$str."\n   <table>";
 										$str=$str."\n   <tr><td>";
-											$str=$str."\n   <div class='detailContainerContentActionsComments' id='detailContainerContentActionsComments".$this->getIdOrRef()."' onClick=\"doCommandTextObject(".$this->getIdOrRef().",'comments','detailContainerContentActionsComments".$this->getIdOrRef()."')\"  title='Hide / Show Comments'></div>";
+											$str=$str."\n   <div class='detailContainerContentActionsComments' id='detailContainerContentActionsComments".$this->getIdOrRef()."' onClick=\"doCommandTextObject(".$this->getIdOrRef().",'comments','detailContainerContentActionsComments".$this->getIdOrRef()."')\" ></div>";
 										$str=$str."\n   </td><td>";
 											$str=$str.$this->viewActionCommanAddIcon( $app, $userId );
 										$str=$str."\n   </td><tr>";
@@ -716,7 +716,7 @@
 											function viewActionCommanEditIcon( $app, $userId )
 											{
 												$str="";
-												if ($this->getRuleAccessMatrix($app,$userId)->isWritable()) $str=$str."\n   <div class='detailContainerContentActionsEdit' id='detailContainerContentActionsEdit".$this->getIdOrRef()."'   onClick=\"doCommandTextObject(".$this->getIdOrRef().",'edit','detailContainerContentActionsEdit".$this->getIdOrRef()."')\" title='Edit Content' ></div>";
+												if ($this->getRuleAccessMatrix($app,$userId)->isWritable()) $str=$str."\n   <div class='detailContainerContentActionsEdit' id='detailContainerContentActionsEdit".$this->getIdOrRef()."'   onClick=\"doCommandTextObject(".$this->getIdOrRef().",'edit','detailContainerContentActionsEdit".$this->getIdOrRef()."')\" ></div>";
 												return $str;
 											}
 											function viewActionCommandRuleIcon( $app, $userId )
@@ -724,7 +724,7 @@
 												$str="";
 													$divIdRule="detailContainerContentActionsRule".$this->getIdOrRef()."";
 													// if ($this->getRuleAccessMatrix($app,$userId)->isWritable()) 
-													$str=$str."\n   <div class='detailContainerContentActionsRule' id='$divIdRule' onClick=\"doCommandRuleOnTextObject('rule',".$this->getIdOrRef().",'$divIdRule')\" title='Rights / Rules' ></div>";
+													$str=$str."\n   <div class='detailContainerContentActionsRule' id='$divIdRule' onClick=\"doCommandRuleOnTextObject('rule',".$this->getIdOrRef().",'$divIdRule')\"  ></div>";
 												return $str;
 											}
 
@@ -732,7 +732,7 @@
 											{
 												$str="";
 												
-												if ($this->getRuleAccessMatrix($app,$userId)->isCommentable()) $str=$str."\n   <div class='detailContainerContentActionsAdd' id='detailContainerContentActionsAdd".$this->getIdOrRef()."' ".$this->viewOnAddClick("detailContainerContentActionsAdd".$this->getIdOrRef())."' ".$this->viewOnAddClick()." title='Add Comment' ></div>";
+												if ($this->getRuleAccessMatrix($app,$userId)->isCommentable()) $str=$str."\n   <div class='detailContainerContentActionsAdd' id='detailContainerContentActionsAdd".$this->getIdOrRef()."' ".$this->viewOnAddClick("detailContainerContentActionsAdd".$this->getIdOrRef())."' ".$this->viewOnAddClick()." ></div>";
 												
 												return $str;
 											}
