@@ -24,19 +24,45 @@
 			}
 */
 
-			function viewDetailCore( $app, $userId )
-            {
-                $str=parent::viewDetailCore( $app, $userId );
+			
+						function viewContent( $app, $userId )
+						{
+							// $str="\n  <div  class='detailContainerContent' id='".$this->getDivId()."Content'>".$this->textobjectObject->textobjectArgument."</div>";
+							$strContent=TextObjectView::textToHtml($this->textobjectObject->getArgument());
+							$strContent=str_replace("\n","<br>",$strContent);
 
-                /*
-                $str=$str."---";
-                echo("<pre>");
-                print_r($this);
-                echo("</pre>");
-                */
+							$str="\n  <div  class='detailContainerContent' id='".$this->getDivId()."Content' >";
 
-                return $str;
-            }
+								// side actions
+								// $str=$str."".$this->viewSideActions($app,$userId);
+								// the content
+								// version 1.0
+								// $str=$str.$strContent;
+								// add members here ... 
+								// $str=$str.$this->viewMembers( $app, $userId );
+
+								// version 2.0
+								$str=$str."\n <h1>".$this->textobjectObject->getArgument()."</h1>";
+
+								// picture
+								// todo: check if there is a picture ... 
+								$str=$str."\n <div style='float:left;'><img src='".$this->textobjectObject->getDocumentURL()."' style='align: top;'></div>";
+
+								// text ... 
+								$htmltext=$this->textobjectObject->getMemberValue( "text", $app, $userId );
+								$str=$str.$htmltext;
+
+
+							$str=$str."\n</div>";
+
+
+							// comments
+							// $str=$str.$this->viewSideActionsComments( $app, $userId );
+
+							return $str;
+						}
+
+
 
 
  

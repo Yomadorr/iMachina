@@ -10,6 +10,9 @@
             // status - default draft ... 
             var $textobjectStatus="draft"; // published/draft/deleted
 
+                    var $textobjectviewTypeCategory="text";
+                    // var $textobjectviewTypeCategoryLabel="Courses, Threads";
+
             // turn into editmode after insertion ... 
             var $textobjectFrontEndInsertToEditDialog=true;
 
@@ -19,7 +22,10 @@
                 $this->addMemberByValue("image","Blogbild",false,"image","png","default/TextObjectcomplexBlog.png",false);
                 
                 // text ...
-                $todefObj=$this->addMemberByValue("text","Text",false,"text","plain","Das ist der BlogText.",false);
+                // $todefObj=$this->addMemberByValue("text","Text",false,"text","plain","Das ist der BlogText.",false);
+
+                // text ...
+                $todefObj=$this->addMemberByValue("text","Text",false,"text","html","Das ist der BIG-TEXT-INHTML.",false);
 
                 // $todefObj=$this->addMemberByValue("text","Text",false,"text","plain","Wow plain!",false);
                 

@@ -24,15 +24,20 @@
 
 	// the types add here ...
 	// todo: add in ...
-	$app->addPublicTypeTypeSub("hyperthread","plain",true);
 	$app->addPublicTypeTypeSub("thread","plain",true);
+	$app->addPublicTypeTypeSub("hyperthread","plain",true);
+
 	$app->addPublicTypeTypeSub("text","plain",false);
 	$app->addPublicTypeTypeSub("text","rtf",false);
 	$app->addPublicTypeTypeSub("text","html",false);
+
 	$app->addPublicTypeTypeSub("image","png",false);
+
 	$app->addPublicTypeTypeSub("audio","wav",false);
-	$app->addPublicTypeTypeSub("video","ogg",false);
+
 	$app->addPublicTypeTypeSub("embed","youtube",false);
+	$app->addPublicTypeTypeSub("video","ogg",false);
+
 	$app->addPublicTypeTypeSub("blog","plain",false);
 	$app->addPublicTypeTypeSub("link","plain",false);
 
