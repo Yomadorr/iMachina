@@ -81,6 +81,15 @@
 	    	// documents ...
     		var $textobjectDocument=0; // 0/1 has a document like .jpg etc.
     		var $textobjectSuffix=""; // suffix jpg/png etc ...
+
+    		// after upload document
+    		function onDocumentUpload($app,$userId)
+    		{
+    			// exp. timelength 
+    			// $timelength=$...
+    			// $app->updateTextObject($this);
+    		}
+
     		// get document url
     		function getDocumentURL()
     		{

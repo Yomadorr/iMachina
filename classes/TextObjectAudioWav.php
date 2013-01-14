@@ -8,6 +8,12 @@
     		var $textobjectviewTypeCategory="audio";
             var $textobjectviewTypeCategoryLabel="Audio";
 
+		function TextObjectAudioWav()
+        {
+            // overwrite here ...
+            $this->addMemberByValue("image","Osc.",false,"image","png","default/TextObjectcomplexBlog.png",false);
+        }
+
     	function onInsert($app,$userId)
 		{
 			

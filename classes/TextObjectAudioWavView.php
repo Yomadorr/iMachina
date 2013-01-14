@@ -31,6 +31,10 @@
 			$str=$str."\n 		Your browser does not support the wav audio element.";
 			$str=$str."\n 	</audio>";
 
+// $imageObj=$this->textobjectObject->getMemberByName( "image", $app, $userId );
+// > "document".$imageObj->textobjectId.".wav"
+// > getDocumentUrl();			
+
 			// waveform image	
 			$str=$str."\n 	<div style='margin: 0 0 0 21px; float:left; clear:right; position: absolute;'>";
 			if(file_exists('./audio/waveforms/waveform'.$textobjectID.'.png')){

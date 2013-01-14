@@ -678,6 +678,10 @@
 									// move to the correct place
 									move_uploaded_file($_FILES['documentfile']['tmp_name'], $newFilePath);
 
+									// onDocumentUpload
+									$updateThisObject->onDocumentUpload($app,$userId);
+
+
 								}
 								else
 								{

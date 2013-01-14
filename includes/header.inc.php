@@ -515,7 +515,7 @@ tinyMCE.init({
                          
                       function reloadTextObject( textobjectId, typ )
                       { 
-                           // alert("reloadTextObject() "+textobjectId+"-"+typ);
+                           // walert("reloadTextObject() "+textobjectId+"-"+typ);
 
                             var divTextobjectId=diffPrefix+textobjectId;
                             if (typ=='core') 
