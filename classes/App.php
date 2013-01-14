@@ -172,7 +172,7 @@
     // 0.69 small bug fixes
     // 0.68 new todos
     // 0.67 Visualisation of "", "AllUsers", "TeamOnly"
-    // 0.65 request are implmented - show now usage-user not collaborators
+    // 0.65 request are implemented - show now usage-user not collaborators
     // 0.64 first request implementation - not yet finished
     // 0.62 complete access implmentation
     // 0.61 implemented right into webservices ... simple error messages

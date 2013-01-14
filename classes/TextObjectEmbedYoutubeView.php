@@ -29,6 +29,8 @@
 
 			function viewFormExtendedCoreContentForm( $addDivAction="" )
 			{
+				$str="";
+				
 				// todo: escape html-entities
 				//$str="\n 	<input type=hidden id='".$this->getDivId()."FormDatatextobjectId".$addDivAction."' value='".$this->textobjectObject->textobjectId."'> ";
 				$str=$str."\n  	<input type=textfield size=50 id='Form".$addDivAction."DatatextobjectArgument' style='width: 100%' value='".$this->textobjectObject->textobjectArgumentText."''>";
@@ -319,7 +321,8 @@ $vimeoId=-1;
 					//<iframe width="560" height="315" src="http://www.youtube.com/embed/ZBj2nmodCuA" frameborder="0" allowfullscreen></iframe>
 					$expList = explode("embed/", $str);
 					if (count($expList)>=2){
-					    $youtubeId = explode('"', $expList[1])[0];
+					    $arrYoutubeId = explode('"', $expList[1]);
+					    $youtubeId=$arrYoutubeId[0];
 					}
 					
 					//$youtubeId = explode('"', explode("embed/", $str)[1])[0];
@@ -338,7 +341,8 @@ $vimeoId=-1;
 					*/
 					$expList = explode("youtube.com/v/", $str);
 					if (count($expList)>=2){
-					    $youtubeId = explode('?', $expList[1])[0];
+					    $arrYoutubeId = explode('?', $expList[1]);
+					    $youtubeId=$arrYoutubeId[0];
 					}
 					
 //					$youtubeId = explode('?', explode("youtube.com/v/", $str)[1])[0];
@@ -360,7 +364,8 @@ $vimeoId=-1;
 					
 					    $expList = explode("v=", $str);
                         if (count($expList)>=2){
-                            $youtubeId = explode('&', $expList[1])[0];
+                            $arrYoutubeId = explode('&', $expList[1]);
+						    $youtubeId=$arrYoutubeId[0];
                         }
 					
 //						$youtubeId = explode("&",explode("v=",$str)[1])[0];
