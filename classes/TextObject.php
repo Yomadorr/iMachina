@@ -73,6 +73,11 @@
     	var $textobjectType="text"; // name for 
     	var $textobjectTypeSub="plain"; // name for 
 
+					// overview type selection [add view]
+					// var $textobjectviewTypes="text";
+					var $textobjectviewTypeCategory="text";
+					var $textobjectviewTypeCategoryLabel="Texts";
+
 	    	// documents ...
     		var $textobjectDocument=0; // 0/1 has a document like .jpg etc.
     		var $textobjectSuffix=""; // suffix jpg/png etc ...

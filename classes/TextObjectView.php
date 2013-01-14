@@ -12,6 +12,7 @@
 		var $textobjectviewLabel="Text"; // @textobject.label*
 		var $textobjectviewDescription="Simple Textobject."; // @textobject.description
 
+
 		var $textobjectviewInteractionType="text"; // text|visual // todo: take from object ... 
 
 		var $textobjectObject;
@@ -572,7 +573,7 @@
 
 											// version 3
 											// show only who changed something here ...
-											// $str=$str.$this->showCollaboratorHistory($app, $userId); // 
+											$str=$str.$this->showCollaboratorHistory($app, $userId); // 
 
 
 
@@ -581,7 +582,7 @@
 
 										// display history here ...
 										// todo: show work history
-										$str=$str.$this->showChangeHistory( $app, $userId );
+										// $str=$str.$this->showChangeHistory( $app, $userId );
 
 										// visibility											
 										// $str=$str.$this->showVisibility( $app );
@@ -614,7 +615,9 @@
 											{
 												$str=$str."";
 												$lastUserId=-1;
-												$userIdenticCounter=0;
+
+												// if (count($arrVersions)>1) $str=$str.count($arrVersions)." Versions: ";
+
 												for ($t=0;$t<count($arrVersions);$t++)
 												{
 													$textobjectObjTmp=$arrVersions[$t];
@@ -625,24 +628,37 @@
 														$userDomain=$app->getUserDomainByUserId($textobjectObjTmp->textobjectVersionUserRef,$userId);
 														$userDomainId=-1; if ($userDomain!=null) { $userDomainId=$userDomain->textobjectId; }
 														
+
 														if ($lastUserId!=$textobjectObjTmp->textobjectVersionUserRef)
 														{
-															if ($userIdenticCounter>0) $str=$str.($userIdenticCounter+1)."x ";
+															// if ($t!=0)
+															// if ($userIdenticCounter>1) 
+															//	$str=$str.($userIdenticCounter+1)."x ";
 
 																$userDescInclude="<a onClick=\"loadContent(".$userDomainId.",'user')\">";
 																if ($userDomainId!=-1) $str=$str.$userDescInclude;
 
-															$str=$str." + ".$userObjVersion->userName." + ";
+															$strMultiply="";
+															// get amount
+															$countThis=0;
+															for ($z=$t;$z<count($arrVersions);$z++)
+															{
+																if ($textobjectObjTmp->textobjectVersionUserRef==$arrVersions[$z]->textobjectVersionUserRef)
+																{	
+																	$countThis++;
+																}
+															}
+															
+															if ($countThis>1) 
+															  $strMultiply=$countThis."x ";
+
+															$str=$str." + ".$strMultiply.$userObjVersion->userName." + ";
 
 																if ($userDomainId!=-1) $str=$str."</a>";
 
-															$userIdenticCounter=0;
 															$lastUserId=$textobjectObjTmp->textobjectVersionUserRef;
 														}
-														else
-														{	
-															$userIdenticCounter++;
-														}
+
 													}
 												}
 												$str=$str."";
@@ -1042,16 +1058,19 @@
 														$str=$str."\n</form>";
 													$str=$str."\n</div>";
 
-													$str=$str."\n<div>";
-														$str=$str."\n<form>";
-															// $str=$str."\n 	<input type=hidden id='Form".$add."DatatextobjectId' value='".$this->textobjectObject->textobjectId."'> ";
-															$str=$str."\n Position:";
-															$str=$str."\n	<input type=text size=10 id='Form".$add."DatatextobjectPositionX'  value='".$this->textobjectObject->textobjectPositionX."'>px / ";
-															$str=$str."\n	<input type=text size=10 id='Form".$add."DatatextobjectPositionY'  value='".$this->textobjectObject->textobjectPositionY."'>px ";
-															$str=$str."\n  <input type=button size=10  onClick=\"updateTextObjectDetailProperty(".$this->getId().",'position')\" value='Set'>";
-														$str=$str."\n</form>";
-													$str=$str."\n</div>";
-
+													// ...
+													if (false)
+													{
+														$str=$str."\n<div>";
+															$str=$str."\n<form>";
+																// $str=$str."\n 	<input type=hidden id='Form".$add."DatatextobjectId' value='".$this->textobjectObject->textobjectId."'> ";
+																$str=$str."\n Position:";
+																$str=$str."\n	<input type=text size=10 id='Form".$add."DatatextobjectPositionX'  value='".$this->textobjectObject->textobjectPositionX."'>px / ";
+																$str=$str."\n	<input type=text size=10 id='Form".$add."DatatextobjectPositionY'  value='".$this->textobjectObject->textobjectPositionY."'>px ";
+																$str=$str."\n  <input type=button size=10  onClick=\"updateTextObjectDetailProperty(".$this->getId().",'position')\" value='Set'>";
+															$str=$str."\n</form>";
+														$str=$str."\n</div>";
+													}
 												}
 											}
 
@@ -1097,50 +1116,124 @@
 														// function select ...
 														// thread only
 														$parentObject=$app->getTextObjectById($this->textobjectObject->textobjectRef,$app,$userId);
-														// selection ... 
+
+														// 1. show only type categories ... text/image etc ... 
+														// types ...
+														$arrTypeCategory=array();
+														$lastTypeCategory="";
+														for ($i=0;$i<count($app->arrPublicTypes);$i++)
+														{
+															$typeObj=$app->arrPublicTypes[$i];
+															if ($lastTypeCategory!=$typeObj->textobjectviewTypeCategory)
+															{
+																// echo("<br>Type: ".$typeObj->textobjectType);
+																// only thread on thread
+																if ($parentObject!=null)
+																if (
+																	($parentObject->textobjectType!="thread")
+																	&&
+																	($parentObject->textobjectType!="hyperthread")
+																	&&
+																	($parentObject->textobjectType!="domain")
+																   )
+																{
+																	if ($typeObj->textobjectType=="thread")
+																	{
+																		continue;
+																	}
+
+																	if ($typeObj->textobjectType=="hyperthread")
+																	{
+																		continue;
+																	}
+																}
+
+																// is this category yet in the array?
+																$foundInArray=false;
+
+																if (count($arrTypeCategory)>0)
+																for ($qi=0;$qi<count($arrTypeCategory);$qi++)
+																{
+																	$objCategory=$arrTypeCategory[$qi];
+																	if ($objCategory->textobjectviewTypeCategory==$typeObj->textobjectviewTypeCategory)
+																	{
+																		$foundInArray=true;
+																	}
+																}
+
+																if (!$foundInArray)
+																{
+																	$arrTypeCategory[count($arrTypeCategory)]=$typeObj;
+																	$lastTypeCategory=$typeObj->textobjectviewTypeCategory;
+																}
+															}
+														}
+
+														// categories
+														$str=$str."\n<div class='detailComponentAddSelectionTextObjectTypeCategoryContainer'>";
+														for ($i=0;$i<count($arrTypeCategory);$i++)
+														{
+															$typeCategoryObj=$arrTypeCategory[$i];															
+															// $str=$str."<br>".$typeCategoryObj->textobjectType;
+															// echo("<pre>");print_r($typeCategoryObj);echo("</pre>");
+
+															// textobjectviewTypesLabel
+															$classSelected="";
+															if ($textobjectObjectToShow->textobjectviewTypeCategory==$typeCategoryObj->textobjectviewTypeCategory) { $classSelected="detailComponentAddSelectionTextObjectTypeCategoryContainerEntrySelected"; $str=$str.""; }
+															$typeCategoryObjView=$app->getTextObjectViewFor($typeCategoryObj, -1);
+															$str=$str."\n <div class='detailComponentAddSelectionTextObjectTypeCategoryContainerEntry $classSelected' onClick=\"selectTextObjectAdd( ".$this->getIdOrRef().", '".$typeCategoryObj->textobjectType."', '".$typeCategoryObj->textobjectTypeSub."', '*' )\">".$typeCategoryObj->textobjectviewTypeCategoryLabel."</div>  ";
+														}
+														$str=$str."\n</div>";
+
+														$str=$str."<br>";
+
+														// 2. show category selection ... 
+														$str=$str."\n<div class='detailComponentAddSelectionTextObjectTypeContainerFrame'>";
 														for ($i=0;$i<count($app->arrPublicTypes);$i++)
 														{
 															$objClass=$app->arrPublicTypes[$i];
-
-															// only thread on thread
-															if ($parentObject!=null)
-															if (
-																($parentObject->textobjectType!="thread")
-																&&
-																($parentObject->textobjectType!="hyperthread")
-																&&
-																($parentObject->textobjectType!="domain")
-															   )
+															// $str=$str."<br>".$textobjectObjectToShow->textobjectviewTypeCategory."  vs. ".$objClass->textobjectviewTypeCategory;
+															if ($objClass->textobjectviewTypeCategory==$textobjectObjectToShow->textobjectviewTypeCategory)
 															{
-																if ($objClass->textobjectType=="thread")
+																// only thread on thread
+																if ($parentObject!=null)
+																if (
+																	($parentObject->textobjectType!="thread")
+																	&&
+																	($parentObject->textobjectType!="hyperthread")
+																	&&
+																	($parentObject->textobjectType!="domain")
+																   )
 																{
-																	continue;
+																	if ($objClass->textobjectType=="thread")
+																	{
+																		continue;
+																	}
+
+																	if ($objClass->textobjectType=="hyperthread")
+																	{
+																		continue;
+																	}
 																}
 
-																if ($objClass->textobjectType=="hyperthread")
-																{
-																	continue;
-																}
+																// todo: userId -1 !
+																$objClassView=$app->getTextObjectViewFor($objClass, -1);
+																// $str=$str."\n   <a onClick=\"select".$this->getDivId()."('".$textobjectTextView->textobjectviewType."','".$textobjectTextView->textobjectviewTypeSub."')\">[".$textobjectTextView->textobjectviewLabel."]</a> ";
+																// ".$objClass->textobjectType."-
+																// $classDivIcon=".detailContainerIcon".$objClass->textobjectType.$objClass->textobjectTypeSub;
+																$classSelected="";
+																// if (($this->textobjectObject->textobjectType==$objClass->textobjectType)&&($this->textobjectObject->textobjectTypeSub==$objClass->textobjectTypeSub)) 
+																$flagSpecial=false;
+																	if ($objClass->textobjectType=="hyperthread") $flagSpecial=true;
+																	if ($objClass->textobjectType=="domain") $flagSpecial=true;
+																if (($textobjectObjectToShow->textobjectType==$objClass->textobjectType)&&($textobjectObjectToShow->textobjectTypeSub==$objClass->textobjectTypeSub)) { $classSelected="detailComponentAddSelectionTextObjectTypeContainerSelected"; }
+																// selectTextObjectAdd( textobjectId, 'text', 'plain', '' );
+																$str=$str."\n <div class='detailComponentAddSelectionTextObjectTypeContainer $classSelected' onClick=\"selectTextObjectAdd( ".$this->getIdOrRef().", '".$objClass->textobjectType."', '".$objClass->textobjectTypeSub."', '*' )\">".$objClassView->textobjectviewLabel."</div>  ";
 															}
-
-															// todo: userId -1 !
-															$objClassView=$app->getTextObjectViewFor($objClass, -1);
-															// $str=$str."\n   <a onClick=\"select".$this->getDivId()."('".$textobjectTextView->textobjectviewType."','".$textobjectTextView->textobjectviewTypeSub."')\">[".$textobjectTextView->textobjectviewLabel."]</a> ";
-															// ".$objClass->textobjectType."-
-															// $classDivIcon=".detailContainerIcon".$objClass->textobjectType.$objClass->textobjectTypeSub;
-															$classSelected="";
-															// if (($this->textobjectObject->textobjectType==$objClass->textobjectType)&&($this->textobjectObject->textobjectTypeSub==$objClass->textobjectTypeSub)) 
-															$flagSpecial=false;
-																if ($objClass->textobjectType=="hyperthread") $flagSpecial=true;
-																if ($objClass->textobjectType=="domain") $flagSpecial=true;
-															if (($textobjectObjectToShow->textobjectType==$objClass->textobjectType)&&($textobjectObjectToShow->textobjectTypeSub==$objClass->textobjectTypeSub)) { $classSelected="detailComponentAddSelectionTextObjectTypeContainerSelected"; }
-															// selectTextObjectAdd( textobjectId, 'text', 'plain', '' );
-															$str=$str."\n <div class='detailComponentAddSelectionTextObjectTypeContainer $classSelected' onClick=\"selectTextObjectAdd( ".$this->getIdOrRef().", '".$objClass->textobjectType."', '".$objClass->textobjectTypeSub."', '*' )\">".$objClassView->textobjectviewLabel."</div>  ";
-
 														}
+														$str=$str."\n</div>"; 
 
 														$str=$str."\n <div class='detailComponentAddSelectionTextObjectTypeContainerDescription'>".$this->textobjectviewDescription."</div>";
-
 
 													$str=$str."\n</div>";
 												}

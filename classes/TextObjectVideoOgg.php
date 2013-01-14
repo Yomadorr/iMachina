@@ -6,6 +6,9 @@
     	var $textobjectTypeSub="ogg"; // name for 
     	var $innerCommentType="visual";
 
+			var $textobjectviewTypeCategory="video";
+            // var $textobjectviewTypeCategoryLabel="Video";
+
 	}
 	
     

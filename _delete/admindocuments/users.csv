@@ -1,13 +1,0 @@
-Vorname;Nachname;Matrikel-Nr.;E-Mail FHNW;E-Mail privat;Anlassnummer;Gruppe
-Res;Mezger;07-123-4;res.mezger@fhnw.ch;res.mezger@gmail.com;test_anlass_01;test_gruppe
-Afra;Sturm;07-123-5;afra.sturm@fhnw.ch;;test_anlass_01;test_gruppe
-Nadja;Lindauer;07-123-6;nadia.lindauer@fhnw.ch;;test_anlass_01;test_gruppe
-Daniel;Knuchel;07-123-7;daniel.knuchel@fhnw.ch;;test_anlass_01;test_gruppe
-Mirjam;Weder;07-123-8;mirjam.weder@fhnw.ch;;test_anlass_01;test_gruppe
-Peter;Schmutz;07-123-9;peter.schmutz@fhnw.ch;;test_anlass_02;test_gruppe
-Mirjam;Weder;07-123-10;mirjam.weder@unibas.ch;;test_anlass_02;test_gruppe
-René;Bauer;07-123-11;rene.bauer@zhdk.ch;;test_anlass_02;test_gruppe
-Rene;Bauer;07-123-12;ixistenz@gmail.com;;test_anlass_02;test_gruppe
-Renée;Bauer;07-123-13;rene.bauer@update.ch;;test_anlass_02;test_gruppe
-"Geraldine";Balint;07-123-14;geraldine.balint@update.ch;;test_anlass_02;test_gruppe
-Hans;Ott;07-123-15;hans.ott@update.ch;;test_anlass_03;test_gruppe

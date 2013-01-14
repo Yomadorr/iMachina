@@ -601,22 +601,47 @@ tinyMCE.init({
 
                                         // alert("insertTextObject() "+textobjectRef);
                                         
-                                        var textobjectArgument="NoValueNoCommentType";
+                                        var textobjectArgument=$('#FormAddDatatextobjectArgument').val();
+
+//                                         alert("textobjectArgument: "+textobjectArgument);
 
                                         // simple form
                                         // if ($this->textobjectArgumentEditor=="form")
+                                        /*
                                         if (argumentEditor=="form")
                                         {   
                                                textobjectArgument=$('#FormAddDatatextobjectArgument').val();
                                         }
+                                        */
 
                                         // tinymce
+                                        // check if tinymce
+                                        
+                                        var tinymceObject=tinyMCE.get('FormAddDatatextobjectArgument');
+                                        // tinymce object
+                                        if ((tinymceObject+"")!="undefined")
+                                        {
+                                            textobjectArgument=tinyMCE.get('FormAddDatatextobjectArgument').getContent();                                             
+                                            // todo: creates strange behavior here - if you don't remove it!
+                                            // 
+                                        }
+
+// todo: problem ... overwrite ... always the same ... 
+if (tinyMCE.getInstanceById('FormAddDatatextobjectArgument'))
+{
+    tinyMCE.execCommand('mceFocus', false, 'FormAddDatatextobjectArgument');                    
+    tinyMCE.execCommand('mceRemoveControl', false, 'FormAddDatatextobjectArgument');
+}
+
+                                        /*
                                         if (argumentEditor=="tinymce")
                                         {   
                                             //     tinyMCE.triggerSave(); 
-                                               textobjectArgument=tinyMCE.get('FormAddDatatextobjectArgument').getContent(); 
                                                // alert('tinymce '+textobjectArgument);  
                                         }
+                                        */
+
+                                        // alert("textobjectArgument: "+textobjectArgument);
 
 
                                            textobjectType=$('#FormAddDatatextobjectType').val();
@@ -713,18 +738,15 @@ tinyMCE.init({
                            
 //                           alert('updateTextObject() '+textobjectId+'--'+textobjectEditor);
 
-                            var textobjectArgument="";
-                            // simple form
-                            if (textobjectEditor=="form")
-                            {   
-                                   textobjectArgument=$('#FormEditDatatextobjectArgument').val();
+                            var textobjectArgument=$('#FormEditDatatextobjectArgument').val();
+
+                            var tinymceObject=tinyMCE.get('FormEditDatatextobjectArgument');
+                            // tinymce object
+                            if ((tinymceObject+"")!="undefined")
+                            {
+                                   textobjectArgument=tinyMCE.get('FormEditDatatextobjectArgument').getContent();                                             
                             }
-                            // tinymce
-                            if (textobjectEditor=="tinymce")
-                            {   
-                                   textobjectArgument=tinyMCE.get('FormEditDatatextobjectArgument').getContent(); 
-                                //    alert('tinymce '+textobjectArgument);  
-                            }
+
 
                            // alert('updateTextObject() '+textobjectId+'--'+textobjectEditor+" textobjectArgument="+textobjectArgument);
 
@@ -898,6 +920,13 @@ tinyMCE.init({
                             // Form2444DatatextobjectArgument
                             textobjectArgument=$('#Form'+memberId+'DatatextobjectArgument').val();
                             // alert("updateTextObjectDetailMember() "+textobjectArgument);
+
+                            var tinymceObject=tinyMCE.get('Form'+memberId+'DatatextobjectArgument');
+                            // tinymce object
+                            if ((tinymceObject+"")!="undefined")
+                            {
+                                   textobjectArgument=tinyMCE.get('Form'+memberId+'DatatextobjectArgument').getContent();                                             
+                            }
 
                     /*
                             // todo direct here!! if exisits ... 
@@ -1721,7 +1750,10 @@ tinyMCE.init({
         // debug
         function debug( area, strLog )
         {
-            if (console)  console.log(area+"--"+strLog);
+            if (typeof console != 'undefined') 
+            {
+                console.log(area+"--"+strLog);
+            }
         }
 
 

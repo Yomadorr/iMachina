@@ -5,6 +5,9 @@
 		var $textobjectType="audio"; 
     	var $textobjectTypeSub="wav";
 
+    		var $textobjectviewTypeCategory="audio";
+            var $textobjectviewTypeCategoryLabel="Audio";
+
     	function onInsert($app,$userId)
 		{
 			

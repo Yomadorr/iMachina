@@ -5,6 +5,9 @@
 		var $textobjectType="embed"; // name for 
     	var $textobjectTypeSub="youtube"; // name for 
     	var $innerCommentType="visual";
+
+			var $textobjectviewTypeCategory="video";
+            var $textobjectviewTypeCategoryLabel="Video";
     	
     	
 		function onInsert($app,$userId)
