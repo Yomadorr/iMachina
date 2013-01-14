@@ -751,7 +751,7 @@
 												$str="";
 												if ($this->textobjectObject->innerCommentType=="visual")
 													if ($this->getRuleAccessMatrix($app,$userId)->isCommentable()) 
-														$str=$str."\n   <div class='detailContainerContentActionsAddPostIt' id='detailContainerContentActionsAddPostIt".$this->getIdOrRef()."' onClick=\"doCommandTextObject(".$this->getIdOrRef().",'addpostit','detailContainerContentActionsAddPostIt".$this->getIdOrRef()."')\"  ></div>";
+														$str=$str."\n   <div class='detailContainerContentActionsAddPostIt' id='detailContainerContentActionsAddPostIt".$this->getIdOrRef()."' onClick=\"doCommandTextObject(".$this->getIdOrRef().",'addpostit','detailContainerContentActionsAddPostIt".$this->getIdOrRef()."')\" title='Add Postit' ></div>";
 												return $str;
 											}
 
