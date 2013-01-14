@@ -30,8 +30,8 @@
 			function viewFormExtendedCoreContentForm( $addDivAction="" )
 			{
 				// todo: escape html-entities
-				$str="\n 	<input type=hidden id='".$this->getDivId()."FormDatatextobjectId".$addDivAction."' value='".$this->textobjectObject->textobjectId."'> ";
-				$str=$str."\n  	<input type=textfield size=50 id='".$this->getDivId()."FormDatatextobjectArgument".$addDivAction."' style='width: 100%' value='".$this->textobjectObject->textobjectArgumentText."''>";
+				//$str="\n 	<input type=hidden id='".$this->getDivId()."FormDatatextobjectId".$addDivAction."' value='".$this->textobjectObject->textobjectId."'> ";
+				$str=$str."\n  	<input type=textfield size=50 id='Form".$addDivAction."DatatextobjectArgument' style='width: 100%' value='".$this->textobjectObject->textobjectArgumentText."''>";
 
 				return $str;
 			}
@@ -58,7 +58,7 @@
 							$playerHeight = round($playerWidth/640*390);
 						}
 						
-						$str="\n  <b>Unknown Link</b>";
+						$str="\n  <b>Unknown Link: </b>".$data." (".$divID.")";
 						if(strpos($data, "youtu") !== false){
 							
 							$youtubeId = $this->getYoutubeId($data);
@@ -317,10 +317,15 @@ $vimeoId=-1;
 				
 				if(strpos($str, "iframe") !== false){
 					//<iframe width="560" height="315" src="http://www.youtube.com/embed/ZBj2nmodCuA" frameborder="0" allowfullscreen></iframe>
-//					$youtubeId = explode('"', explode("embed/", $str)[1])[0];
+					$expList = explode("embed/", $str);
+					if (count($expList)>=2){
+					    $youtubeId = explode('"', $expList[1])[0];
+					}
+					
+					//$youtubeId = explode('"', explode("embed/", $str)[1])[0];
 // todo: error on renes computer
 // Parse error: syntax error, unexpected '[' in /Applications/MAMP/htdocs/imachina/classes/TextObjects/TextObjectEmbedYoutubeView.php on line 319
-$youtubeId =-1;
+//$youtubeId =-1;
 				}
 				elseif(strpos($str, "object") !== false){
 					/*
@@ -331,9 +336,14 @@ $youtubeId =-1;
 					</embed>
 					</object>
 					*/
+					$expList = explode("youtube.com/v/", $str);
+					if (count($expList)>=2){
+					    $youtubeId = explode('?', $expList[1])[0];
+					}
+					
 //					$youtubeId = explode('?', explode("youtube.com/v/", $str)[1])[0];
 // todo: error on renes computer
-$youtubeId =-1;
+//$youtubeId =-1;
 				}
 				elseif(strpos($str, "http") !== false){
 					$str = str_replace("https://", "", str_replace("http://", "", str_replace("www.", "", $str)));
@@ -348,9 +358,14 @@ $youtubeId =-1;
 					// http://www.youtube.com/watch?feature=endscreen&NR=1&v=pE0uRmETWKc
 					elseif(strpos($str, "v=") !== false){
 					
+					    $expList = explode("v=", $str);
+                        if (count($expList)>=2){
+                            $youtubeId = explode('&', $expList[1])[0];
+                        }
+					
 //						$youtubeId = explode("&",explode("v=",$str)[1])[0];
 // todo: error on renes computer
-$youtubeId=-1;
+//$youtubeId=-1;
 					}
 				}
 
@@ -360,7 +375,7 @@ $youtubeId=-1;
 		// wuerde ohne parameter funtionieren.
 		public function getDuration($video_id){
 	
-		    if($youtubeId != "invalid"){
+		    if($video_id != "invalid"){
                 //parse_str(parse_url($url,PHP_URL_QUERY),$arr);
                 //$video_id=$arr['v']; 
         
