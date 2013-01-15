@@ -10,9 +10,15 @@
 	echo("\n<html>");
 	echo("\n  <body>");
 
+	// config
+	echo("config");
+	
+	echo("<br>email-from-system:".$app->emailSystem);
+	
+
 	// email test
 	echo("\n  <br>email-test ");
-	$arr=Array($app->emailFrom,"rene.bauer@zhdk.ch");
+	$arr=Array($app->emailSystem,"rene.bauer@zhdk.ch");
 	print_r($arr);
 	$done=$app->sendEmailWithTitleText($arr,"imachina.test","testing");
 	echo($done);

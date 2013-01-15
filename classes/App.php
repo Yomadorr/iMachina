@@ -163,8 +163,10 @@
 
 
 		// version 
-    var $version=0.73; // versions ... 
+    var $version=0.75; // versions ... 
 
+    // 0.75 first time installed remote (several changes - app->emailSystem - killed app->emailFrom)
+    // 0.74 first test for text-markers
     // 0.73 bug fixes & better add container ... 
     // 0.72 fixes on edit ... html ... 
     // 0.71 members update 50% integrated! (open: tinymce & upload objects!)
@@ -206,11 +208,10 @@
       var $emailUseEmailServer=false; // hmmm ...
         	var $emailHost="smtp.imachina.ch"; // *
             // default no authen.
-        	var $emailLogin=""; // *
-        	var $emailPassword="";  //*
+        	var $emailLogin=""; // 
+        	var $emailPassword="";  // 
 
-    	var $emailFrom="rene.bauer@zhdk.ch";
-  //      var $emailFrom="info@imachina.ch";
+    	var $emailSystem="rene.bauer@zhdk.ch";
 
       // not yet implemented!
       // use seo names (insert seo name in domain properties!)
@@ -287,7 +288,7 @@
         	$password=$this->getConfigValueByName( "database.password" );
         	$this->initDB($host, $database, $login, $password);
         
-        	$this->emailSystem=$this->getConfigValueByName( "email.from" );
+        	$this->emailSystem=$this->getConfigValueByName( "email.system" );
 
             // check enabled
             $this->strEmailSystem=$this->getConfigValueByName( "email.usemailserver" );           
@@ -568,7 +569,7 @@ echo("<br>App.install().<br>");
 
       // todo: different processes for different types
       function createNewUser( $login, $accounttype="" ) // imachina, facebook, twitter, switch
-      {
+      { 
           $userObj=new User();
           $userObj->userLogin=$login;
           // user login
@@ -586,11 +587,16 @@ echo("<br>App.install().<br>");
           $arrEmails[0]=$login;
           $emailText="";
               $emailText=$emailText."\n<br>";
-              $emailText=$emailText."\n<br>You can login with a new password: ";
-              $emailText=$emailText."\n<br><br>".$userObj->userPassword." ";
-              $emailText=$emailText."\n";
+              $emailText=$emailText."\n<br>Login-Name: ";
+              $emailText=$emailText."\n<br>".$login;
+              $emailText=$emailText."\n<br><br>You can login with a new password: ";
+              $emailText=$emailText."\n<br>".$userObj->userPassword." ";
+              $emailText=$emailText."\n<br>";
+              $baseUrl=$this->getPlatformBaseURL();
+              $emailText=$emailText."\n<br><a href='".$baseUrl."'>Login here (".$baseUrl.") ></a>";
               $arrEmails=array();
-
+              $arrEmails[count($arrEmails)]=$this->emailSystem;
+  
           $sentEmail=$this->sendEmailWithTitleText($arrEmails,"[imachina] Account-Activation ",$emailText);
 
           return $userObj;
@@ -2180,8 +2186,8 @@ echo("<br>App.install().<br>");
                   break;
         }
 
-        $mail->AddReplyTo($this->emailFrom,"");
-        $mail->SetFrom($this->emailFrom, '');
+        $mail->AddReplyTo($this->emailSystem,"");
+        $mail->SetFrom($this->emailSystem, '');
                 
         // $mail->AddAddress($address, "John Doe");
         $mail->Subject = "".$title;

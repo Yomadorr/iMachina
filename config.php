@@ -14,7 +14,7 @@
 
 	
 	// email
-	$app->addConfigByValue(  "email.from", "string", "rene.bauer@zhdk.ch" );
+	$app->addConfigByValue(  "email.system", "string", "rene.bauer@zhdk.ch" );
 
 	// email sending server
 	$app->addConfigByValue(  "email.usemailserver", "string", "false" );
