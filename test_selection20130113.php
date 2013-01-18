@@ -136,7 +136,6 @@
 					textobjectObj.textobjectCursorA=textobjectCursorA;
 					textobjectObj.textobjectCursorB=textobjectCursorB;
 						textobjectObj.textobjectTextWordAttribute=new TextWordAttribute();
-						textobjectObj.textobjectTextWordAttribute.textobjectId=textobjectId;
 						textobjectObj.textobjectTextWordAttribute.colorRed=0;					
 						textobjectObj.textobjectTextWordAttribute.colorGreen=255;					
 						textobjectObj.textobjectTextWordAttribute.colorBlue=0;					
@@ -182,7 +181,7 @@
 				console.debug("TextComments "+this.arrTextComments.length);
 				for (var z=0;z<this.arrTextComments.length;z++)
 				{
-					if (this.arrTextComments[z].textobjectRef==textobjectId) this.renderCommentToAttributes( this.arrTextComments[z] );;
+					if (this.arrTextComments[z].textobjectId==textobjectId) this.renderCommentToAttributes( this.arrTextComments[z] );;
 				}
 
 				// apply attributes to divs
@@ -207,7 +206,7 @@
 
 					for (var i=0;i<this.arrWords.length;i++)
 					{
-						if ((textobjectObj.textobjectRef==this.arrWords[i].textobjectId)||(textobjectObj.textobjectId=="selection"))
+						if ((textobjectObj.textobjectId==this.arrWords[i].textobjectId)||(textobjectObj.textobjectId=="selection"))
 						{
 							if (textobjectObj.textobjectCursorA==this.arrWords[i].textwordId) {  flagInSelection=true;  }
 							if (flagInSelection) { var textwordattributeObj=textobjectObj.textobjectTextWordAttribute;  this.arrWords[i].addTextWordAttribute(textwordattributeObj);   } 
@@ -301,7 +300,7 @@
 			textCommentToggle(
 
 		*/
-		function onTextCommentToggle( textobjectId )
+		function textCommentToggle( textobjectId )
 		{
 			alert("textobjectId: "+textobjectId);
 		}
@@ -312,9 +311,7 @@
 		*/
 		// selected text
 		var textobjectSelection=new TextObject();
-			textobjectSelection.textobjectId=15001; // default
-			textobjectSelection.textobjectRef=1001; // default
-
+			textobjectSelection.textobjectId=1001; // default
 			textobjectSelection.textobjectTextWordAttribute.colorRed=255;
 		    textobjectSelection.textobjectCursorA=-1;
 		    textobjectSelection.textobjectCursorB=-1;
@@ -331,9 +328,9 @@
 			// alert("onTextClick( "+textobjectId+","+ textId+")");
 
 			// clear
-			if (textobjectId!=textobjectSelection.textobjectRef)
+			if (textobjectId!=textobjectSelection.textobjectId)
 			{
-				imachinaManager.clearCommentAttributesForId( textobjectSelection.textobjectRef );
+				this.clearCommentAttributesForId( textobjectSelection.textobjectId );
 			}
 
 			if (textobjectSelection.textobjectCursorA==-1)textobjectSelection.textobjectCursorA=textId;
@@ -357,7 +354,7 @@
 
 			// console.debug("onTextClick() "+textobjectSelection.textobjectCursorA+"  "+textobjectSelection.textobjectCursorB);
 
-			imachinaManager.renderTextObjectById(textobjectSelection.textobjectRef);
+			imachinaManager.renderTextObjectById(textobjectSelection.textobjectId);
 
 			console.debug(imachinaManager.debugText());
 
@@ -608,22 +605,20 @@
 	// version 1
 	// $selectableText=preg_replace("/( id='imt(\d+)_(\d+)' imachinaTag>([^<]+))/", "$1<div style='display: inline; position: relative;'><div  style='position: absolute; display: inline; top: 20px; opacity: 1.0;' id='imcommentt$2_$3'></div></div>", $selectableText);
 	// $selectableText=preg_replace("/( id='imt(\d+)_(\d+)' imachinaTag>([^<]+))/", "$1<div style='display: inline; position: relative;'><div  style='position: absolute; display: inline; top: 20px; opacity: 1.0;' id='imcommentt$2_$3'></div></div>", $selectableText);
-	// version 2
-	$selectableText=preg_replace("/( id='endimt(\d+)_(\d+)'>)/", "$1<div class='detailComponentCommentsText'  id='commentimt$2_$3'></div>", $selectableText);
+//	$selectableText=preg_replace("/( id='endimt(\d+)_(\d+)'>)/", "$1<div style='display:inline; background: blue;' class='detailComponentCommentsText'><div class='detailComponentCommentsTextEntity' id='imcommentt$2_$3'>*</div></div>", $selectableText);
 
 	// display 
 	// add a concrete comment here ...
 	$textobjectIdThis=1001;
-	$wordtextId=62;
-	$textobjectCommentId=15001;
+	$wordtextId=37;
+	$textobjectCommentId=1001;
 	// version 1.0
 //	$selectableText=preg_replace("/( id='imt".$textobjectIdThis."_".$wordtextId."' imachinaTag>([^<]+))/", "$1C", $selectableText);
 //	$selectableText=preg_replace("/( id='imcommentt".$textobjectIdThis."_".$wordtextId."'>)/", "$1<div style='border: 1px solid black; padding: 5px;'>ABC</div>", $selectableText);
 	// version 2
-	// add an icon (for show and hide)
-	$selectableText=preg_replace("/( id='endimt".$textobjectIdThis."_".$wordtextId."'>)/", "$1<div class='detailComponentCommentsTextIcon' onClick=\"onTextCommentToggle( $textobjectCommentId )\">[]</div>", $selectableText);
-	// add a comment for this	
-	$selectableText=preg_replace("/( id='commentimt".$textobjectIdThis."_".$wordtextId."'>)/", "$1<div class='detailComponentCommentsTextEntity' id='imcommentt$2_$3'>ABC</div>", $selectableText);
+	$selectableText=preg_replace("/( id='endimt".$textobjectIdThis."_".$wordtextId."'>)/", "$1<div class='detailComponentCommentsTextIcon' onClick=\"textCommentToggle( $textobjectCommentId )\">[]</a>", $selectableText);
+//	$selectableText=preg_replace("/( id='endimt".$textobjectIdThis."_".$wordtextId."'>)/", "$1[C]", $selectableText);
+	//	$selectableText=preg_replace("/( id='imcommentt".$textobjectIdThis."_".$wordtextId."'>)/", "$1<div style='border: 1px solid black; padding: 5px;'>ABC</div>", $selectableText);
 
 //  id='endimt".$textobjectId."_".$imachinaTextId."'>
 

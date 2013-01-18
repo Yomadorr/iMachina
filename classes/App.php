@@ -97,6 +97,8 @@
     -- RegistratedHyperthread* 
     -- RegistratedDomain* 
 
+    todo: member (always refName till up to object! )
+
   RuleAccessMatrix
   - read
   - write
@@ -196,6 +198,9 @@
     // ideas:
     //  add onStart=''|'start' - onEnd=''|'repeat'  (rb)
     //  add timeAAction='/go'  (rb)
+
+    // new types: 
+    //  zip
 
 
 		// config object
@@ -594,8 +599,7 @@ echo("<br>App.install().<br>");
               $emailText=$emailText."\n<br>";
               $baseUrl=$this->getPlatformBaseURL();
               $emailText=$emailText."\n<br><a href='".$baseUrl."'>Login here (".$baseUrl.") ></a>";
-              $arrEmails=array();
-              $arrEmails[count($arrEmails)]=$this->emailSystem;
+ //             $arrEmails[count($arrEmails)]=$this->emailSystem;
   
           $sentEmail=$this->sendEmailWithTitleText($arrEmails,"[imachina] Account-Activation ",$emailText);
 

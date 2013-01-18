@@ -7,17 +7,80 @@
 // at the moment in index.php
 
 
+	// Baseobjects
+
+			/*
+		Text-Rendering
+	*/
+		// helper classes for imachinaManager
+		var TextWord = function()
+		{
+			this.textobjectId=-1;
+			this.textwordId=-1;
+			this.textwordAttributes = new Array();
+			this.addTextWordAttribute = function( textwordattributeObj ) {   this.textwordAttributes[this.textwordAttributes.length]=textwordattributeObj;  }
+			this.addTextWordAttributeByValue = function( red, blue, green ) {  var textwordObj=new TextWordAttribute(); textwordObj.colorRed=red; textwordObj.colorGreen=green; textwordObj.colorBlue=blue;   this.textwordAttributes[this.textwordAttributes.length]=textwordattributeObj;  }
+			this.clearTextWordAttributes = function( ) { this.textwordAttributes=new Array();  }
+
+			this.debug = function () 
+			{ 
+				var str="("+this.textobjectId+") "+this.textwordId; 
+					// add attributes
+					str=str+" length "+this.textwordAttributes.length;
+					str=str+" { ";
+					for (z=0;z<this.textwordAttributes.length;z++)
+					{
+						var wordtextObj=this.textwordAttributes[z];
+						str=str+" "+z+" ("+wordtextObj.debug()+")";
+						str=str+" ";
+					}
+					str=str+" } "
+				return str;
+			}
+
+		}
+
+			var TextWordAttribute = function()
+			{
+				// textobject
+				this.textobjectId=-1; // textobject ... 
+
+				// colors ... 
+				this.colorRed=250;
+				this.colorBlue=0;
+				this.colorGreen=0;
+
+				// overwrite all other (for selection)
+				this.overwriteAndTop=false;
+
+				// bold etc?
+
+				this.debug = function () { return this.colorRed+"-"+this.colorBlue+"-"+this.colorGreen }
+			}
+
+
 	// iMachinaTextObject
 	var TextObject = function()
 	{
-		var textobjectId=-1;
-		var textobjectRef=-1;
-		var textobjectType="text";
-		var textobjectTypeSub="plain";
-		var textobjectArgument="";
-		var textobjectCommentType=""; // textobjectCommentType
+		this.textobjectId=-1;
+		this.textobjectRef=-1;
+		this.textobjectType="text";
+		this.textobjectTypeSub="plain";
+		this.textobjectArgument="";
+
+		this.textobjectCommentType=""; // textobjectCommentType
+
+		this.textobjectCursorA=-1; // types
+		this.textobjectCursorB=-1; 
+
+			this.textobjectTextWordAttribute=new TextWordAttribute(); // for rendering
 	}
 
+	
+
+	/*
+		Timelines
+	*/
 	// iMachinaTimeLine
 	var iMachinaTimeLine = function( )
 	{

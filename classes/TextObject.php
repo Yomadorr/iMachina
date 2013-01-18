@@ -38,14 +38,17 @@
     	// status
     	var $textobjectStatus="published"; // published/draft/deleted
 
-    	var $textobjectName=""; // name for 
+    	var $textobjectName=""; // name for / used in members!
 
 		// refs
     	var $textobjectRef=-1; // name for 
     	var $textobjectRefName=""; // name for 
-			
+
 			// special
 	    	var $textobjectUserRef=-1; // to a user
+
+	    // special parents? ...
+		var $needsThreadAsParent=false; // *
  
  		// REF TEXT (Cursor) *
  		var $textobjectCursorA=-1; // name for 
@@ -119,10 +122,12 @@
 		var $textobjectWidth=""; // time length 
 		var $textobjectHeight=""; // 
 
-		var $textobjectBackground=""; // * ...
+		var $textobjectBackground=""; // * ... 
 
 		// comment
 		var $innerCommentType="text"; // text/visual/none	
+		var $innerCommentable=false; // * commentable ... 
+
 
 		// gps lat/lng*
 
@@ -139,8 +144,15 @@
        	var $textobjectCopyright=""; // * "":no / "education": must - online in open communities important! ... 
 
        	// in case of domain *
-       	var $textobjectIsPublic=1; // is public = searchable etc ... 
+       	var $textobjectIsPublic=1; // * is public = searchable etc ... 
 
+        // special staff
+		var $isRootAdminStuff=false; // * 
+		var $isDomainAdminStuff=false; // * 
+		var $isAdminStuff=false; // * 
+
+		var $isStaffStuff=false; // * 
+		
     	// different values?
 
     	var $textobjectCreate;

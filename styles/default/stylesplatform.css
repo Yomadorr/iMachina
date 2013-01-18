@@ -87,19 +87,20 @@ input[type=textarea] {
 							.detailComponentFormContainerManualAdd { width: 500px; }
 							#formAddFileDropBoxContainer { float: right; width: 280px; border-left: 1px solid black; padding-left: 5px; padding-right: 5px; min-height: 400px;}
 			 					.detailComponentAddCommentType {  width: 30; height: 30;  background-image: url(imgs/FormAddComment.png);  }
-					 			.detailComponentAddCommentTypeVisual {  background-image: url(imgs/FormAddCommentVisual.png); }
-					 			.detailComponentAddCommentTypeText {  background-image: url(imgs/FormAddCommentText.png);  }
-								.detailComponentAddSelectionContainer { margin-top: 10px; margin-bottom: 10px; background: #cccccc; border: 1px solid black; }
-									.detailComponentAddSelectionTextObjectTypeCategoryContainer { background: white; padding: 10px; }
-										.detailComponentAddSelectionTextObjectTypeCategoryContainerEntry { display: inline; border: 1px solid black;  min-width: 50px; min-height: 50px; padding: 5px; margin-bottom: 40px; }
-										.detailComponentAddSelectionTextObjectTypeCategoryContainerEntrySelected { border: 1px solid black; padding: 3px; font-weight: bold; background: black; color: white;}
+						 			.detailComponentAddCommentTypeVisual {  background-image: url(imgs/FormAddCommentVisual.png); }
+						 			.detailComponentAddCommentTypeText {  background-image: url(imgs/FormAddCommentText.png);  }
+									.detailComponentAddSelectionContainer { margin-top: 10px; margin-bottom: 10px; background: #cccccc; border: 1px solid black; }
+										.detailComponentAddSelectionTextObjectTypeCategoryContainer { background: white; padding: 10px; }
+											.detailComponentAddSelectionTextObjectTypeCategoryContainerEntry { display: inline; border: 1px solid black;  min-width: 50px; min-height: 50px; padding: 5px; margin-bottom: 40px; }
+											.detailComponentAddSelectionTextObjectTypeCategoryContainerEntrySelected { border: 1px solid black; padding: 3px; font-weight: bold; background: black; color: white;}
 
-									.detailComponentAddSelectionTextObjectTypeContainerFrame {  background: white;  padding: 10px;  }
-										.detailComponentAddSelectionTextObjectTypeContainer { margin-top: 5px; margin-bottom: 5px; display: inline; border: 1px solid black; font-size: 16px; background: white; padding-left: 5px; padding-right:5px; }
-											.detailComponentAddSelectionTextObjectTypeContainerSelected { border: 2px solid black; background: #cccccc; }
-												.detailComponentAddSelectionTextObjectTypeContainerIcon { background: green;  }
-											.detailComponentAddSelectionTextObjectTypeContainerDescription { font-weight: italic;  padding-top: 5px; padding-bottom: 5px; margin-top: 5px; border-top: 1px dotted black; border-bottom: 1px dotted black; }
-									
+										.detailComponentAddSelectionTextObjectTypeContainerFrame {  background: white;  padding: 10px;  }
+											.detailComponentAddSelectionTextObjectTypeContainer { margin-top: 5px; margin-bottom: 5px; display: inline; border: 1px solid black; font-size: 16px; background: white; padding-left: 5px; padding-right:5px; }
+												.detailComponentAddSelectionTextObjectTypeContainerSelected { border: 2px solid black; background: #cccccc; }
+													.detailComponentAddSelectionTextObjectTypeContainerIcon { background: green;  }
+												.detailComponentAddSelectionTextObjectTypeContainerDescription { font-weight: italic;  padding-top: 5px; padding-bottom: 5px; margin-top: 5px; border-top: 1px dotted black; border-bottom: 1px dotted black; }
+										
+
 								.detailComponentMemberForm { border: 0px solid black; }
 									.detailComponentMemberFormTitle { padding-top: 20px;}
 									.detailComponentMemberFormEntities { padding-left: 10px;  }
@@ -123,6 +124,15 @@ input[type=textarea] {
 									.detailComponentCommentsVisualSpace{ display:inline; width:30px; padding-left: 5px; padding-right:;}
 									.detailComponentCommentsVisualToggle { display:inline; font-size: 12px; background: #eeee00; border: 1px solid black; width: 50px;}
 									.detailComponentCommentsVisualBringToFront { display:inline; font-size: 12px; background: #eeee00; border: 1px solid black; }
+						/* visual 1. a container absolute and 2. the innercomments absolute positioned */
+						.detailComponentCommentsTextIcon { display: inline; }
+						.detailComponentCommentsText { position: relative; display: inline; }
+							.detailComponentCommentsTextEntity { position: absolute; display: inline; _left: 20xp; top: 10px; border: 1px solid black; background: white; opacity: 0.5; }
+
+							/* used in textes */
+							.imachinaText { display: inline; /*float: left; */ }
+						  		.imachinaTextSelected { display: inline; background; red; }
+
 					
 					.detailContainerContentActions { _float: right; border: 0px solid black; }
 
