@@ -88,7 +88,7 @@
 			this.playerId="20";
 			this.playerOffset=20;
 			this.playerWidth=400;
-			this.playerHeight=10;
+			this.playerHeight=20;
 			this.playerbuttonspace = 10;
 			this.playerDiv="";
 			this.timeToPixelRatio=1.0;
@@ -543,9 +543,9 @@
 				 	$('#'+this.playerDiv).append("<div id='playertime"+this.playerId+"' style='z-index: "+maxZIndex+"; position: absolute; border: 1px solid black; background:#ffffff; font-size: 12px; opacity: .7;  margin-left: "+(this.timeToPixel(this.maxTime)+10)+"px; height: "+this.playerHeight+"px;' > "+this.converToMinutes(this.maxTime)+" </div>");
 					
 
-				 	// play
+				 	// play button
 					maxZIndex=maxZIndex+1;
-				 	$('#'+this.playerDiv).append("<div id='playerPlay"+this.playerId+"' style='z-index: "+maxZIndex+"; position: absolute; border: 1px solid black; background:#cccccc; width: 10px; font-size: 8px; valign: topx; vertical-alignment:top; ' >></div>");
+				 	$('#'+this.playerDiv).append("<div id='playerPlay"+this.playerId+"' style='z-index: "+maxZIndex+"; position: absolute; border: 1px solid black; background:#cccccc; width: 20px; height: "+this.playerHeight+"px;'  font-size: 8px; valign: topx; vertical-alignment:top; ' >></div>");
 				 	$("#playerPlay"+this.playerId+"").click(function() { objectThis.toggle();  });
 
 				

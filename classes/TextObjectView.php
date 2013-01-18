@@ -347,8 +347,7 @@
 							$str=$str."".$this->viewSideActionsTop($app,$userId);
 
 
-							// timeline
-							$str=$str."\n   ".$this->viewTimeline( $app, $userId )."";					
+			
 
 							// add
 	//						$str=$str."\n  	".$this->viewAddForm(  $app, $userId  )."";	
@@ -363,7 +362,9 @@
 
 							// detail
 							$str=$str."\n   ".$this->viewContent( $app, $userId )."";					
-		
+
+							// timeline
+							$str=$str."\n   ".$this->viewTimeline( $app, $userId )."";				
 						
 						$str=$str."\n </div>";	
 
