@@ -165,8 +165,9 @@
 
 
 		// version 
-    var $version=0.75; // versions ... 
+    var $version=0.76; // versions ... 
 
+    // 0.76 imported div. javascripts for textmarking & new text for hyperthreads
     // 0.75 first time installed remote (several changes - app->emailSystem - killed app->emailFrom)
     // 0.74 first test for text-markers
     // 0.73 bug fixes & better add container ... 

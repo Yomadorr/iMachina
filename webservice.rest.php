@@ -16,7 +16,7 @@
 	// session?
 
 	// todo get from session!
-	// $userId=-1; // comes from appinstance ..
+	// $userId=-1; // comes from aviewTimelineWithDivEnvelopeppinstance ..
 
 	// area
 	$area=""; if (isset($_REQUEST["area"])) $area="".$_REQUEST["area"];
@@ -675,6 +675,7 @@
 										{
 											rename($newFilePath, $newFilePathVersion);
 										}
+										
 									// move to the correct place
 									move_uploaded_file($_FILES['documentfile']['tmp_name'], $newFilePath);
 

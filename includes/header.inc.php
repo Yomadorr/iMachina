@@ -25,6 +25,19 @@
 <script src="jqueryaddons.js"></script> 
 
 <!-- javascript -->
+<script>
+    /*
+        Debugging
+    */
+    // debug
+    function debug( area, strLog )
+    {
+        if (typeof console != 'undefined') 
+        {
+            console.log(area+"--"+strLog);
+        }
+    }
+</script>
 <!-- including timeline etc. scripts -->
 <script src="jclasses.js"></script> 
 
@@ -161,6 +174,9 @@ tinyMCE.init({
 </script>
 
 <script>
+
+
+
     
     /*
 
@@ -413,6 +429,75 @@ tinyMCE.init({
             }
         };
 
+    /*
+        TextComments 
+        (render Text etc)
+
+        Selections
+    */
+    // instance of the manager ...
+    var imachinaTextManager=new imachinaTextManager();
+        
+        /*
+            textCommentToggle(
+
+        */
+        function onTextCommentToggle( textobjectId )
+        {
+            alert("textobjectId: "+textobjectId);
+        }
+
+        /*
+            actual
+        */
+        // selected text
+        var textobjectSelection=new TextObject();
+            textobjectSelection.textobjectId=15001; // default
+            textobjectSelection.textobjectRef=1001; // default
+
+            textobjectSelection.textobjectTextWordAttribute.colorRed=255;
+            textobjectSelection.textobjectCursorA=-1;
+            textobjectSelection.textobjectCursorB=-1;
+        // add this component here ...
+        imachinaTextManager.addTextComment(textobjectSelection);    
+        
+        // debug
+        var debugComments=imachinaTextManager.debugTextComments();
+        // console.debug(""+debugComments);            
+
+        // todo: remove this here ... 
+        function onTextClick( textobjectId, textId)
+        {
+            // alert("onTextClick( "+textobjectId+","+ textId+")");
+
+            // clear
+            if (textobjectId!=textobjectSelection.textobjectRef)
+            {
+                imachinaTextManager.clearCommentAttributesForId( textobjectSelection.textobjectRef );
+            }
+
+            if (textobjectSelection.textobjectCursorA==-1)textobjectSelection.textobjectCursorA=textId;
+            else
+            {
+                //if (textobjectSelection.textobjectCursorA!=-1) 
+                //{
+                    /*
+                    if (selectionRangeA<selectionRangeB) selectionRangeB=textId;
+                    else
+                    if (selectionRangeA>selectionRangeA) selectionRangeA=textId;
+                    */
+                    textobjectSelection.textobjectCursorB=textId;
+                //}
+            }
+            // alert("onTextClick( "+textobjectId+","+ textId+")");
+            // showTextSelection();
+            // todo: deselect old version
+            // console.debug("onTextClick() "+textobjectSelection.textobjectCursorA+"  "+textobjectSelection.textobjectCursorB);
+
+            imachinaTextManager.renderTextObjectById(textobjectSelection.textobjectRef);
+            debug("imachnaTextManager",imachinaTextManager.debugText());
+
+        }
 
     /*
             
@@ -1744,16 +1829,6 @@ if (tinyMCE.getInstanceById('FormAddDatatextobjectArgument'))
         function hideSystemDialog() // user do this!
         {
             $('#systemDialog').hide();
-        }
-
-
-        // debug
-        function debug( area, strLog )
-        {
-            if (typeof console != 'undefined') 
-            {
-                console.log(area+"--"+strLog);
-            }
         }
 
 

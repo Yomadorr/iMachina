@@ -7,6 +7,13 @@
 
     	var $innerCommentType="";
 
+
+			function TextObjectHyperthreadPlain()
+            {
+               	// text ...
+                $todefObj=$this->addMemberByValue("maintext","Text",false,"text","html","Text zum Hyperthread. Edit this Text in Hyperthread properties.",false);
+            }
+
 	}
 	
     

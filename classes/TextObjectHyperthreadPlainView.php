@@ -144,12 +144,18 @@
 			// side actions
 			// $str=$str."".$this->viewSideActions($app,$userId);
 
+
 			$str=$str."<div class='textobjectHyperthreadPlainDetailTitle'>";
 			$str=$str.$this->showVisibility( $app );
 			$str=$str.$strContent;
 			$str=$str."</div>";
 			// add members here ... 
 			// $str=$str.$this->viewMembers( $app, $userId );
+
+			// text ... 
+			$htmltext=$this->textobjectObject->getMemberValue( "maintext", $app, $userId );
+			if ($htmltext!="") $str=$str.$htmltext;
+
 			$str=$str."</div>";
 
 			// comments

@@ -25,261 +25,21 @@
 	// ok add 
 	?>
 	<script>
-
-		/*
-
-			Render Textcomments...
-
-		*/
-		/*
-
-			Datastructure:
-
-			[textobjectTextCommentX] [textobjectTextCommentY]
-						   	|\\\	
-
-    				      (TextAttribute1-LayerX) 
-    				           (TextAttribute1-LayerY)
-    				           (TextAttribute2-LayerX) 
-					         \ |  /
-				Text-Layer: [WordA-IDA][WordB-IDB]
-			
-			Workflow (Rendering):
-			- TextObject { selectionA - selectionB }
-			- Rendering to TextAttributes
-			> Visualisation (Rendering)
-			
-		*/
-
-		/*
-			texts: wordtexts, holds texts (wordlist), 
-				   [wordtext]-attributes
-			comments
-		*/
-			
-
-		// the manager
-		var imachinaTextManager = function()
-		{
-			// this.debutToConsole=false; 
-
-			this.version=0.6;
-
-			/*
-				Texts
-
-			*/
-			/*
-				TextWords
-			*/
-			/*
-			 	Words of the text ... 
-			*/	
-			// 
-			// Layer: [selected] or [id]
-			//  
-			this.arrWords=new Array(); 
-
-				this.debugWords = function()
-				{
-					var str="WORDS: ";
-					var textwordObj;
-					for (var i=0;i<this.arrWords.length;i++)
-					{
-						textwordObj=this.arrWords[i];
-						str=str+"\n "+i+". "+textwordObj.debug();
-					}
-
-					return str;
-				}
-
-
-			this.addTextWord = function( textobjectId, wordId )
-			{
-				var wordObject=new TextWord();
-					wordObject.textobjectId=textobjectId;
-					wordObject.textwordId=wordId;
-
-				// console.debug("addTextWord( "+textobjectId+", "+wordId+"  )");
-
-				this.arrWords[this.arrWords.length]=wordObject;
-
-				return wordObject
-			}		
-
-			this.debugText = function( )
-			{
-				var str="";
-
-				for (var i=0;i<this.arrWords.length;i++)
-				{
-					str=str+"\n"+i+" "+this.arrWords[i].debug();;
-				}
-
-				return str;
-			}
-
-
-			/*
-				TextComments
-			*/
-			/*
-				TextComments
-			*/
-			this.arrTextComments = new Array();
-
-			this.addTextCommentByValues = function(textobjectId, textobjectRef, textobjectCursorA, textobjectCursorB ) // red,green,blue
-			{
-				var textobjectObj=new TextObject();
-					textobjectObj.textobjectId=textobjectId;
-					textobjectObj.textobjectRef=textobjectRef;
-					textobjectObj.textobjectCursorA=textobjectCursorA;
-					textobjectObj.textobjectCursorB=textobjectCursorB;
-						textobjectObj.textobjectTextWordAttribute=new TextWordAttribute();
-						textobjectObj.textobjectTextWordAttribute.textobjectId=textobjectId;
-						textobjectObj.textobjectTextWordAttribute.colorRed=0;					
-						textobjectObj.textobjectTextWordAttribute.colorGreen=255;					
-						textobjectObj.textobjectTextWordAttribute.colorBlue=0;					
-				this.addTextComment( textobjectObj );
-			}
-			this.addTextComment = function ( textobjectObj )
-			{
-				textobjectObj.textobjectTextWordAttribute=new TextWordAttribute();
-
-				var arr=this.arrTextComments;
-				arr[arr.length]=textobjectObj;
-			}
-			
-			this.getComments = function()
-			{
-				return this.arrTextComments.length;
-			}
-
-			this.getVersion = function()
-			{
-				return this.version;
-			}
-
-			this.debugTextComments = function () 
-			{ 
-				var arr=this.arrTextComments; 
-				var str=""; 
-				for (var z=0;z<arr.length;z++) {  str=str+"\n "+z+". "+this.arrTextComments[z].textobjectId+" A: "+this.arrTextComments[z].textobjectCursorA+" B: "+this.arrTextComments[z].textobjectCursorB; } 
-				return str; 
-			}
-
-			/*
-				Renderings
-
-			*/
-			this.renderTextObjectById = function( textobjectId )
-			{
-				// reset all now ...
-				this.clearCommentAttributesForId( textobjectId );
-
-				// render all textobjects
-				// do now the renderdings
-				console.debug("TextComments "+this.arrTextComments.length);
-				for (var z=0;z<this.arrTextComments.length;z++)
-				{
-					if (this.arrTextComments[z].textobjectRef==textobjectId) this.renderCommentToAttributes( this.arrTextComments[z] );;
-				}
-
-				// apply attributes to divs
-				this.applyTextWordAttributeToText( textobjectId );
-
-			}
-				this.clearCommentAttributesForId = function( textobjectId )
-				{
-					for (var z=0;z<this.arrWords.length;z++)
-					{
-						if (this.arrWords[z].textobjectId==textobjectId) this.arrWords[z].clearTextWordAttributes();
-					}
-				}
-
-				// render comment to attribute
-				this.renderCommentToAttributes = function( textobjectObj )
-				{
-					var textwordObj;
-					var flagInSelection=false;
-
-					// console.debug("renderCommentToAttributes("+textobjectObj.textobjectId+")  ");
-
-					for (var i=0;i<this.arrWords.length;i++)
-					{
-						if ((textobjectObj.textobjectRef==this.arrWords[i].textobjectId)||(textobjectObj.textobjectId=="selection"))
-						{
-							if (textobjectObj.textobjectCursorA==this.arrWords[i].textwordId) {  flagInSelection=true;  }
-							if (flagInSelection) { var textwordattributeObj=textobjectObj.textobjectTextWordAttribute;  this.arrWords[i].addTextWordAttribute(textwordattributeObj);   } 
-							if ((textobjectObj.textobjectCursorB==this.arrWords[i].textwordId)||(textobjectObj.textobjectCursorB==-1)) {  flagInSelection=false;  }
-						}
-					}
-				}
-
-				// render data
-				this.applyTextWordAttributeToText = function( textobjectId )
-				{
-					var toaObj;
-
-					// red ...
-
-					for (var z=0;z<this.arrWords.length;z++)
-					{
-						var textwordObj=this.arrWords[z];
-						if (textwordObj.textobjectId==textobjectId) 
-						{
-							var arr=textwordObj.textwordAttributes;
-
-							// more complex!!
-							if (arr.length>0)
-							{
-								// go through attributes!!!
-								// new TextWordAttribute();
-								
-								toaObj=new TextWordAttribute();
-								toaObj.colorRed=0;
-								toaObj.colorGreen=0;
-								toaObj.colorBlue=0;
-								for (var inx=0;inx<arr.length;inx++)
-								{
-									
-									// add togehter here ...
-									toaObj.colorRed=toaObj.colorRed+arr[inx].colorRed+1;
-									toaObj.colorGreen=toaObj.colorGreen+arr[inx].colorGreen+1;
-									toaObj.colorBlue=toaObj.colorBlue+arr[inx].colorBlue+1;
-								}
-
-								console.debug("new marker before: "+toaObj.colorRed+","+toaObj.colorGreen+","+toaObj.colorBlue);
-
-								// max ... 
-								if (toaObj.colorRed>255) toaObj.colorRed=255;
-								if (toaObj.colorGreen>255) toaObj.colorGreen=255;
-								if (toaObj.colorBlue>255) toaObj.colorBlue=255;
-
-								// make it darker
-								var factor=1;
-								if (arr.length>1) factor=1.0-arr.length*0.1;
-
-								toaObj.colorRed=parseInt(toaObj.colorRed*factor);
-								toaObj.colorGreen=parseInt(toaObj.colorGreen*factor);
-								toaObj.colorBlue=parseInt(toaObj.colorBlue*factor);
-
-								console.debug("new marker: "+toaObj.colorRed+","+toaObj.colorGreen+","+toaObj.colorBlue);
-
-								var divId="imt"+textwordObj.textobjectId+"_"+textwordObj.textwordId;
-								$('#'+divId).css("background",'rgb('+toaObj.colorRed+','+toaObj.colorBlue+','+toaObj.colorGreen+')');
-
-//								$('#'+divId).css("background","green");
-							}
-						}
-					}
-				}	
-
-		
-		}
+    /*
+        Debugging
+    */
+    // debug
+    function debug( area, strLog )
+    {
+        if (typeof console != 'undefined') 
+        {
+            console.log(area+"--"+strLog);
+        }
+    }
+	
 
 		// instance of the manager ...
-		var imachinaManager=new imachinaTextManager();
+		var imachinaTextManager=new imachinaTextManager();
 		
 	</script>
 
@@ -288,8 +48,8 @@
 		// add TextComments
 		// examples
 		// 87-61
-		imachinaManager.addTextCommentByValues(2001, 1001, 82, 61 );
-		imachinaManager.addTextCommentByValues(2002, 1001, 96, 82 );
+		imachinaTextManager.addTextCommentByValues(2001, 1001, 82, 61 );
+		imachinaTextManager.addTextCommentByValues(2002, 1001, 96, 82 );
 
 	</script>
 
@@ -319,10 +79,10 @@
 		    textobjectSelection.textobjectCursorA=-1;
 		    textobjectSelection.textobjectCursorB=-1;
 		// add this component here ...
-		imachinaManager.addTextComment(textobjectSelection);	
+		imachinaTextManager.addTextComment(textobjectSelection);	
 		
 		// debug
-		var debugComments=imachinaManager.debugTextComments();
+		var debugComments=imachinaTextManager.debugTextComments();
 		console.debug(""+debugComments);			
 
 		// todo: remove this here ... 
@@ -333,7 +93,7 @@
 			// clear
 			if (textobjectId!=textobjectSelection.textobjectRef)
 			{
-				imachinaManager.clearCommentAttributesForId( textobjectSelection.textobjectRef );
+				imachinaTextManager.clearCommentAttributesForId( textobjectSelection.textobjectRef );
 			}
 
 			if (textobjectSelection.textobjectCursorA==-1)textobjectSelection.textobjectCursorA=textId;
@@ -357,9 +117,9 @@
 
 			// console.debug("onTextClick() "+textobjectSelection.textobjectCursorA+"  "+textobjectSelection.textobjectCursorB);
 
-			imachinaManager.renderTextObjectById(textobjectSelection.textobjectRef);
+			imachinaTextManager.renderTextObjectById(textobjectSelection.textobjectRef);
 
-			console.debug(imachinaManager.debugText());
+			console.debug(imachinaTextManager.debugText());
 
 		}
 
@@ -648,15 +408,15 @@
 			$textobjectId=$arrVal[0]; 
 			$wordIndex=$arrVal[1]; 
 			// echo("\n $textobjectId $wordIndex ");
-			$strScript=$strScript."\n imachinaManager.addTextWord( $textobjectId, $wordIndex ); ";
+			$strScript=$strScript."\n imachinaTextManager.addTextWord( $textobjectId, $wordIndex ); ";
 		}
 	}
 
-	// $strScript=$strScript."\n console.debug(imachinaManager.debugText()); ";
+	// $strScript=$strScript."\n console.debug(imachinaTextManager.debugText()); ";
 
-	$strScript=$strScript."\n imachinaManager.renderTextObjectById(1001);";
+	$strScript=$strScript."\n imachinaTextManager.renderTextObjectById(1001);";
 
-	// $strScript=$strScript."\n console.debug(imachinaManager.debugText()); ";
+	// $strScript=$strScript."\n console.debug(imachinaTextManager.debugText()); ";
 
 	$strScript=$strScript."\n</script>";
 
