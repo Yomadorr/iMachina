@@ -3,47 +3,128 @@
 	class TextObjectAudioWavView extends TextObjectView
 	{
 
-		var $textobjectviewType="audio";
-		var $textobjectviewTypeSub="wav";
+		var $textobjectviewType="audio"; 
+		var $textobjectviewTypeSub="wav"; 
+	
+		var $textobjectviewLabel="WAV-Audio"; // @textobject.label*
+		var $textobjectviewDescription="a WAV Audiofile"; // @textobject.description
 
-		var $textobjectviewIcon="AudioWavIcon.png"; // * not used
-		var $textobjectviewIconBig="AudioWavIconBig.png"; // * not used
-		var $textobjectviewLabel="AudioWave"; // @textobject.label*
-		var $textobjectviewDescription="This is a audiofile."; // @textobject.description
 
-		function viewFormExtendedCoreContentForm( $addDivAction="" )
-		{
-			$str="";
-			$str=$str."\n  	<input type=textfield size=50 id='".$this->getDivId()."FormDatatextobjectArgument".$addDivAction."' style='width: 100%' value='".$this->textobjectObject->textobjectArgumentText."''>";
-			return $str;
-		}
+			function viewContent( $app, $userId )
+			{
+				// document path
+				$width="".$this->textobjectObject->textobjectWidth;
+				$height="".$this->textobjectObject->textobjectHeight;
+				$strWidth="";
+				$strHeight="";
+					if ($width!="") $strWidth=" width='$width' ";
+					if ($height!="") $strHeight=" width='$height' ";
+				$strSize=" $strWidth  $strHeight ";
 
+				// document path
+				$documentURL=$this->textobjectObject->getDocumentURL();
+				$textobjectID = $this->getId();
+				$audioDuration = $this->textobjectObject->textobjectTimeLength;
+
+				//$str="\n  <div  class='detailContainerContent' id='".$this->getDivId()."Content'>".$this->textobjectObject->textobjectArgument."</div>";
+				$strContent=TextObjectView::textToHtml($this->textobjectObject->getArgument());
+				$strContent=str_replace("\n","<br>",$strContent);
+
+
+					$str="\n  <div  class='detailContainerContent' id='".$this->getDivId()."Content' >";
+
+					$str=$str."\n 	<audio id='audio".$textobjectID."'>";
+		  			$str=$str."\n 		<source id='wav_src".$textobjectID."' src='".$documentURL."' type='audio/wav'>";
+					$str=$str."\n 		Your browser does not support the wav audio element.";
+					$str=$str."\n 	</audio>";
+
+					// Image
+					$wavImageObjdocumentURL = "default/TextObjectcomplexWavImage.png";
+					$member = $this->textobjectObject->getMemberByName("image", $app, $userId );
+					if ($member!=null)
+			    	{
+			    		$membertextObj = $member->textobjectObject;
+			    		if($membertextObj!=null)
+			    		{
+							$wavImageObjdocumentURL = $membertextObj->getDocumentURL();
+			    		}
+			    	}
+					$str=$str."\n <div style='float:left; margin-left:21px;'><img src='".$wavImageObjdocumentURL."'  style='align: top; width:402px; height:25px;'></div>";
+
+					// js audio
+					$str=$str."\n <script>";
+						//$str=$str."\n	timelineObj".$textobjectID.".timeToPixel(".$audioDuration.");";
+						//$str=$str."\n	$('#waveformimage".$textobjectID."').width(timelineObj".$textobjectID.".timeToPercent(".$audioDuration.")+'%');";
+						$str=$str."\n 	var audio".$textobjectID." = $('#audio".$textobjectID."').get(0);";
+						
+						// todo: reload audio src
+						$str=$str."\n 	$(document).ready(function(){";
+						$str=$str."\n 		$('#wav_src".$textobjectID."').attr('src','".$documentURL."'); alert('ready!');";
+						$str=$str."\n 		$('#playerBackground".$this->getId()."Overlay').append(\"<img src='".$wavImageObjdocumentURL."'  style='position: absolute; align: top; width:402px; height:10px;'>\");";
+						//$str=$str."\n 	$('#waveformimage".$textobjectID."').css('width', timelineObj".$textobjectID.".timeToPercent(".$audioDuration."));  ";
+						$str=$str."\n 	});";
+
+						//events handler
+						$str=$str."\n 	$(document).on('OnTimelineStateChange".$textobjectID."', timelineHasChanged".$textobjectID.");";
+						$str=$str."\n 	$(document).on('OnTimelineStartAt".$textobjectID."', timelineStartAt".$textobjectID.");";
+
+						$str=$str."\n 	isAudioEnd = false;";
+
+						$str=$str."\n 	function timelineHasChanged".$textobjectID."(e) {";
+						//$str=$str."\n 		alert('E.STATUS:'+e.status+' isAudioEnd:'+isAudioEnd);";
+						$str=$str."\n 		if(e.status == 'play'){";
+						$str=$str."\n 			if(!isAudioEnd)audio".$textobjectID.".play();";
+						$str=$str."\n 		}else if(e.status == 'pause'){";
+						$str=$str."\n 			audio".$textobjectID.".pause();";
+						$str=$str."\n 	} }";
+
+						$str=$str."\n 	function timelineStartAt".$textobjectID."(e) { ";
+						//$str=$str."\n 		alert('startAT: '+e.status+' maxtime: '+".$audioDuration."+audio".$textobjectID."+' isAudioEnd:'+isAudioEnd);";
+						$str=$str."\n 		if(e.status >".$audioDuration."){";
+						$str=$str."\n 			isAudioEnd = true; audio".$textobjectID.".currentTime = ".$audioDuration."; audio".$textobjectID.".pause();";
+						$str=$str."\n 		}else{";
+						$str=$str."\n 			isAudioEnd = false;";
+						$str=$str."\n 			audio".$textobjectID.".currentTime = e.status; ";
+						$str=$str."\n			if( timelineObj".$textobjectID.".isPlaying() ) audio".$textobjectID.".play();";
+						$str=$str."\n 		}";
+						$str=$str."\n 	}";
+					$str=$str."\n 	</script>";
+
+					$str=$str."\n</div>";
+
+
+				// comments
+				// $str=$str.$this->viewSideActionsComments( $app, $userId );
+
+				return $str;
+			}
+        /*
 		// detail is all together ... 
 		function viewContent( )
 		{
+
+			$width="".$this->textobjectObject->textobjectWidth;
+			$height="".$this->textobjectObject->textobjectHeight;
+			$strWidth="";
+			$strHeight="";
+				if ($width!="") $strWidth=" width='$width' ";
+				if ($height!="") $strHeight=" width='$height' ";
+			$strSize=" $strWidth  $strHeight ";
+
+			// document path
+			$documentURL=$this->textobjectObject->getDocumentURL();
 			$textobjectID = $this->getId();
+
 			// audio container
 			$str="";
-			$str=$str."\n <div class='detailContainerContent' id='".$this->getDivId()."Content' >";
+			$str=$str."\n <div class='detailContainerContent' id='".$textobjectID."Content' >";
 			$str=$str."\n 	<audio id='audio".$textobjectID."'>";
-  			$str=$str."\n 		<source src='".$this->textobjectObject->textobjectArgumentText."' type='audio/wav'>";
-  			$str=$str."\n 		<source src='".$this->textobjectObject->textobjectArgumentText."'' type='audio/x-wav'>";
+  			$str=$str."\n 		<source src='".$documentURL."' type='audio/wav'>";
+  			$str=$str."\n 		<source src='".$documentURL."'' type='audio/x-wav'>";
 			$str=$str."\n 		Your browser does not support the wav audio element.";
 			$str=$str."\n 	</audio>";
 
-// $imageObj=$this->textobjectObject->getMemberByName( "image", $app, $userId );
-// > "document".$imageObj->textobjectId.".wav"
-// > getDocumentUrl();			
-
-			// waveform image	
-			$str=$str."\n 	<div style='margin: 0 0 0 21px; float:left; clear:right; position: absolute;'>";
-			if(file_exists('./audio/waveforms/waveform'.$textobjectID.'.png')){
-				$str=$str."\n 		<img id='waveformimage".$textobjectID."' src='./audio/waveforms/waveform".$textobjectID.".png' width='400px' height='29px'  border='1px solid black'>";
-			}else{
-				$str=$str."\n 	sorry no wavform available!";
-			}
-			$str=$str."\n 	</div>";
-
+			// waveform image				
 			// volume control button
 			$str=$str."\n 	<div id='audioControlContainer".$this->getId()."' class='audioControlContainer'>";
 			$str=$str."\n 		<div class='volumeImg' id='muteButton".$this->getId()."'></div>"; // mute button
@@ -98,29 +179,42 @@
 			$str=$str."\n 	</script>";
 			
 			return $str;
-		}
-		
-		public function getDuration(){
+		}*/
 
-			$file = $this->textobjectObject->textobjectArgumentText;
-			$fp = fopen($file, 'r');
+			function viewFormExtendedCoreContentForm( $addDivAction="" )
+			{
+				$str="";
 
-			if (fread($fp,4) == "RIFF") {
-				fseek($fp, 20);
-				$rawheader = fread($fp, 16);
-				$header = unpack('vtype/vchannels/Vsamplerate/Vbytespersec/valignment/vbits',$rawheader);
-				$pos = ftell($fp);
-				while (fread($fp,4) != "data" && !feof($fp)) {
-					$pos++;
-					fseek($fp,$pos);
-				}
-				$rawheader = fread($fp, 4);
-				$data = unpack('Vdatasize',$rawheader);
-				$sec = $data[datasize]/$header[bytespersec];
-				return $sec;
+				// todo: escape html-entities
+				$str=$str."\n  	<input type=hidden size=50 id='Form".$addDivAction."DatatextobjectArgument'    style='width: 100%'  value='".$this->textobjectObject->textobjectArgumentText."''>";				
+				
+				return $str;
 			}
-			return false;
-		}
+
+				// form insert
+				function viewFormExtendedCoreContentFormInsert()
+				{
+					$str="";
+
+					// is document?
+					$str=$str."\n ".$this->viewFormExtendedCoreContentFormDocumentAddSingle( );
+
+					return $str;
+				}
+
+				// form update
+				function viewFormExtendedCoreContentFormUpdate()
+				{
+					$str="";
+					//$wavImageObjdocumentURL = $this->imageURL();
+					//$str=$str."\n <div><img src='$wavImageObjdocumentURL' width='50%' border=0></div>";
+
+					// is document?
+					$str=$str."\n ".$this->viewFormExtendedCoreContentFormDocumentUpdateSingle( );
+					
+
+					return $str;								
+				}
 
 	}
 ?>

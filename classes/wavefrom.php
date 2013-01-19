@@ -200,7 +200,7 @@ define('ACCURACY',100);           // Data point is the average of ACCURACY point
 define('WIDTH', 1000);             // image width
 define('HEIGHT',20);             // image heigt
 define('FOREGROUND', '#29abe2');
-define('BACKGROUND', '#222222');  //  blank for transparent
+define('BACKGROUND', '');  //  blank for transparent
 
 
 /*if (($argc != 3) || !file_exists($argv[1]))
