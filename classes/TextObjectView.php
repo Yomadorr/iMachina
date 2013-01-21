@@ -305,8 +305,18 @@
 					// visual
 					$str=$str."\n   ".$this->viewCommentsCommentTypeVisual( $app, $userId )."";	
 
+					// mouse over toolbar js
+					$str=$str."\n<script>";
+					$str=$str."\n    function showActionToolbar".$this->getDivId()."(){";
+					$str=$str."\n        $('#".$this->getDivId()."Core .detailContainerContentActionsTop').show();";
+					$str=$str."\n    }";
+					$str=$str."\n    function hideActionToolbar".$this->getDivId()."(){";
+					$str=$str."\n        $('#".$this->getDivId()."Core .detailContainerContentActionsTop').hide();";
+					$str=$str."\n    }";
+					$str=$str."\n</script>";
+
 					// get core info 
-					$str=$str."\n <div id='".$this->getDivId()."Core' onResize=\"debug('Resize');\">";
+					$str=$str."\n <div id='".$this->getDivId()."Core' onmouseover=\"showActionToolbar".$this->getDivId()."();\" onmouseout=\"hideActionToolbar".$this->getDivId()."();\" onResize=\"debug('Resize');\">";
 
 						// add core ... 
 						$str=$str.$this->viewDetailCore( $app, $userId );
@@ -314,6 +324,12 @@
 					// info
 					$str=$str."\n </div>";
 
+					// mouse over toolbar js
+					$str=$str."\n<script>";
+					$str=$str."\n    hideActionToolbar".$this->getDivId()."()";
+					$str=$str."\n    $('#".$this->getDivId()."Core .detailContainerContentActionsTop').css('position','absolute');";
+					$str=$str."\n</script>";
+					
 					// comments
 					$str=$str."\n   ".$this->viewCommentsCommentTypeClear( $app, $userId )."";
 
@@ -346,8 +362,13 @@
 							// view side actions
 							$str=$str."".$this->viewSideActionsTop($app,$userId);
 
-
-			
+                            // portrait pic
+                            $userObj=$app->getUserById($this->textobjectObject->textobjectVersionUserRef);
+                            $userIconPath="styles/default/imgs/UserViewDefaultIcon.png";
+                            if ($userObj && $userObj->userIconStatus=="icon") $userIconPath="documents/user".$userObj->userId.".png";
+                            $str=$str."\n<img class='userPortraitIconSmall' src='".$userIconPath."' height='20px' style='float:left; margin-left:-20px;'/>";
+							//$str=$str."\n <img src='styles/default/imgs/UserViewDefaultIcon.png' style='float:left; margin-left:-20px;' height='20px'/>";	
+							
 
 							// add
 	//						$str=$str."\n  	".$this->viewAddForm(  $app, $userId  )."";	
@@ -459,7 +480,7 @@
 							$strContent=str_replace("\n","<br>",$strContent);
 
 							$str="\n  <div  class='detailContainerContent' id='".$this->getDivId()."Content' >";
-
+							    
 								// side actions
 								// $str=$str."".$this->viewSideActions($app,$userId);
 								// the content
@@ -597,7 +618,10 @@
 										//$str=$str."\n</div>";
 										$str=$str."\n    </td>";
 										
-
+										
+										//$str=$str."\n    <td>";
+										//$str=$str."\n    <a href='#' onclick='hideActionToolbar".$this->getDivId()."(); return false;'>x</a>";
+                                        //$str=$str."\n    </td>";
 
 										$str=$str."\n   <tr>";	
 
@@ -652,6 +676,11 @@
 															
 															if ($countThis>1) 
 															  $strMultiply=$countThis."x ";
+                                                            
+														    // portrait pic
+                                                            $userIconPath="styles/default/imgs/UserViewDefaultIcon.png";
+                                                            if ($userObjVersion->userIconStatus=="icon") $userIconPath="documents/user".$userObjVersion->userId.".png";
+														    $str=$str."\n<img class='userPortraitIconSmall' src='".$userIconPath."' height='20px' />";
 
 															$str=$str." + ".$strMultiply.$userObjVersion->userName." + ";
 
