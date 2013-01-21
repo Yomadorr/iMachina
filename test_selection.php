@@ -154,7 +154,7 @@
     // generate this
 	$textobjectObj=new TextObject();
 	$textobjectObj->setArgument($selectableText);
-	$selectableText=$textobjectObj->getWordText();
+	// $selectableText=$textobjectObj->getWordText();
 	echo("<hr>".$selectableText."<hr>");
 	
 	/*

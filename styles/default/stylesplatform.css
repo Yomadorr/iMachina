@@ -130,8 +130,8 @@ input[type=textarea] {
 							.detailComponentCommentsTextEntity { position: absolute; display: inline; _left: 20xp; top: 10px; border: 1px solid black; background: white; opacity: 0.5; }
 
 							/* used in textes */
-							.imachinaText { display: inline; /*float: left; */ }
-						  		.imachinaTextSelected { display: inline; background; red; }
+							.imachinaText { display: inline; background: red; /*float: left; */ }
+						  		.imachinaTextSelected { display: inline; background: red; }
 
 					
 					.detailContainerContentActions { _float: right; border: 0px solid black; }

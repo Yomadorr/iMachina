@@ -512,7 +512,7 @@
 									$text=$text.$strScript;
 
 									// ok that was it
-									$strContent="CONVERTTED!<br>".$text;
+									$strContent="CONVERTTED!<br><div class='detailComponentCommentsTextIcon'>test</div>".$text;
 								}
 
 
