@@ -67,6 +67,10 @@ php_value log_errors_max_len 0
 		// members fors complex ...	
 		include_once("./classes/TextObjectComplexMember.php"); 
 
+		// textword
+		include_once("./classes/TextWord.php");
+//		 include_once("./classes/TextWordFound.php")
+
 	// base
 	include_once("./classes/TextObject.php"); 
 		include_once("./classes/TextObjectView.php"); 

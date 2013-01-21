@@ -150,13 +150,9 @@
     // if ($debugThis)
     // echo($selectableText);
 
+ 
 
-    // generate this
-	$textobjectObj=new TextObject();
-	$textobjectObj->setArgument($selectableText);
-	$selectableText=$textobjectObj->getWordText();
-	echo("<hr>".$selectableText."<hr>");
-	
+
 	/*
 		add div layer and selection staff here ...
 	*/
@@ -191,9 +187,212 @@
 
 //  id='endimt".$textobjectId."_".$imachinaTextId."'>
 
+   // 1. find not imachinaTextId tagged object
+	$pattern = '/>([^<]+)/s';
+	preg_match_all($pattern, $selectableText, $matches, PREG_OFFSET_CAPTURE, 3);
+
+	// 2. take the foundings... 
+		class imachinaText
+		{
+			var $text="";
+			var $position="";
+
+			function debug()
+			{
+				return $this->position." :".$this->text."";
+			}
+		}
+
+	$arrMatches=$matches[1];
+	$arrFound=array();
+	if ($debugThis) {  echo("<pre>");print_r($arrMatches);echo("</pre>"); }
+	for ($i=0;$i<count($arrMatches);$i++)
+	{
+		// echo("<pre>");print_r($arrMatches[$i]);echo("</pre>");
+		$newTextObject=new imachinaText();
+		$newTextObject->text=$arrMatches[$i][0];
+		$newTextObject->position=$arrMatches[$i][1];
+		$arrFound[count($arrFound)]=$newTextObject;
+		if ($debugThis) echo("\n<br>---$i:-".$newTextObject->text);
+	}
+	// show matches here
+	// debug
+	for ($i=0;$i<count($arrFound);$i++)
+	{
+		$textObj=$arrFound[$i];
+		// echo("<br>$i ".$textObj->debug());
+	}
+
+	// get max imachinaTextId	
+	$imachinaTextId=0;
+	preg_match_all("/id='imt([^']+)'/", $selectableText, $arrImachinaIds, PREG_OFFSET_CAPTURE, 3);
+	if ($debugThis)  { echo("<hr>ID<hr>");echo("<pre>");print_r($arrImachinaIds);echo("</pre>"); echo("<hr>"); }
+	for ($i=0;$i<count($arrImachinaIds[1]);$i++)
+	{
+		$val=$arrImachinaIds[1][$i][0];
+		if ($debugThis) echo("\n<br>-----VAL:".$val);
+		$arrVal=explode("_",$val);
+		if (count($arrVal)>0) { $val=$arrVal[1]; } 
+		$valInt=intval($val);
+		if ($valInt>$imachinaTextId) $imachinaTextId=$valInt;
+	}
+	if ($debugThis) echo("\n<br><hr>----".$imachinaTextId."---");
+
+	if ($debugThis) echo("\n<hr>");	
+	if ($debugThis) echo("\n<hr>");	
+	if ($debugThis) echo("\n<hr>");	
+
+	// imachinaTextId
+	$imachinaTextId++;
+
+	// go from back to top 
+	if (count($arrFound)>0)
+	{
+		for ($i=count($arrFound)-1;$i>=0;$i--)
+		{
+			$textObj=$arrFound[$i];
+			// check 
+			if ($debugThis) echo("\n<br><br>$i ".$textObj->debug());
+
+			$inlineText=$textObj->text;
+
+			// check now if there is something to do
+		
+			// check: "wordonly" > is it a imachinatext-div?
+			//  imachinaTag>
+			$isInSystem=false;
+			$checkForThisTag="imachinaTag>";
+
+			// case: "wordonly" > is it a imachinatext-div?
+			$pos=$textObj->position;
+			if ($pos>strlen($checkForThisTag))
+			{
+
+				$posStart=$pos-strlen($checkForThisTag);
+				// ok get thext
+				$tag=substr($selectableText,$posStart,strlen($checkForThisTag));
+				if ($debugThis) echo("---{$tag}---");
+				if ($tag==$checkForThisTag)
+				{
+					$isInSystem=true;
+				}
+
+				// echo("------TAG: ".$tag);
+				if ($debugThis) if ($isInSystem) echo("\n---TAGFOUND---");
+
+				$commentMode="word";
+				// mode: word - do it 
+				// $app->
+				if ($commentMode=="word")
+				{
+					$strReplace="";
+
+					// explode
+					$arrWords=explode(" ",$inlineText);
+					// = one
+					if (count($arrWords)==1)
+					{
+						// in system?
+						if (!$isInSystem)
+						{
+							// add div here ... 
+							// addTextObject()
+							// $strReplace="\n-REPLACEONEWORD-";
+							// <div class='imachinaText' id='imt".$textobjectId."_16' imachinaTag>
+							$strReplace=$strReplace.addTextWord( $textobjectId, $imachinaTextId, $inlineText );
+							$imachinaTextId++;
+						}
+						
+						if ($isInSystem)
+						{
+							if ($debugThis) echo(" IN SYSTEM ");
+							$strReplace="";
+						}
+					}
+					// on or more?
+					if (count($arrWords)>1)
+					{
+						// add all now ... 
+						$strReplace=""; // \n(-REPLACEMORETHANONEWORD-)";
+
+						// version one - problem <div id='100'>A B</div>
+						/*
+						for ($wordIndex=0;$wordIndex<count($arrWords);$wordIndex++)
+						{
+							$singleWord=$arrWords[$wordIndex];
+							// echo($singleWord);
+							$strReplace=$strReplace.addTextWord( $textobjectId, $imachinaTextId, $singleWord );
+							$imachinaTextId++;
+
+							$strReplace=$strReplace.addTextWord( $textobjectId, $imachinaTextId, " " );
+							$imachinaTextId++;
+
+						}
+						*/
+
+						for ($wordIndex=0;$wordIndex<count($arrWords);$wordIndex++)
+						{
+							$singleWord=$arrWords[$wordIndex];
+							// echo($singleWord);
+							if (($isInSystem)&&($wordIndex==0)) { $strReplace=$strReplace.$singleWord."</div>"; } // end div in original!
+
+							if ((!$isInSystem)&&($wordIndex==0)) { $strReplace=$strReplace.addTextWord( $textobjectId, $imachinaTextId, $singleWord ); } // end div in original!
+
+							if (($wordIndex>0))
+							{ 
+								$strReplace=$strReplace.addTextWord( $textobjectId, $imachinaTextId, $singleWord );
+							}
+							$imachinaTextId++;
+
+							$strReplace=$strReplace.addTextWord( $textobjectId, $imachinaTextId, " " );
+							$imachinaTextId++;
+
+						}
+
+					}
+
+					// replace this here and now ...
+					if ($strReplace!="")
+					{
+						// cutoff ..
+						$wordsLength=strlen($inlineText);
+						$tmpText=$selectableText;
+							$textA=substr($selectableText,0,$pos);
+							if ($debugThis) echo("\n<br>POS: ".$pos);
+							$textB=substr($selectableText,$pos+$wordsLength);
+							if ($debugThis) echo("\n<br>TEXTA: ".$textA);
+							if ($debugThis) echo("\n<br>TEXTB:".$textB);
+						$selectableText=$textA.$strReplace.$textB;
+						if ($debugThis) echo("\n<br>!!!!!!!!!!!!!!!!!!!!CHANGED");
+					}
+
+				}
+				// mode: char - do every char!
+				// ressource hungry
+				if ($commentMode=="char")
+				{
+
+				}
+
+			}
+
+		}
+
+		// done ..
+		if ($debugThis) echo("\n\n\n<hr><br><hr>RESULT: <br>".$selectableText);
+
+		// add all ids and comments?
 
 
+	}
+	if ($debugThis) echo("<br>parsing done - text updated - done...");
 
+
+	// function
+		function addTextWord( $textobjectId, $imachinaTextId, $word )
+		{
+			return "<div class='imachinaText'  id='imt".$textobjectId."_".$imachinaTextId."' imachinaTag>".$word."</div id='endimt".$textobjectId."_".$imachinaTextId."'>";
+		}
 	/*
 		
 		Add Javascript Objects ....
@@ -222,6 +421,7 @@
 	*/
 
 	// textobject
+	$textobjectObj=new TextObject();
 	$textobjectObj->setArgument($selectableText);
 
 	// version 2.0

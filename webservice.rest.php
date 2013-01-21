@@ -286,7 +286,7 @@
                   if ($domainObj==null) 
                   {
                       $strError=$app->getLanguageBy( $app->getDomainLanguage($userId), "@contentErrorThreadNotFound" ) ;  
-                      $output=$output.$strError;                      
+                      $output=$output.$strError."   ".$textobjectId;                      
                   }
             }
 
@@ -864,6 +864,29 @@
 				} 
 			}
 
+				// case: core mark mode (no marks here ...)
+				if ($actionsub=="coremarkmode")
+				{
+
+					$output=$output."MARKMODE";
+					$thisObject=$app->getTextObjectById($textobjectFromWeb->textobjectId, $userId);
+					// convert to markmode
+					$thisObject->updateArgumentAsWordText();
+					// print_r($thisObject);
+					if ($thisObject!=null)
+					{
+
+						// view 
+						$textobjectViewTmp=$app->getTextObjectViewFor($thisObject, $userId );
+						if ($textobjectViewTmp!=null)
+						{
+							// print_r($textobjectViewTmp);
+							$output=$output.$textobjectViewTmp->viewDetailCore($app,$userId);
+						}
+
+					} 
+				}
+
 			// get the whole container ... 
 			if ($actionsub=="container")
 			{
@@ -1056,7 +1079,8 @@
 							if ($textobjectBaseObj!=null)
 							{
 								// get next hyperthread ...
-								$app->insertRuleByValueForExt($ruleName,$textobjectBaseId,"request",$userId);
+								// todo problem twice $userId
+								$app->insertRuleByValueForExt($ruleName,$textobjectBaseId,"request",$userId,$userId);
 
 								// add system dialog here
 								$output=$output."\n<script>";
@@ -1174,14 +1198,19 @@
 														$output=$output."\n   <div  class='detailContainerContentActionsRuleTypeEntity' >";
 															// $output=$output."\n   $a ";
 															$strOnClick="";															
-															if ($flagAccess) $output=$output."\n<div class='detailContainerContentActionsRuleTypeEntityDelete' $strOnClick onClick=\"alert('delete'); doRuleAction('delete','".$ruleTypeObj->ruleName."',".$ruleObj->ruleId.")\"> - </div>";
+															if ($flagAccess) $output=$output."\n<div class='detailContainerContentActionsRuleTypeEntityDelete' $strOnClick onClick=\"doRuleAction('delete','".$ruleTypeObj->ruleName."',".$ruleObj->ruleId.")\"> - </div>";
 															if ($userObject!=null) $output=$output."\n   ".$userObject->userName;															
 															// else $output=$output."\n   ".$userObject->userName;
 														$output=$output."\n   </div>";
 													}
 												}
+
 												// found the correct ones
-												if ($flagAccess) $output=$output."\n   <div  class='detailContainerContentActionsRuleTypeEntity' onClick=\"doRuleAction('addform','".$ruleTypeObj->ruleName."',-1)\"> + </div>";
+												if ($flagAccess) $output=$output."\n<div  class='detailContainerContentActionsRuleTypeEntity' style='float:left; width: 49%; border-right: 1px dotted black;' onClick=\"doRuleAction('addform','".$ruleTypeObj->ruleName."',-1)\"> + user</div>";
+												// invitations
+												if ($flagAccess) $output=$output."\n<div  class='detailContainerContentActionsRuleTypeEntity' style='float:left; width: 50%; ' onClick=\"doRuleAction('invitationform','".$ruleTypeObj->ruleName."',-1)\"> ? invite</div>";
+												// clear
+												$output=$output."<div style='clear: both;'></div>";
 
 												// todo: add defaults! anonymous & friends!
 												$arrRequests=$app->getRuleRequestsByTextObjectIdRuleName( $textobjectId, $ruleName, $userId );
@@ -1202,6 +1231,40 @@
 													}
 												}
 
+												// todo: add defaults! anonymous & friends
+												if ($flagAccess)
+												{
+													$arrInvitations=$app->getRuleInvitationsByTextObjectIdRuleName( $textobjectId, $ruleName, $userId );
+													if (count($arrInvitations)>0)
+													{
+														// $output=$output."<br>arrInvitations:  ".count($arrInvitations);
+														$output=$output."? Invitations  ";
+														for ($it=0;$it<count($arrInvitations);$it++)
+														{
+															$invitationRule=$arrInvitations[$it];
+															// $output=$output."".$invitationRule->ruleName;
+															$userNameOrEmail="".$invitationRule->ruleTypeCaseInvitationsEmail;
+															$userInvitationObj=$app->getUserById($invitationRule->ruleUserRef,$userId);
+															if ($userInvitationObj!=null) $userNameOrEmail=$userInvitationObj->userName;
+
+															if (
+																// default
+																($userInvitationObj!=null)
+																||
+																// special case: invitationweb!
+																(($invitationRule->ruleStatus=="invitationweb")&&(($userInvitationObj==null)))
+															   )
+															{
+																$output=$output."\n   <div  class='detailContainerContentActionsRuleTypeEntityRequest' >";
+																// todo: remove request
+																$ruleType=""; // [".$invitationRule->ruleStatus."]
+																if ($invitationRule->ruleStatus=="invitationweb") $ruleType="[extern]";
+																$output=$output."<div class='detailContainerContentActionsRuleTypeEntityRequestApprove'  onClick=\"doRuleAction('delete','".$invitationRule->ruleName."',".$invitationRule->ruleId.")\"> - </div> ".$userNameOrEmail." ".$ruleType;
+																$output=$output."\n   </div>";
+															}
+														}
+													}
+												}
 
 											$output=$output."\n   </div>";
 											
@@ -1233,7 +1296,7 @@
 						$output=$output."\n</div>";
 
 				}
-					
+					// add direct
 					if ($actionsub=="addform")
 					{
 						// what do you wanna add?
@@ -1312,11 +1375,140 @@
 									// let's add
 									// todo: access
 									// $output=$output."--- $ruleName,$textobjectId,$userId  -------";
-									$app->insertRuleByValueFor($ruleName,$textobjectId,$userIdRule);
+									$app->insertRuleByValueFor($ruleName,$textobjectId,$userIdRule,$userId);
 								}
 
 							}
 
+					// inviteform
+					if ($actionsub=="invitationform")
+					{
+						// what do you wanna add?
+						
+						// ruleName
+						$ruleName=$app->requestFromWeb("ruleName","string");
+						if ($ruleName==null) $ruleName="friends";
+
+
+						$output=$output."\n<div id='ruleContainerAddHead'>";
+						// add email
+						$output=$output."\n";
+						$output=$output."\n<form>Invite via Email: <br><input type=textfield name='RuleEmail' id='RuleEmail' value='@'><input type=button value='invite'  onClick=\"doRuleAction('invitationwebformsearchrule','',-1)\"></form>";
+
+						// add user
+						$output=$output."\nSelect Invitation Rule: $ruleName ";
+						$output=$output."\n<form><input type=textfield name='InvitationSearch' id='InvitationSearch' value=''><input type=button value='search'  onClick=\"doRuleAction('invitationformsearch','',-1)\"></form>";
+						$output=$output."\n</div>";
+
+						$output=$output."\n<div id='ruleContainerAddResult'>";
+						$output=$output."\n</div>";
+					}
+
+						if ($actionsub=="invitationformsearch")
+						{
+
+							// $output=$output."invitationformsearch";
+							// what do you wanna add?
+							// ruleName
+							// search now ...
+							// ok search here ..
+							// todo: security
+							// echo($_REQUEST["invitationformsearch"]);
+							$search="";
+							if (isset($_REQUEST["invitationformsearch"]))
+							{
+								$searchString="".$_REQUEST["invitationformsearch"];
+
+								// search for different type of users
+
+								// 1. friends
+
+								// 2. groupds/topics
+
+								// 3. persons ...
+								// search for ...
+								$arrUsers=$app->getUsersByNameAndPrenameLike( $searchString, $userId );
+								// print_r($arrUsers);
+								for ($z=0;$z<count($arrUsers);$z++)
+								{
+									$userObj=$arrUsers[$z];
+									$output=$output."<div style='border: 1px solid black;' onClick=\"doRuleAction('invitationformsearchrule','',".$userObj->userId.")\">< ".$userObj->userAvatar.": ".$userObj->userName.", ".$userObj->userPreName."</div>";
+								}
+
+								if (count($arrUsers)==0) $output=$output."\n<br>No result.";
+
+							} 
+						}
+
+							// webservice.rest.php?area=textobjectdetail&action=insert&actionsub=form&textobjectType=text&textobjectTypeSub=plain&textobjectRef=1313&textobjectCommentType=
+							if ($actionsub=="insertinvitation")
+							{
+								$ruleName=$app->requestFromWeb("ruleName","string");
+								if ($ruleName==null) $ruleName="friends";
+
+								$userIdRule=$app->requestFromWeb("ruleUserId","string");
+								if ($userIdRule==null) $userIdRule=-1;
+
+								$textobjectId=$textobjectFromWeb->textobjectId;
+
+								// rule access matrix ... 
+								$ruleaccessmatrixObj=$app->getRuleAccessMatrixByTextObjectId( $textobjectId, $userId );
+
+								if (!$ruleaccessmatrixObj->isWritable())
+								{
+									$msg="Sorry you can't change anything here @rule.access.error.noaccess";
+									$output=$output.TextObjectView::viewErrorMessage( "rule", $msg );
+								}
+  
+								// can be changed?
+								if ($ruleaccessmatrixObj->isWritable())
+								{
+									// $output=$output."------ $ruleName $userIdRule $textobjectId";
+
+									// let's add
+									// todo: access
+									// $output=$output."--- $ruleName,$textobjectId,$userId  -------";
+									$app->insertRuleByValueForExt($ruleName,$textobjectId,"invitation",$userIdRule,$userId);
+								}
+							}
+
+							// invitateweb
+							if ($actionsub=="insertinvitationweb")
+							{
+								$ruleName=$app->requestFromWeb("ruleName","string");
+								if ($ruleName==null) $ruleName="friends";
+
+								$userIdRule=$app->requestFromWeb("ruleUserId","string");
+								if ($userIdRule==null) $userIdRule=-1;
+
+								$ruleEmail=$app->requestFromWeb("ruleEmail","string");
+								if ($ruleEmail==null) $ruleEmail="";
+
+								$textobjectId=$textobjectFromWeb->textobjectId;
+
+								// rule access matrix ... 
+								$ruleaccessmatrixObj=$app->getRuleAccessMatrixByTextObjectId( $textobjectId, $userId );
+
+								if (!$ruleaccessmatrixObj->isWritable())
+								{
+									$msg="Sorry you can't change anything here @rule.access.error.noaccess";
+									$output=$output.TextObjectView::viewErrorMessage( "rule", $msg );
+								}
+  
+								// can be changed?
+								if ($ruleaccessmatrixObj->isWritable())
+								{
+									// $output=$output."------ $ruleName $userIdRule $textobjectId";
+
+									// let's add
+									// todo: access
+									// $output=$output."--- $ruleName,$textobjectId,$userId  -------";
+									$app->insertRuleByValueForExt($ruleName,$textobjectId,"invitationweb",-1,$userId,$ruleEmail); // todo: not nice programmed userId should be at the end
+								}
+							}
+
+
+				// delete 
 				if ($actionsub=="delete")
 				{
 					$ruleId=$app->requestFromWeb("ruleId","string");

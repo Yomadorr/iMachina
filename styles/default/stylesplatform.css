@@ -6,7 +6,7 @@ h2 { font-size: 22px; color: green; font-weight: normal; margin: 0px; padding-t
 h3 { font-size: 18px; color: green; font-weight: normal; margin: 0px; padding-top: 0px; padding-bottom:0px; margin-top: 0px; margin-bottom:0px;font-weight: bold; padding-bottom:0px; margin-bottom:0px; } 
 h4 { font-size: 16px; color: green; font-weight: normal; margin: 0px; padding-top: 0px; padding-bottom:0px; margin-top: 0px; margin-bottom:0px; } 
 
-a, a hover { color: #990000 ; text-decoration: none;  } /* #5E9400 */
+a, a hover { color: #990000; text-decoration: none;  } /* #5E9400 */
 
 pre { border: 0px; padding: 0px; }
 
@@ -143,6 +143,7 @@ input[type=textarea] {
 						.detailContainerContentActionsRule { _float: right; width: 15px; height: 15px;  border: 0px solid #999999; background-image: url(imgs/ContentActionsRule.png);  }
 						.detailContainerContentActionsAdd { _float: right;  width: 15px; height: 15px;  border: 0px solid #999999;  background-image: url(imgs/ContentActionsAdd.png);   }
 						.detailContainerContentActionsAddPostIt { _float: right; width: 15px; height: 15px; border: 0px solid #999999;  background-image: url(imgs/ContentActionsAddPostIt.png);  }
+						.detailContainerContentActionsMarkText { float: left; _width: 15px; height: 15px; border: 1px solid #999999;  _background-image: url(imgs/ContentActionsAddPostIt.png);  }
 						.detailContainerContentActionsComments { _float: left; width: 15px; height: 15px; border: 0px solid #999999;  background-image: url(imgs/ContentActionsComments.png);  }
 
 							#documentAddSingleDropZone { border: 1px dotted black; padding: 5px; margin: 5px; background: white; }

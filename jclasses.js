@@ -17,6 +17,9 @@
 		{
 			this.textobjectId=-1;
 			this.textwordId=-1;
+
+			this.textwordString="";
+
 			this.textwordAttributes = new Array();
 			this.addTextWordAttribute = function( textwordattributeObj ) {   this.textwordAttributes[this.textwordAttributes.length]=textwordattributeObj;  }
 			this.addTextWordAttributeByValue = function( red, blue, green ) {  var textwordObj=new TextWordAttribute(); textwordObj.colorRed=red; textwordObj.colorGreen=green; textwordObj.colorBlue=blue;   this.textwordAttributes[this.textwordAttributes.length]=textwordattributeObj;  }
@@ -24,7 +27,7 @@
 
 			this.debug = function () 
 			{ 
-				var str="("+this.textobjectId+") "+this.textwordId; 
+				var str="("+this.textobjectId+") "+this.textwordId+" ['"+this.textwordString+"'] "; 
 					// add attributes
 					str=str+" length "+this.textwordAttributes.length;
 					str=str+" { ";
@@ -146,12 +149,12 @@
 					return str;
 				}
 
-
-			this.addTextWord = function( textobjectId, wordId )
+			this.addTextWord = function( textobjectId, wordId, stringWord )
 			{
 				var wordObject=new TextWord();
 					wordObject.textobjectId=textobjectId;
 					wordObject.textwordId=wordId;
+					wordObject.textwordString=stringWord;
 
 				// debug("imachnaTextManager","addTextWord( "+textobjectId+", "+wordId+"  )");
 
