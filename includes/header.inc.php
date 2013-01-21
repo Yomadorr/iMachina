@@ -624,7 +624,11 @@ tinyMCE.init({
                          
                       function reloadTextObject( textobjectId, typ )
                       { 
+<<<<<<< HEAD
                            // alert("reloadTextObject() "+textobjectId+"-"+typ);
+=======
+                           //alert("reloadTextObject() "+textobjectId+"-"+typ);
+>>>>>>> wav
 
                             var divTextobjectId=diffPrefix+textobjectId;
                             if (typ=='core') 

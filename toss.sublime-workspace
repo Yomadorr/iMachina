@@ -31,62 +31,6 @@
 	},
 	"buffers":
 	[
-		{
-			"file": "classes/FrameworkDim.php",
-			"settings":
-			{
-				"buffer_size": 4033,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "adminevaluationother.php",
-			"settings":
-			{
-				"buffer_size": 71223,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "adminevaluationother.service.php",
-			"settings":
-			{
-				"buffer_size": 2353,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "classes/FrameworkDimVal.php",
-			"settings":
-			{
-				"buffer_size": 4764,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "classes/App.php",
-			"settings":
-			{
-				"buffer_size": 44075,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "classes/Display.php",
-			"settings":
-			{
-				"buffer_size": 14899,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Applications/MAMP/htdocs/cineogame/index.html",
-			"settings":
-			{
-				"buffer_size": 921,
-				"line_ending": "Unix"
-			}
-		}
 	],
 	"build_system": "",
 	"command_palette":
@@ -112,6 +56,19 @@
 	},
 	"file_history":
 	[
+		"/Applications/MAMP/htdocs/iMachina/classes/TextObjectImagePngView.php",
+		"/Applications/MAMP/htdocs/iMachina/classes/TextObject.php",
+		"/Applications/MAMP/htdocs/iMachina/classes/TextObjectAudioWav.php",
+		"/Applications/MAMP/htdocs/iMachina/classes/TextObjectAudioWavView.php",
+		"/Applications/MAMP/htdocs/iMachina/webservice.rest.php",
+		"/Applications/MAMP/htdocs/iMachina/classes/TextObjectImagePng.php",
+		"/Applications/MAMP/htdocs/iMachina/classes/FrameworkDim.php",
+		"/Applications/MAMP/htdocs/iMachina/adminevaluationother.php",
+		"/Applications/MAMP/htdocs/iMachina/adminevaluationother.service.php",
+		"/Applications/MAMP/htdocs/iMachina/classes/FrameworkDimVal.php",
+		"/Applications/MAMP/htdocs/iMachina/classes/App.php",
+		"/Applications/MAMP/htdocs/iMachina/classes/Display.php",
+		"/Applications/MAMP/htdocs/cineogame/index.html",
 		"/Applications/MAMP/htdocs/toss/includes/header.fhnw.inc.php",
 		"/Applications/MAMP/htdocs/toss/userexcercise.php",
 		"/Applications/MAMP/htdocs/toss/userreadtext.php",
@@ -169,6 +126,9 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"onDocumentUpload",
+			"onUpload",
+			"on",
 			"storeDimensionVal",
 			"comment",
 			"ajax",
@@ -293,10 +253,7 @@
 			"category",
 			"set",
 			"setFrame",
-			"commentInspectorFrameworkDimId",
-			"formSelectSelection",
-			"==0",
-			"==-1"
+			"commentInspectorFrameworkDimId"
 		],
 		"highlight": false,
 		"in_selection": false,
@@ -314,197 +271,8 @@
 	"groups":
 	[
 		{
-			"selected": 6,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "classes/FrameworkDim.php",
-					"settings":
-					{
-						"buffer_size": 4033,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2281,
-								2281
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 565.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "adminevaluationother.php",
-					"settings":
-					{
-						"buffer_size": 71223,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								68595,
-								68635
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 211.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "adminevaluationother.service.php",
-					"settings":
-					{
-						"buffer_size": 2353,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1195,
-								1195
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 1000.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "classes/FrameworkDimVal.php",
-					"settings":
-					{
-						"buffer_size": 4764,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								94,
-								94
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "classes/App.php",
-					"settings":
-					{
-						"buffer_size": 44075,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								34225,
-								34225
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/PHP/PHP.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 17306.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "classes/Display.php",
-					"settings":
-					{
-						"buffer_size": 14899,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								11848,
-								11865
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 4854.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "/Applications/MAMP/htdocs/cineogame/index.html",
-					"settings":
-					{
-						"buffer_size": 921,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								220,
-								220
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 13.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				}
 			]
 		}
 	],
@@ -564,6 +332,6 @@
 	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 225.0,
+	"side_bar_width": 306.0,
 	"status_bar_visible": true
 }
