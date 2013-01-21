@@ -2,40 +2,59 @@
 
 	class TextObjectAudioWav extends TextObject
 	{
-		var $textobjectType="audio"; 
-    	var $textobjectTypeSub="wav";
+		var $innerCommentType="visual";
 
-    		var $textobjectviewTypeCategory="audio";
-            var $textobjectviewTypeCategoryLabel="Audio";
+			// textobject ...
+	   		var $textobjectDocument=1; 
+    		var $textobjectSuffix="wav"; 
+
+    				var $textobjectviewTypeCategory="audio";
+					var $textobjectviewTypeCategoryLabel="Audio";
+		
+	
 
 		function TextObjectAudioWav()
-        {
-            // overwrite here ...
-            $this->addMemberByValue("image","Osc.",false,"image","png","default/TextObjectcomplexBlog.png",false);
-        }
-
-    	function onInsert($app,$userId)
 		{
-			
-			$textobjectViewTmp=$app->getTextObjectViewFor($this, $app, $userId );
-			$this->textobjectTimeLength = $textobjectViewTmp->getDuration();
-			drawWaveform($textobjectViewTmp->textobjectObject->textobjectArgumentText,'./audio/waveforms/waveform'.$textobjectViewTmp->getId().'.png');	
+			$this->addMemberByValue("image","WAVformImage",false,"image","png","default/TextObjectcomplexWavImage.png",false);
 		}
 
-		
-		function onUpdate($app,$userId)
+		function onDocumentUpload($app,$userId)
 		{
-			// textobjectTimeLength min length = audiofile length!
-			$textobjectViewTmp=$app->getTextObjectViewFor($this, $app, $userId );
-			if($this->textobjectTimeLength < $textobjectViewTmp->getDuration()){
-				$this->textobjectTimeLength = $textobjectViewTmp->getDuration();			
-			}
-			// draw a new image
-			// todo: save path?
-			drawWaveform($textobjectViewTmp->textobjectObject->textobjectArgumentText,'./audio/waveforms/waveform'.$textobjectViewTmp->getId().'.png');	
+			// document path
+			$documentURL=$this->getDocumentURL();
+			// get memger documentURl -> draw Image
+			$wavImageObjdocumentURL = "default/TextObjectcomplexWavImage.png";
+			$member = $this->getMemberByName("image", $app, $userId );
+			if ($member!=null)
+	    	{
+	    		$membertextObj = $member->textobjectObject;
+	    		if($membertextObj!=null)
+	    		{
+					$wavImageObjdocumentURL = $membertextObj->getDocumentURL();
+	    		}
+	    	}
+			drawWaveform( $documentURL, $wavImageObjdocumentURL );
+
+			// get duration
+			$duration = $this->getDuration($documentURL);
+			$this->textobjectTimeLength = $duration;
+			// update duration
+			$app->updateTextObject($this,$userId);
 		}
-		
+
+		function getDuration($file){
+				
+			if(!file_exists($file)) return 1;
+						
+			$fp = fopen($file, 'r');
+			$size_in_bytes = filesize($file);
+			fseek($fp, 20);
+			$rawheader = fread($fp, 16);
+			$header = unpack('vtype/vchannels/Vsamplerate/Vbytespersec/valignment/vbits',$rawheader);
+			$sec = ceil($size_in_bytes/$header['bytespersec']);
+			// todo:
+			if($sec < 1) $sec = 1;
+			return $sec;		
+		}
 	}
-	
-    
 ?>

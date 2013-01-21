@@ -161,12 +161,14 @@
     // bugs
     // - javascript-history: problem going forward and back - conten will not be found! load with return works ... 
     // - updateTextObject > ref? memberupdate > update baseobect (getBaseMember!)
-
+    // - changing members > open such an object > problem with editing members !!!
 
 
 		// version 
-    var $version=0.76; // versions ... 
+    var $version=0.78; // versions ... 
 
+    // 0.78 implemented all classes for textmarking
+    // 0.77 invite front-end implemented (not yet login etc...)
     // 0.76 imported div. javascripts for textmarking & new text for hyperthreads
     // 0.75 first time installed remote (several changes - app->emailSystem - killed app->emailFrom)
     // 0.74 first test for text-markers
@@ -177,7 +179,7 @@
     // 0.69 small bug fixes
     // 0.68 new todos
     // 0.67 Visualisation of "", "AllUsers", "TeamOnly"
-    // 0.65 request are implemented - show now usage-user not collaborators
+    // 0.65 i are implemented - show now usage-user not collaborators
     // 0.64 first request implementation - not yet finished
     // 0.62 complete access implmentation
     // 0.61 implemented right into webservices ... simple error messages
@@ -383,7 +385,7 @@ echo("<br>App.install().<br>");
           
             // create admin for platform
             $adminuserRootObject=$this->createUserRoot();
-            $this->insertRuleByValueFor("admin",$platformObject->textobjectId,$adminuserRootObject->userId);           
+            $this->insertRuleByValueFor("admin",$platformObject->textobjectId,$adminuserRootObject->userId,$adminuserRootObject->userId);           
 
           // add an objects counter display ...
 
@@ -680,7 +682,7 @@ echo("<br>App.install().<br>");
                   $userNewDomain=$this->insertTextObject($userDomain,$userCreatedObject->userId);                
 
                   // add admin
-                  $this->insertRuleByValueFor("admin",$userNewDomain->textobjectId,$userCreatedObject->userId);           
+                  $this->insertRuleByValueFor("admin",$userNewDomain->textobjectId,$userCreatedObject->userId,$userCreatedObject->userId);           
 
                   return $userObj;  
               }
@@ -1032,21 +1034,26 @@ echo("<br>App.install().<br>");
 
           function insertRule( $ruleObject, $userId )
           {
+             $ruleObject->ruleUserOwnerRef=$userId;
              return $this->fundamentalInsertRule($ruleObject);
           }
 
-            function insertRuleByValueFor($ruleName,$textobjectId,$userId)
+            function insertRuleByValueFor($ruleName,$textobjectId, $userRef, $userId)
             {
-               return $this->insertRuleByValueForExt($ruleName,$textobjectId,"active",$userId);
+               return $this->insertRuleByValueForExt($ruleName,$textobjectId,"active", $userRef, $userId);
             }
 
-                function insertRuleByValueForExt($ruleName,$textobjectId, $ruleStatus, $userId)
+                function insertRuleByValueForExt($ruleName,$textobjectId, $ruleStatus, $userRef, $userId, $ruleEmail="") // todo: not so cool - end param should be $userId!
                 {
                     // todo: check if possible 
 
                     $ruleObject=new Rule();
-                    $ruleObject->ruleUserRef=$userId;
+                    $ruleObject->ruleUserRef=$userRef;
                     $ruleObject->ruleName="".$ruleName;
+                      
+                      // only status=="invitationweb"
+                      $ruleObject->ruleTypeCaseInvitationsEmail="".$ruleEmail;
+
                     $ruleObject->ruleStatus="".$ruleStatus;
                     $ruleObject->ruleTextObjectRef=$textobjectId;
                     $this->insertRule( $ruleObject, $userId );
@@ -1062,9 +1069,9 @@ echo("<br>App.install().<br>");
           // add guest / friends ...
           function insertDefaultRules( $textobjectBaseId, $userId )
           {
-             $this->insertRuleByValueFor("freerider",$textobjectBaseId,$this->getUserAnonymousId( ));
-             $this->insertRuleByValueFor("friend",$textobjectBaseId,$this->getUserRegistratedId( ));
-             $this->insertRuleByValueFor("admin",$textobjectBaseId,$userId);
+             $this->insertRuleByValueFor("freerider",$textobjectBaseId,$this->getUserAnonymousId( ),$this->getUserAnonymousId( ));
+             $this->insertRuleByValueFor("friend",$textobjectBaseId,$this->getUserRegistratedId( ),$this->getUserRegistratedId( ));
+             $this->insertRuleByValueFor("admin",$textobjectBaseId,$userId,$userId);
           }
 
           function getRuleById( $ruleId )
@@ -1088,6 +1095,12 @@ echo("<br>App.install().<br>");
           function getRuleRequestsByTextObjectIdRuleName( $textobjectId, $ruleName, $userId )
           {
               return $this->fundamentalGetRuleRequestsByTextObjectIdRuleName( $textobjectId, $ruleName );
+          }
+
+          // 
+          function getRuleInvitationsByTextObjectIdRuleName( $textobjectId, $ruleName, $userId )
+          {
+              return $this->fundamentalGetRuleInvitationsByTextObjectIdRuleName( $textobjectId, $ruleName );
           }
      
           // checkRules
@@ -1561,7 +1574,7 @@ echo("<br>App.install().<br>");
             $newTextObject=$this->getTextObjectById($newTextObjectId,$userId);
 
             // add this rule
-            if ($userId!=-1) $this->insertRuleByValueFor("collaborator",$newTextObject->textobjectId,$userId);
+            if ($userId!=-1) $this->insertRuleByValueFor("collaborator",$newTextObject->textobjectId,$userId,$userId);
 
             // special objects 
             // domain
@@ -2100,9 +2113,6 @@ echo("<br>App.install().<br>");
               return array();
           }
 
-
-
-
       /*
           languages
       */
@@ -2545,6 +2555,13 @@ echo("<br>App.install().<br>");
                     private function fundamentalGetRuleRequestsByTextObjectIdRuleName( $textobjectId, $ruleName )
                     {
                         $arr = $this->fundamentalGetTheseRules(" where ruleTextObjectRef='$textobjectId' and ruleName='$ruleName' and ruleStatus='request' ", "");
+                      
+                        return $arr;
+                    }
+
+                    private function fundamentalGetRuleInvitationsByTextObjectIdRuleName( $textobjectId, $ruleName )
+                    {
+                        $arr = $this->fundamentalGetTheseRules(" where ruleTextObjectRef='$textobjectId' and ruleName='$ruleName' and (ruleStatus='invitation' or ruleStatus='invitationweb') ", "");
                       
                         return $arr;
                     }

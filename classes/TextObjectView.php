@@ -475,9 +475,67 @@
 						// detail is all together ... 
 						function viewContent( $app, $userId )
 						{
+
 							// $str="\n  <div  class='detailContainerContent' id='".$this->getDivId()."Content'>".$this->textobjectObject->textobjectArgument."</div>";
-							$strContent=TextObjectView::textToHtml($this->textobjectObject->getArgument());
-							$strContent=str_replace("\n","<br>",$strContent);
+							$strContent="";
+
+							$strContendDefault=TextObjectView::textToHtml($this->textobjectObject->getArgument());
+							$strContendDefault=str_replace("\n","<br>",$strContendDefault);
+
+// echo("Is wordtext: [".$this->textobjectObject->isWordText()."]");
+
+								// default: not yet commented and converted
+								if (!$this->textobjectObject->isWordText())
+								{
+									$strContent="".$strContendDefault."";
+									// todo: also possible just do like comment and
+									// only add if there is really a comment!
+									// 
+								}
+
+								// converted with comments?
+								if ($this->textobjectObject->isWordText())
+								{
+
+									// update this object
+									$this->textobjectObject->updateArgumentAsWordText();
+
+// echo("*****".$this->textobjectObject->getArgument());
+
+									// conversion done - go on with this here ..
+									$text=$this->textobjectObject->getArgument();
+// echo("*****".$text);
+
+// todo: put into a own methode
+									// $text="OKDOIT<br>".$text;
+									// add the rest things here ... 
+
+									// add comments div container
+									$text=$this->textInsertTextCommentContainer( $text );
+
+									// javascripts ...
+
+									// add onClicks
+									$text=$this->textInserJavascriptOnClick( $text );
+
+									// add the text
+									$strScript="<script>";
+									// todo: delete old words !!!! > do it javascript
+//									$strScript=$strScript."\n imachinaTextManager.deleteTextWordsByTextObjectId( ".$this->textobjectObject->textobjectId." ); ";
+
+									$arrWords=$this->textobjectObject->getTextWords( );
+									for ($t=0;$t<count($arrWords);$t++)
+									{
+										$wordObj=$arrWords[$t];
+										$strScript=$strScript."\n imachinaTextManager.addTextWord( ".$wordObj->textwordTextObjectId.", ".$wordObj->textwordId.", \"".$wordObj->getWordJavascriptFormat()."\" ); ";
+									}
+									$strScript=$strScript."</script>";
+									$text=$text.$strScript;
+
+									// ok that was it
+									$strContent="CONVERTTED!<br><div class='detailComponentCommentsTextIcon'>test</div>".$text;
+								}
+
 
 							$str="\n  <div  class='detailContainerContent' id='".$this->getDivId()."Content' >";
 							    
@@ -496,6 +554,57 @@
 
 							return $str;
 						}
+
+										// html output
+										function textInsertTextCommentContainer( $text )
+										{
+
+												// add comments and divs here ...
+												// todo: for eff. comments do this here ... 
+
+												// add divs for ajax
+												// version 1
+												// $selectableText=preg_replace("/( id='imt(\d+)_(\d+)' imachinaTag>([^<]+))/", "$1<div style='display: inline; position: relative;'><div  style='position: absolute; display: inline; top: 20px; opacity: 1.0;' id='imcommentt$2_$3'></div></div>", $selectableText);
+												// $selectableText=preg_replace("/( id='imt(\d+)_(\d+)' imachinaTag>([^<]+))/", "$1<div style='display: inline; position: relative;'><div  style='position: absolute; display: inline; top: 20px; opacity: 1.0;' id='imcommentt$2_$3'></div></div>", $selectableText);
+												// version 2
+												$text=preg_replace("/( id='endimt(\d+)_(\d+)'>)/", "$1<div class='detailComponentCommentsText'  id='commentimt$2_$3'></div>", $text);
+
+												return $text;
+
+										}
+
+										// javascript inserts
+										// comment
+										function textInsertComment( $text )
+										{
+
+	/*
+												// display 
+												// add a concrete comment here ...
+												$textobjectIdThis=1001;
+												$wordtextId=62;
+												$textobjectCommentId=15001;
+												// version 1.0
+											//	$selectableText=preg_replace("/( id='imt".$textobjectIdThis."_".$wordtextId."' imachinaTag>([^<]+))/", "$1C", $selectableText);
+											//	$selectableText=preg_replace("/( id='imcommentt".$textobjectIdThis."_".$wordtextId."'>)/", "$1<div style='border: 1px solid black; padding: 5px;'>ABC</div>", $selectableText);
+												// version 2
+												// add an icon (for show and hide)
+												$selectableText=preg_replace("/( id='endimt".$textobjectIdThis."_".$wordtextId."'>)/", "$1<div class='detailComponentCommentsTextIcon' onClick=\"onTextCommentToggle( $textobjectCommentId )\">[]</div>", $selectableText);
+												// add a comment for this	
+												$selectableText=preg_replace("/( id='commentimt".$textobjectIdThis."_".$wordtextId."'>)/", "$1<div class='detailComponentCommentsTextEntity' id='imcommentt$2_$3'>ABC</div>", $selectableText);
+	*/
+											return $text;
+										}
+
+										// insert the 
+
+										// onClick
+										function textInserJavascriptOnClick( $text )
+										{
+											// add on click script here manualy ...
+											$text=preg_replace("/(id='imt(\d+)_(\d+)')/", " onClick=\"onTextClick( $2, $3 )\"  $1", $text);										
+											return $text;
+										}
 
 
 									function viewSideActionsTop( $app, $userId )
@@ -616,6 +725,8 @@
 
 	//									$str=$str."\n   <div class='detailContainerContentActionsAdd'   onClick=\"doCommand".$this->getDivIdOrRef()."('add')\"  ></div>";
 										//$str=$str."\n</div>";
+										$str=$str."".$this->viewActionCommanAddTextIcon( $app,$userId );
+
 										$str=$str."\n    </td>";
 										
 										
@@ -798,6 +909,21 @@
 												if ($this->textobjectObject->innerCommentType=="visual")
 													if ($this->getRuleAccessMatrix($app,$userId)->isCommentable()) 
 														$str=$str."\n   <div class='detailContainerContentActionsAddPostIt' id='detailContainerContentActionsAddPostIt".$this->getIdOrRef()."' onClick=\"doCommandTextObject(".$this->getIdOrRef().",'addpostit','detailContainerContentActionsAddPostIt".$this->getIdOrRef()."')\" title='Add Postit' ></div>";
+												return $str;
+											}
+
+											function viewActionCommanAddTextIcon( $app, $userId )
+											{
+												$str="";
+												if ($this->textobjectObject->innerCommentType=="text")
+													if ($this->getRuleAccessMatrix($app,$userId)->isCommentable()) 
+												{
+														$str=$str."\n   <div class='detailContainerContentActionsMarkText' id='detailContainerContentActionsMarkText".$this->getIdOrRef()."' onClick=\"doCommandTextObject(".$this->getIdOrRef().",'addmarkmode','detailContainerContentActionsMarkText".$this->getIdOrRef()."')\"  title='TextMarking' >Add Textmarker</div>";
+														$str=$str."\n   <div class='detailContainerContentActionsMarkText' style='display: none;' id='detailContainerContentActionsMarkText".$this->getIdOrRef()."Mode' onClick=\"doCommandTextObject(".$this->getIdOrRef().",'addmarkmodeclose','detailContainerContentActionsMarkText".$this->getIdOrRef()."Mode')\"  title='TextMarking-Mode' >Marking-Mode</div>";
+														// $str=$str."\n   <div class='detailContainerContentActionsMarkText' id='detailContainerContentActionsMarkTextIt".$this->getIdOrRef()."' onClick=\"doCommandTextObject(".$this->getIdOrRef().",'addpostit','detailContainerContentActionsAddPostIt".$this->getIdOrRef()."')\" title='Add Postit' >Display Mode</div>";
+														
+												}
+
 												return $str;
 											}
 

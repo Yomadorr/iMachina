@@ -8,11 +8,18 @@
 
         // db 
     	var $ruleId=-1;
-    	var $ruleStatus="active"; // active/waiting/disabled
+    	var $ruleStatus="active"; // active/waiting/disabled/invitation/invitationweb*
     	var $ruleTextObjectRef=-1;
     	var $ruleUserRef=-1;
 
     	var $ruleName="";
+
+ 	  		var $ruleTypeCaseInvitationsEmail=""; //* case: $ruleName==invitationweb this is activation code
+     		var $ruleTypeCaseInvitationsText=""; //* case: $ruleName==invitationweb this is activation code
+    		var $ruleTypeCaseInvitationWebCode=""; //* case: 
+
+    	var $ruleUserOwnerRef=-1;
+
     	var $ruleCreate;
 
     	var $ruleHierarchy=""; // only used for rule merging ...
@@ -32,9 +39,9 @@
 		{
 			$sqlInsert="INSERT INTO Rule ";
 
-			$sqlInsert=$sqlInsert."(ruleName,ruleStatus,ruleTextObjectRef,ruleUserRef,ruleGeneric,ruleCreate) ";
+			$sqlInsert=$sqlInsert."(ruleName,ruleStatus,ruleTextObjectRef,ruleUserRef,ruleGeneric,ruleCreate,ruleTypeCaseInvitationsText, ruleTypeCaseInvitationWebCode, ruleUserOwnerRef, ruleTypeCaseInvitationsEmail ) ";
 			$sqlInsert=$sqlInsert." values ";
-			$sqlInsert=$sqlInsert."('".Converter::escapeSql($this->ruleName)."','".Converter::escapeSql($this->ruleStatus)."','".Converter::escapeSql($this->ruleTextObjectRef)."','".Converter::escapeSql($this->ruleUserRef)."','".Converter::escapeSql($this->ruleGeneric)."',Now()  )   "; // $rulePasswordNew
+			$sqlInsert=$sqlInsert."('".Converter::escapeSql($this->ruleName)."','".Converter::escapeSql($this->ruleStatus)."','".Converter::escapeSql($this->ruleTextObjectRef)."','".Converter::escapeSql($this->ruleUserRef)."','".Converter::escapeSql($this->ruleGeneric)."',Now(),'".Converter::escapeSql($this->ruleTypeCaseInvitationsText)."','".Converter::escapeSql($this->ruleTypeCaseInvitationWebCode)."','".Converter::escapeSql($this->ruleUserOwnerRef)."','".Converter::escapeSql($this->ruleTypeCaseInvitationsEmail)."'   )   "; // ruleTypeCaseInvitationsEmail $rulePasswordNew ruleTypeCaseInvitationsText, ruleTypeCaseInvitationWebCode, ruleUserOwnerRef
 // echo($sqlInsert);
 			return $sqlInsert;
 		}
@@ -76,8 +83,12 @@
 			$this->ruleTextObjectRef=Converter::unescapesql(mysql_result($result, $index,"ruleTextObjectRef"));
 			$this->ruleGeneric=Converter::unescapesql(mysql_result($result, $index,"ruleGeneric"));
 
-			$this->ruleCreate=Converter::unescapesql(mysql_result($result, $index,"ruleCreate"));
+				$this->ruleTypeCaseInvitationsText=Converter::unescapesql(mysql_result($result, $index,"ruleTypeCaseInvitationsText"));
+				$this->ruleTypeCaseInvitationWebCode=Converter::unescapesql(mysql_result($result, $index,"ruleTypeCaseInvitationWebCode"));
+				$this->ruleUserOwnerRef=Converter::unescapesql(mysql_result($result, $index,"ruleUserOwnerRef"));
+				$this->ruleTypeCaseInvitationsEmail=Converter::unescapesql(mysql_result($result, $index,"ruleTypeCaseInvitationsEmail"));
 
+			$this->ruleCreate=Converter::unescapesql(mysql_result($result, $index,"ruleCreate"));
 		} 
 	
 		function encodeField( $fieldvalue )
@@ -96,6 +107,10 @@
 			if (isset($request["ruleName"]))  {  $this->ruleType=$request["ruleName"]; } 
 			if (isset($request["ruleUserRef"]))  {  $this->ruleType=$request["ruleUserRef"]; } 
 			if (isset($request["ruleTextObjectRef"]))  {  $this->ruleType=$request["ruleTextObjectRef"]; } 
+
+				if (isset($request["ruleTypeCaseInvitationsText"]))  {  $this->ruleTypeCaseInvitationsText=$request["ruleTypeCaseInvitationsText"]; } 
+				if (isset($request["ruleTypeCaseInvitationsEmail"]))  {  $this->ruleTypeCaseInvitationsEmail=$request["ruleTypeCaseInvitationsEmail"]; } 
+
 		}
 	
 		function getAsFormat( $formatType )

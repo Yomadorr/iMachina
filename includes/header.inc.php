@@ -469,6 +469,7 @@ tinyMCE.init({
         function onTextClick( textobjectId, textId)
         {
             // alert("onTextClick( "+textobjectId+","+ textId+")");
+            debug("imachnaTextManager","onTextClick("+textobjectId+","+textId+")");
 
             // clear
             if (textobjectId!=textobjectSelection.textobjectRef)
@@ -531,7 +532,8 @@ tinyMCE.init({
                     var url='webservice.rest.php?area=textobjectdetail&action=update&actionsub=form&textobjectId='+textobjectId; 
                     $('#detailComponentFormEdit').load(url);
                 }
-                
+
+                // add 
                 if (command=='add')
                 {
                     setDivPositionToDiv( 'detailComponentFormAdd', divIdAttach );
@@ -553,6 +555,28 @@ tinyMCE.init({
                         selectTextObjectAdd( textobjectId, 'text', 'plain', 'visual' );
                     }
                     
+                                    // mark
+                    if (command=='addmarkmode')
+                    {
+                        // alert("markmode "+textobjectId);
+                        updateObject.textobjectId=textobjectId;
+                        // do we have to change or is it change?
+                        reloadTextObject( textobjectId, "coremarkmode" );  
+
+                        $('#'+divId).hide();                      
+                        $('#'+divId+"Mode").show();                      
+                    } 
+
+                    if (command=='addmarkmodeclose')
+                    {
+                        // alert("markmode "+textobjectId);
+                        updateObject.textobjectId=textobjectId;
+                        // do we have to change or is it change?
+                        reloadTextObject( textobjectId, "core" );                        
+
+                        $('#'+divId).show();                      
+                        $('#'+divId+"Mode").hide();                      
+                    } 
 
                 if (command=='timeline')
                 {
@@ -600,7 +624,11 @@ tinyMCE.init({
                          
                       function reloadTextObject( textobjectId, typ )
                       { 
-                           // walert("reloadTextObject() "+textobjectId+"-"+typ);
+<<<<<<< HEAD
+                           // alert("reloadTextObject() "+textobjectId+"-"+typ);
+=======
+                           //alert("reloadTextObject() "+textobjectId+"-"+typ);
+>>>>>>> wav
 
                             var divTextobjectId=diffPrefix+textobjectId;
                             if (typ=='core') 
@@ -608,6 +636,12 @@ tinyMCE.init({
                               var url='webservice.rest.php?area=textobjectdetail&action=get&actionsub=core&textobjectId='+textobjectId; /* alert('reload '+url); */ 
                               $('#'+divTextobjectId+'Core').load(url);  return; 
                             } 
+                                // case not yet marked at all !                                
+                                if (typ=='coremarkmode') 
+                                { 
+                                  var url='webservice.rest.php?area=textobjectdetail&action=get&actionsub=coremarkmode&textobjectId='+textobjectId; /* alert('reload '+url); */ 
+                                  $('#'+divTextobjectId+'Core').load(url);  return; 
+                                } 
                             if (typ=='listview') 
                             { 
                                 var url='webservice.rest.php?area=textobjectdetail&action=get&actionsub=listview&textobjectId='+textobjectId; /*  alert('reload '+url); */  
@@ -1661,7 +1695,7 @@ if (tinyMCE.getInstanceById('FormAddDatatextobjectArgument'))
         function doRuleAction( action, ruleName, ruleIndex )
         {
             // debug
-            // alert("doRuleAction("+ action+", "+ruleName+", "+ruleIndex+" )");
+            //alert("doRuleAction("+ action+", "+ruleName+", "+ruleIndex+" ["+actualRuleDialogId+"])");
 
             // actions
 
@@ -1716,6 +1750,93 @@ if (tinyMCE.getInstanceById('FormAddDatatextobjectArgument'))
                     // delete and reload
                     reloadDialogRule();       
                 }
+
+            // invitationform
+            if (action=="invitationform")
+            {
+                actualRuleName=ruleName;
+
+                // give form for ruleName now ..  
+                var url="webservice.rest.php?area=textobjectdetail&action=rule&actionsub=invitationform&textobjectId="+actualRuleDialogId+"&ruleName="+ruleName;
+                $('#ruleContainerAdd').load(url);  
+            }
+
+                // invitationformsearch
+                if (action=="invitationformsearch")
+                {
+                    // alert("AddFormSearch");
+                    var searchVal=$('#InvitationSearch').val();
+                    // alert("SearchVal:"+searchVal);
+                    $('#ruleContainerAddResult').html("loading...");   
+
+                    // do it with ajax here ...
+                    var url="webservice.rest.php?area=textobjectdetail&action=rule&actionsub=invitationformsearch&textobjectId="+actualRuleDialogId+"&invitationformsearch="+escape(searchVal);
+                    $('#ruleContainerAddResult').load(url);          
+
+                    // delete and reload
+                    // reloadDialogRule();       
+                }
+
+                // invitationformsearch
+                if (action=="invitationformsearchrule")
+                {
+                    // alert("add next rule invitation");
+                    // alert("SearchVal:"+searchVal);
+                    $('#ruleContainerAddResult').html("loading...");   
+
+                    // do it with ajax here ...
+                    // var url="webservice.rest.php?area=textobjectdetail&action=rule&actionsub=addformsearch&textobjectId="+actualRuleDialogId+"&addformsearch="+escape(searchVal);
+                    // $('#ruleContainerAddResult').load(url);          
+
+                    $.ajax({
+                         url: 'webservice.rest.php',
+                         post: 'post',
+                         data:  { area: 'textobjectdetail', action: 'rule', actionsub: 'insertinvitation', textobjectId: actualRuleDialogId, ruleName: actualRuleName, ruleUserId: ruleIndex   },
+                         context: document.body
+                    }).done(function( result ) { 
+
+                        // alert('saved '+result); 
+
+                    });
+                    
+
+                    // delete and reload
+                    reloadDialogRule();       
+                }
+
+                 // invitationwebformsearch
+                if (action=="invitationwebformsearchrule")
+                {
+                    // alert("add next rule invitationweb");
+                    // alert("SearchVal:"+searchVal);
+
+                    var ruleEmail=$('#RuleEmail').val();
+
+                    // alert("add next rule invitationweb"+ruleEmail);
+
+
+                    $('#ruleContainerAddResult').html("loading...");   
+
+                    // do it with ajax here ...
+                    // var url="webservice.rest.php?area=textobjectdetail&action=rule&actionsub=addformsearch&textobjectId="+actualRuleDialogId+"&addformsearch="+escape(searchVal);
+                    // $('#ruleContainerAddResult').load(url);          
+
+                    $.ajax({
+                         url: 'webservice.rest.php',
+                         post: 'post',
+                         data:  { area: 'textobjectdetail', action: 'rule', actionsub: 'insertinvitationweb', textobjectId: actualRuleDialogId, ruleName: actualRuleName, ruleUserId: -1, ruleEmail: ruleEmail   },
+                         context: document.body
+                    }).done(function( result ) { 
+
+                        // alert('saved '+result); 
+
+                    });
+                    
+
+                    // delete and reload
+                    reloadDialogRule();       
+                }
+
 
             if (action=="delete")
             {
