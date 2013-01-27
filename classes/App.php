@@ -2113,6 +2113,23 @@ echo("<br>App.install().<br>");
               return array();
           }
 
+          // get children
+          function getTextObjectChildrenById( $textobjectId, $userId )
+          {
+              //$textobjectObj=$this->getTextObjectById($textobjectId, $userId);
+              //if ($textobjectObj!=null)
+              //{
+                 $arrTypes=array();
+                   $arrTypes[0]="Thread";
+                   $arrTypes[1]="Hyperthread";
+                   $arrTypes[2]="Domain";
+                 $arr=$this->getAllTextObjectsByRefAndTypes( $textobjectId, $arrTypes , $userId );
+                return $arr;
+              //}
+
+              //return array();
+          }
+
       /*
           languages
       */

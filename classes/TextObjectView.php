@@ -893,6 +893,7 @@
 												
 												return $str;
 											}
+
 												function viewActionCommandAddIconCommentable( $app, $userId )
 												{
 													return $this->getRuleAccessMatrix($app,$userId)->isCommentable();
@@ -901,6 +902,11 @@
 												function viewOnAddClick( $divId="" )
 												{
 													 return " onClick=\"doCommandTextObject(".$this->getIdOrRef().",'add','$divId')\" ";
+												}
+
+												function viewOnAddThreadClick( $textobjectParentId, $divId="" )
+												{
+													 return " onClick=\"doCommandTextObject(".$textobjectParentId.",'addthread','$divId')\" ";
 												}
 
 											function viewActionCommanAddVisualIcon( $app, $userId )

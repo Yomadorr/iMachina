@@ -126,11 +126,11 @@ input[type=textarea] {
 									.detailComponentCommentsVisualBringToFront { display:inline; font-size: 12px; background: #eeee00; border: 1px solid black; }
 						/* visual 1. a container absolute and 2. the innercomments absolute positioned */
 						.detailComponentCommentsTextIcon { display: inline; }
-						.detailComponentCommentsText { position: relative; display: inline; }
+						.detailComponentCommentsText { position: relative; display: inline;  }
 							.detailComponentCommentsTextEntity { position: absolute; display: inline; _left: 20xp; top: 10px; border: 1px solid black; background: white; opacity: 0.5; }
 
 							/* used in textes */
-							.imachinaText { display: inline; background: red; /*float: left; */ }
+							.imachinaText { display: inline; background: green; /*float: left; */ }
 						  		.imachinaTextSelected { display: inline; background: red; }
 
 					
@@ -193,7 +193,7 @@ input[type=textarea] {
 
 					/* thread in lisview (comments) plain */
 					.textobjectThreadPlainDetailListView { }
-						.textobjectThreadPlainDetailCore { font-size: 18px; background: #666666; color: white; }
+						.textobjectThreadPlainDetailCore { font-size: 22px; background: #666666; color: white; }
 						.textobjectThreadPlainDetailComponentComments { padding-left: 20px; padding-right: 5px; border: 0px solid black; padding-top: 0px; font-size: 16px; border-left: 1px dotted #cccccc; background: white; }
 						
 						.textobjectThreadPlainDetailListViewStart {  }
@@ -203,8 +203,11 @@ input[type=textarea] {
 
 					/* hyperthread in lisview (comments) plain */
 					.textobjectHyperthreadPlainDetailTitle { font-size: 32px; background: black; color: white;} 
+					.textobjectHyperthreadPlainDetailIcon { float: left; } 
+						.textobjectHyperthreadPlainDetailIconsReset { clear: both; }
+
 					.textobjectHyperthreadPlainDetailListView { }
-						.textobjectHyperthreadPlainDetailListViewStart {  }
+						.textobjectHyperthreadPlainDetailListViewStart { }
 							.textobjectHyperthreadPlainDetailListView { border-top: 1px solid black; border-left: 1px solid black;   border-right: 1px solid black; padding-left: 10px; padding-right: 10px;  display: inline; background: #ccccc; font-size: 28px;}
 								.textobjectHyperthreadPlainPlainDetailListView { background: #cccccc; padding-left: 10px; padding-right: 10px; font-size: 36px; }
 						.textobjectHyperthreadPlainDetailListViewEnd { height: 10px; margin-bottom: 10px; border-top: 1px solid black; border-left: 2px solid black; border-right: 1px solid black; background-image: url(imgs/TextObjectHyperThreadBackground.jpg); height: 7px; }

@@ -84,20 +84,23 @@
 								$hyperthreadObjView=$app->getTextObjectViewFor($hyperthreadObj, $app, $userId);
 
 								// case: hyperthread is object to show ...
+								// version 1.0
+								/*
 								if ($hyperthreadObj->textobjectId==$contentId)
 								{
 									$str=$str.$hyperthreadObjView->viewDetail($app,$userId);
 								}
+								*/
 							
 								/*
 									case: showId is the Hyperthread Node
 								*/
 								// case: hyperthread is not object to show go further ...
-								if ($hyperthreadObj->textobjectId!=$contentId)
-								{
+								//if ($hyperthreadObj->textobjectId!=$contentId)
+								//{
 									// $str=$str."SHOW BELOW".$hyperthreadObjView->viewDetail($app,$userId);
 									$str=$str."".$hyperthreadObjView->viewDetailHyperthread($contentId, $app,$userId);
-								}
+								//}
 					
 
 		// 				viewDetailWithId($contentId,$app,$userId)

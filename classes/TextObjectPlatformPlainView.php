@@ -29,8 +29,10 @@
            // todo: if access is ok
            // edit
            // $str=$str."\n   ".$this->viewForm( $app, $userId )."";    
-           $str=$str."<div class='textobjectPlatformPlainDetailEdit' id='textobjectPlatformPlainDetailEdit' onClick=\"doCommandTextObject(".$this->textobjectObject->textobjectId.", 'edit', 'textobjectPlatformPlainDetailEdit' );\" title='Edit Platform'></div>";
-           $str=$str."<div class='textobjectPlatformPlainDetailRule' id='textobjectPlatformPlainDetailRule' onClick=\"doCommandRuleOnTextObject('rule',".$this->textobjectObject->textobjectId.",'textobjectPlatformPlainDetailRule' );\" title='Platform Rights / Rules' ></div>";
+
+             $str=$str."\n<div class='textobjectHyperthreadPlainDetailIcon'><div class='textobjectPlatformPlainDetailEdit' id='textobjectPlatformPlainDetailEdit' onClick=\"doCommandTextObject(".$this->textobjectObject->textobjectId.", 'edit', 'textobjectPlatformPlainDetailEdit' );\" title='Edit Platform'></div></div>";
+             $str=$str."\n<div class='textobjectHyperthreadPlainDetailIcon'><div class='textobjectPlatformPlainDetailRule' id='textobjectPlatformPlainDetailRule' onClick=\"doCommandRuleOnTextObject('rule',".$this->textobjectObject->textobjectId.",'textobjectPlatformPlainDetailRule' );\" title='Platform Rights / Rules' ></div></div><br>";
+             $str.$str."\n<div class='textobjectHyperthreadPlainDetailIconsReset'></div>";
 
 
                     // split

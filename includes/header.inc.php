@@ -225,6 +225,13 @@ tinyMCE.init({
         // load content
         loadContentExtended( threadId, contentType, true );
     }
+
+    function reloadContent( contentType )
+    {
+        hideSystemDialog();
+        loadContentExtended( actualThreadId, contentType, false );
+    }
+
     function loadContentExtended( threadId, contentType, flagHistory )
     {
         actualThreadId=threadId;
@@ -524,7 +531,7 @@ tinyMCE.init({
                     updateObject.textobjectId=textobjectId;
 
                     //$('#detailComponentFormAdd').hide();
-                    setDivPositionToDiv( 'detailComponentFormEdit', divIdAttach );
+                    if (divIdAttach!="") setDivPositionToDiv( 'detailComponentFormEdit', divIdAttach );
                     $('#detailComponentFormEdit').show();
                     $('#detailComponentFormEdit').css( 'z-index',$.topZIndex()+10);
                     $('#detailComponentFormEdit').html( "<div class='dialogCommandOnObjectRuleContainerEventLoading'>loading</div>" );
@@ -536,7 +543,7 @@ tinyMCE.init({
                 // add 
                 if (command=='add')
                 {
-                    setDivPositionToDiv( 'detailComponentFormAdd', divIdAttach );
+                    if (divIdAttach!="") setDivPositionToDiv( 'detailComponentFormAdd', divIdAttach );
                     //$('#detailComponentFormEdit').hide();
                     $('#detailComponentFormAdd').show();
                     $('#detailComponentFormAdd').css( 'z-index',$.topZIndex()+10);
@@ -544,10 +551,22 @@ tinyMCE.init({
                     $('#detailComponentFormAdd').html( "<div class='dialogCommandOnObjectRuleContainerEventLoading'>loading</div>" );
                     selectTextObjectAdd( textobjectId, 'text', 'plain', '' );
                 }
+
+                         // addthread
+                        if (command=='addthread')
+                        {
+                            if (divIdAttach!="") setDivPositionToDiv( 'detailComponentFormAdd', divIdAttach );
+                            //$('#detailComponentFormEdit').hide();
+                            $('#detailComponentFormAdd').show();
+                            $('#detailComponentFormAdd').css( 'z-index',$.topZIndex()+10);
+                            //    selectAdd( textobjectId, 'text', 'rtf', '' )
+                            $('#detailComponentFormAdd').html( "<div class='dialogCommandOnObjectRuleContainerEventLoading'>loading</div>" );
+                            selectTextObjectAdd( textobjectId, 'thread', 'plain', '' );
+                        }
                     
                     if (command=='addpostit')
                     {
-                        setDivPositionToDiv( 'detailComponentFormAdd', divIdAttach );
+                        if (divIdAttach!="") setDivPositionToDiv( 'detailComponentFormAdd', divIdAttach );
                         //$('#detailComponentFormEdit').hide();
                         $('#detailComponentFormAdd').show();
                         $('#detailComponentFormAdd').css( 'z-index',$.topZIndex()+10);
@@ -705,7 +724,7 @@ tinyMCE.init({
                                     var url='webservice.rest.php?area=textobjectdetail&action=insert&actionsub=form&textobjectType='+addSelectObject.textobjectType+'&textobjectTypeSub='+addSelectObject.textobjectTypeSub+'&textobjectRef='+addSelectObject.textobjectRef+'&textobjectCommentType='+addSelectObject.textobjectCommentType; 
                                     // ."&textobjectPositionX='+x+'&textobjectPositionY='+y; 
                                      // alert(''+url); 
-                                   // alert(\"select".$this->getDivId()."FormAdd( type, typesub )\"+url);
+                                    // alert(\"select".$this->getDivId()."FormAdd( type, typesub )\"+url);
                                     $('#detailComponentFormAdd').load(url);
                              }
 
@@ -789,16 +808,45 @@ if (tinyMCE.getInstanceById('FormAddDatatextobjectArgument'))
                                                         var newId=result; 
                                                     // insert normal comment (add below)
 
+                                                        // alert("textobjectType: "+textobjectType+" commentType=/"+commentType+"/");
                                                         // todo: something else ..
                                                         if (commentType=="") 
                                                         {
-                                                            // alert('Add inserted record here: '+'#'+divTextobjectIdBase+'Comments');
-                                                             $('#'+divTextobjectIdBase+'Comments').append( $('<div>').load('webservice.rest.php?area=textobjectdetail&action=get&actionsub=listview&textobjectId='+newId) );                                              
+                                                             //alert('Add inserted record here: '+'#'+divTextobjectIdBase+'Comments');
+                                                             $('#'+divTextobjectIdBase+'Comments').append( $('<div>').load('webservice.rest.php?area=textobjectdetail&action=get&actionsub=listview&textobjectId='+newId, 
+
+                                                                    // load
+                                                                    function() 
+                                                                    { 
+                                                                            // alert("textobjectType: "+textobjectType); 
+                                                                            var isThread=false;
+                                                                            if (textobjectType=="thread") isThread=true;
+                                                                            if (textobjectType=="hyperthread") isThread=true;
+                                                                            if (isThread)
+                                                                            {
+
+                                                                                // load new content ...
+                                                                                // version 1.0
+                                                                                // loadContent( newId, "content" );
+
+                                                                                // load actual content again!
+                                                                                reloadContent("content");
+
+                                                                            }
+
+                                                                            // scroll there ..
+                                                                            if (!isThread)
+                                                                            {
+                                                                                scrollToTextObjectById( newId );  
+                                                                            }
+                                                                    } 
+
+                                                                ) );         
                                                         }
 
                                                         if (commentType=="visual") 
                                                         {
-                                                                        $('#'+divTextobjectIdBase+'CommentsVisual').append( $('<div>').load('webservice.rest.php?area=textobjectdetail&action=get&actionsub=listviewvisual&textobjectId='+newId) );                                              
+                                                            $('#'+divTextobjectIdBase+'CommentsVisual').append( $('<div>').load('webservice.rest.php?area=textobjectdetail&action=get&actionsub=listviewvisual&textobjectId='+newId) );                                              
                                                         }
 
                                                         //              $('#".$this->getDivIdBase()."'+newId).css( 'background', '#ffcccc' );
@@ -828,7 +876,15 @@ if (tinyMCE.getInstanceById('FormAddDatatextobjectArgument'))
                                                         if (flagEdit)
                                                         {
                                                              doCommandTextObject( newId, "edit", 'detailComponentFormAdd' );
+
+                                                             // move detailComponentFormAdd to the inserted object
                                                         }
+                                                        else
+                                                        {
+                                                            // scroll to inserted object
+                                                            // scrollToTextObjectById( newId );
+                                                        }
+
 
                                                         // scroll to this object ...
                                                         // todo: ?
@@ -844,6 +900,38 @@ if (tinyMCE.getInstanceById('FormAddDatatextobjectArgument'))
 
                                          //  } 
                                 }
+
+                     // scrollToTextObjectById()
+                     function scrollToTextObjectById( textobjectId )
+                     {
+
+                        // alert("0. scrollToTextObjectById()  "+textobjectId);
+                        var divId="#"+getTextObjectDivById(textobjectId);
+                        // alert("1. scrollToTextObjectById()  "+textobjectId+"  divId="+divId);
+                        // alert("2. scrollToTextObjectById()  "+textobjectId+"  divId="+divId+" offset="+$(divId+"Core").offset());
+                        var posY=$(divId).offset().top;
+                        // alert("3. scrollToTextObjectById()  "+textobjectId+" divId="+divId+" posY: "+posY);
+                        // scroll now to this!
+
+                        // todo: check actual posy and check difference
+                        var scrollPosY=$(window).scrollTop();
+                        var scrollingHeight = $(window).height();
+
+                        // and some more jquery!
+                        // alert("scrollPosY "+scrollPosY);
+
+                        var diff=posY-scrollPosY;
+                        if (Math.abs(diff)>scrollingHeight) 
+                        {
+                            $('html, body').animate({ scrollTop: posY }, 'fast');
+                        }
+                     }
+
+                        // textobject div > returns div without #!
+                        function getTextObjectDivById( textobjectId )
+                        {
+                            return diffPrefix+textobjectId;
+                        }
 
 
   
@@ -1613,6 +1701,8 @@ if (tinyMCE.getInstanceById('FormAddDatatextobjectArgument'))
                                     
                                     // reloadTextObject
                                     $('#detailComponentFormEdit').hide();
+
+                                    // todo: type: thread/hyperthread > go up ... 
 
                                 })
                                 .fail(function( resulttmp ) { deleteAddError( textobjectId, resulttmp ) })

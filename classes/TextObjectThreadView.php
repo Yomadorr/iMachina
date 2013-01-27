@@ -32,6 +32,7 @@
 							$objSibling=$arrPartOfTree[$i];
 							$nextDepth=$startDepthIndex-$i;
 							if ($startDepthIndex==-1) $nextDepth=-1;
+							if ($startDepthIndex==-2) $nextDepth=-2;
 							$str=$str.$this->showSiblingLineBySiblingId( $nextDepth, $objSibling->textobjectId, $app, $userId );
 						}
 
@@ -54,6 +55,9 @@
 
 						function showSiblingLine( $depth, $siblingId, $arrSiblings, $app, $userId )
 						{
+							// depth
+							$depthStart=$depth;
+
 							// show singling lines ...
 							// opacity?
 							$opacity=1.0;
@@ -71,26 +75,93 @@
 //							$str=$str."&nbsp;($depth)";
 
 							// $str=$str."-$siblingId-";
-
+							$strMenuPoints="";
+							$threadObj=null;
+							$selectedThreadViewObj=null;
 							for ($i=0;$i<count($arrSiblings);$i++)
 							{
 								$threadObj=$arrSiblings[$i];
-
+								
 								// version 2.0
 								$threadObjView=$app->getTextObjectViewFor($threadObj, $app, $userId);
 								
 									// href: simple noscript link for crawler  
 									$str=$str.$this->getNoScriptHrefURLDirect( $threadObj );
 									// normal: link
-									if ($threadObj->textobjectId==$siblingId) $str=$str.$threadObjView->viewTreeMenuPointSelected( $depth, count($arrSiblings), $app, $userId);
-									if ($threadObj->textobjectId!=$siblingId) $str=$str.$threadObjView->viewTreeMenuPoint( $depth, count($arrSiblings), $app, $userId);
+									if ($threadObj->textobjectId==$siblingId) 
+									{ 
+										$selectedThreadViewObj=$threadObjView; 
+										// $strMenuPoints=$strMenuPoints.$threadObjView->viewTreeMenuPointSelected( $depth, count($arrSiblings), $app, $userId); 
+									}
+									if ($threadObj->textobjectId!=$siblingId) $strMenuPoints=$strMenuPoints.$threadObjView->viewTreeMenuPoint( $depth, count($arrSiblings), $app, $userId);
+
 							}
 
-							$str=$str."</div>";
+							// the first in line ...
+							if ($selectedThreadViewObj!=null) $str=$str.$selectedThreadViewObj->viewTreeMenuPointSelected( $depth, count($arrSiblings), $app, $userId); 
+
+							// the menu points
+							$str=$str.$strMenuPoints;
+
+							// add +
+							// todo: check accessibility.. 
+							// add new ... 
+							if ($depthStart==-2) 
+							{
+								// check access
+								$ruleaccessmatrixObj=$app->getRuleAccessMatrixByTextObjectId( $threadObj->textobjectId, $userId );
+								if ($app->checkRuleMatrixFor($ruleaccessmatrixObj,"comment"))
+									$str=$str."<div class='textobjectThreadPlainTreeContainerMenuPoint' id='iMachinaAddThread".$threadObj->textobjectRef."' ".$this->viewOnAddThreadClick( $threadObj->textobjectRef, "iMachinaAddThread".$threadObj->textobjectRef )."> +</div>";
+							}
+
+							$str=$str."</div>";  
 
 							return $str;
 						}
 
+						// ...
+						function showChildren( $parenttextobjectId, $arrChildren, $app, $userId )
+						{
+							
+							$str="";
+							$str=$str."<div style='_float: right; background: white; margin-top: 10px; z-index: 1000px;'";
+								
+								$str=$str."<div class='treeSiblingBottomLine' style='opacity: 1.0; _overflow: hidden; _vertical-alignment: top; _height: 14px;'>"; // margin-top: ".-$newdepth."px
+
+								$str=$str."<div style='width: 300px;'></div>";
+	//							$str=$str."&nbsp;($depth)";
+
+								// $str=$str."-$siblingId-";
+								if (count($arrChildren)>0)
+								{
+									$threadObj=null;
+									for ($i=0;$i<count($arrChildren);$i++)
+									{
+										$threadObj=$arrChildren[$i];
+										
+										// version 2.0
+										$threadObjView=$app->getTextObjectViewFor($threadObj, $app, $userId);
+										
+											// href: simple noscript link for crawler  
+											$str=$str.$this->getNoScriptHrefURLDirect( $threadObj );
+											$str=$str.$threadObjView->viewTreeMenuPoint( -2, count($arrChildren), $app, $userId);
+									}
+
+								}
+
+									// add +
+									// todo: check accessibility.. 
+									// add new ... 
+										// check access
+
+										$ruleaccessmatrixObj=$app->getRuleAccessMatrixByTextObjectId( $parenttextobjectId, $userId );
+										if ($app->checkRuleMatrixFor($ruleaccessmatrixObj,"comment"))
+											$str=$str."<div class='textobjectThreadPlainTreeContainerMenuPoint' id='iMachinaAddThread".$parenttextobjectId."' ".$this->viewOnAddThreadClick( $parenttextobjectId, "iMachinaAddThread".$parenttextobjectId )."> +</div>";
+								$str=$str."</div>";  
+							$str=$str."</div>";
+
+							return $str;
+						}
 								/*
 									display menupoint
 								*/
@@ -309,13 +380,26 @@
 					$strContent=str_replace("\n","<br>",$strContent);
 					$str="\n  <div  class='detailContainerContent' id='".$this->getDivId()."Content'>";
 
-					// side actions
-					// $str=$str."".$this->viewSideActions($app,$userId);
+						// side actions
+						// $str=$str."".$this->viewSideActions($app,$userId);
 
-					$str=$str."<div class='textobjectThreadPlainDetailCore'>".$strContent."</div>";
-					// add members here ... 
-					// $str=$str.$this->viewMembers( $app, $userId );
+						$str=$str."<div class='textobjectThreadPlainDetailCore'>";
+							$str=$str.$strContent;
+
+							// children ...
+							// version 1.0
+							// $arrChildren=$app->getTextObjectChildrenById( $this->getId(), $userId );
+							// $str=$str.$this->showChildren( $this->getId(), $arrChildren, $app, $userId );
+
+							
+
+						$str=$str."</div>";
+						// add members here ... 
+						// $str=$str.$this->viewMembers( $app, $userId );
+						// ....
+
 					$str=$str."</div>";
+
 
 					// comments
 					$str=$str.$this->viewSideActionsComments( $app, $userId );
