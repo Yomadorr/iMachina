@@ -391,6 +391,10 @@
 
 					$newObject->textobjectPositionX=$textobjectFromWeb->textobjectPositionX;
 					$newObject->textobjectPositionY=$textobjectFromWeb->textobjectPositionY;
+
+					$newObject->textobjectCursorA=$textobjectFromWeb->textobjectCursorA;
+					$newObject->textobjectCursorB=$textobjectFromWeb->textobjectCursorB;
+
 					// echo($newObject->textobjectRef);
 					
 					$newObjectCasted=$app->getTextObjectCastFor($newObject);
@@ -436,12 +440,16 @@
 						$newObject->textobjectTypeSub=$textobjectFromWeb->textobjectTypeSub;
 						$newObject->textobjectPositionX=$textobjectFromWeb->textobjectPositionX;
 						$newObject->textobjectPositionY=$textobjectFromWeb->textobjectPositionY;
+
+						$newObject->textobjectCursorA=$textobjectFromWeb->textobjectCursorA;
+						$newObject->textobjectCursorB=$textobjectFromWeb->textobjectCursorB;
 						// $newObject->textobjectArgumentText=$textobjectFromWeb->textobjectArgumentText;
 						$newObject->setArgument($textobjectFromWeb->getArgument());
 
 						$newObject->textobjectCommentType=$textobjectFromWeb->textobjectCommentType;
 
-						// echo("-----error----".$newObject->textobjectCommentType);
+						//echo("-----error----".$newObject->textobjectCommentType);
+						//print_r($newObject);
 
 						$newObjectCasted=$app->getTextObjectCastFor($newObject);
 
@@ -621,6 +629,20 @@
 					if ($actionsub=="document")
 					{
 						// $output=$output."\n-----document-------";
+
+// todo: check filetypes
+// clean up filetypes!
+// 1. check all incoming filetypes -> direct correct?
+// 2. an alternative filetype? -> correct					
+/*
+		$arrAlternativeTypes=$obj->arrAlternativeTextobjectTypes;
+        for ($alt=0;$alt<count($arrAlternativeTypes);$alt++)
+        {
+            $documentTypeAlt=$arrAlternativeTypes[$alt];
+            echo("\n documentAddMimeType( '".$documentTypeAlt->documentType."', '".$documentTypeAlt->documentTypeSub."' ); ");
+        }
+ */	
+
 						// todo: only possible for comments on images (who can have visual comments)
 						$updateThisObject=$app->getTextObjectById($textobjectFromWeb->textobjectId, $userId);
 						if ($updateThisObject!=null)
@@ -640,12 +662,15 @@
 								// todo: is mime/type correct?
 								// can you use this mimetype
 
+
 								// ok save it as this!
 								if (isset($_FILES['documentfile']))
 								{
 									// add this
 									// $output=$output."---".$_FILES['documentfile'];
 									$filePathBaseFolder=$app->getApplicationBaseFilePath();
+
+								
 
 									// $output=$output.$filePath;
 									$newFilePath=$filePathBaseFolder."documents/document".$updateThisObject->textobjectId.".".$updateThisObject->textobjectSuffix;
@@ -872,6 +897,8 @@
 					$thisObject=$app->getTextObjectById($textobjectFromWeb->textobjectId, $userId);
 					// convert to markmode
 					$thisObject->updateArgumentAsWordText();
+
+
 					// print_r($thisObject);
 					if ($thisObject!=null)
 					{
@@ -880,8 +907,18 @@
 						$textobjectViewTmp=$app->getTextObjectViewFor($thisObject, $userId );
 						if ($textobjectViewTmp!=null)
 						{
+							// disable interactivity !
+							// href etc...
+							$thisObject->updateArgumentDeactivateInteractivity();
+
+							// set visibility to markingmode!
+							// 
+
 							// print_r($textobjectViewTmp);
 							$output=$output.$textobjectViewTmp->viewDetailCore($app,$userId);
+
+							// debug
+							// $output=$output."".$thisObject->convertHtmlToSourceCode($thisObject->getArgument());
 						}
 
 					} 

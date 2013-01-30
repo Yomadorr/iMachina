@@ -119,7 +119,7 @@
 		{
 			// this.debutToConsole=false; 
 
-			this.version=0.6;
+			this.version=0.65;
 
 			/*
 				Texts
@@ -156,12 +156,26 @@
 					wordObject.textwordId=wordId;
 					wordObject.textwordString=stringWord;
 
-				// debug("imachnaTextManager","addTextWord( "+textobjectId+", "+wordId+"  )");
+				// debug("imachinaTextManager","addTextWord( "+textobjectId+", "+wordId+"  )");
 
 				this.arrWords[this.arrWords.length]=wordObject;
 
 				return wordObject
 			}		
+
+			this.getIndexOfWordId = function( textobjectId, wordId )
+			{
+				for (var i=0;i<this.arrWords.length;i++)
+				{
+					textwordObj=this.arrWords[i];
+					if ((textwordObj.textobjectId==textobjectId)&&(textwordObj.textwordId==wordId)) 
+					{
+						return i;
+					}
+				}
+
+				return -1;
+			}
 
 			this.debugText = function( )
 			{
@@ -221,8 +235,15 @@
 				var arr=this.arrTextComments; 
 				var str=""; 
 				for (var z=0;z<arr.length;z++) {  str=str+"\n "+z+". "+this.arrTextComments[z].textobjectId+" A: "+this.arrTextComments[z].textobjectCursorA+" B: "+this.arrTextComments[z].textobjectCursorB; } 
+
 				return str; 
 			}
+
+			/*
+
+				Managing the selections
+			*/
+
 
 			/*
 				Renderings
@@ -235,7 +256,7 @@
 
 				// render all textobjects
 				// do now the renderdings
-				debug("imachnaTextManager","TextComments "+this.arrTextComments.length);
+				debug("imachinaTextManager","TextComments "+this.arrTextComments.length);
 				for (var z=0;z<this.arrTextComments.length;z++)
 				{
 					if (this.arrTextComments[z].textobjectRef==textobjectId) this.renderCommentToAttributes( this.arrTextComments[z] );;
@@ -259,7 +280,7 @@
 					var textwordObj;
 					var flagInSelection=false;
 
-					// debug("imachnaTextManager","renderCommentToAttributes("+textobjectObj.textobjectId+")  ");
+					// debug("imachinaTextManager","renderCommentToAttributes("+textobjectObj.textobjectId+")  ");
 
 					for (var i=0;i<this.arrWords.length;i++)
 					{
@@ -289,44 +310,61 @@
 							// more complex!!
 							if (arr.length>0)
 							{
+
+							}
 								// go through attributes!!!
 								// new TextWordAttribute();
 								
 								toaObj=new TextWordAttribute();
-								toaObj.colorRed=0;
-								toaObj.colorGreen=0;
-								toaObj.colorBlue=0;
-								for (var inx=0;inx<arr.length;inx++)
+								
+								// there are attributes
+								if (arr.length>0)
 								{
-									
-									// add togehter here ...
-									toaObj.colorRed=toaObj.colorRed+arr[inx].colorRed+1;
-									toaObj.colorGreen=toaObj.colorGreen+arr[inx].colorGreen+1;
-									toaObj.colorBlue=toaObj.colorBlue+arr[inx].colorBlue+1;
+									toaObj.colorRed=0;
+									toaObj.colorGreen=0;
+									toaObj.colorBlue=0;
+
+									for (var inx=0;inx<arr.length;inx++)
+									{
+										
+										// add togehter here ...
+										toaObj.colorRed=toaObj.colorRed+arr[inx].colorRed+1;
+										toaObj.colorGreen=toaObj.colorGreen+arr[inx].colorGreen+1;
+										toaObj.colorBlue=toaObj.colorBlue+arr[inx].colorBlue+1;
+									}
+
+									debug("imachniaTextManager","---- new marker before: "+toaObj.colorRed+","+toaObj.colorGreen+","+toaObj.colorBlue);
+
+									// max ... 
+									if (toaObj.colorRed>255) toaObj.colorRed=255;
+									if (toaObj.colorGreen>255) toaObj.colorGreen=255;
+									if (toaObj.colorBlue>255) toaObj.colorBlue=255;
+
+									// make it darker
+									var factor=1;
+									if (arr.length>1) factor=1.0-arr.length*0.1;
+
+									toaObj.colorRed=parseInt(toaObj.colorRed*factor);
+									toaObj.colorGreen=parseInt(toaObj.colorGreen*factor);
+									toaObj.colorBlue=parseInt(toaObj.colorBlue*factor);
 								}
 
-								debug("imachnaTextManager","new marker before: "+toaObj.colorRed+","+toaObj.colorGreen+","+toaObj.colorBlue);
+								// no attributes
+								if (arr.length==0)
+								{
+									toaObj.colorRed=255;
+									toaObj.colorGreen=255;
+									toaObj.colorBlue=255;
+								}
 
-								// max ... 
-								if (toaObj.colorRed>255) toaObj.colorRed=255;
-								if (toaObj.colorGreen>255) toaObj.colorGreen=255;
-								if (toaObj.colorBlue>255) toaObj.colorBlue=255;
-
-								// make it darker
-								var factor=1;
-								if (arr.length>1) factor=1.0-arr.length*0.1;
-
-								toaObj.colorRed=parseInt(toaObj.colorRed*factor);
-								toaObj.colorGreen=parseInt(toaObj.colorGreen*factor);
-								toaObj.colorBlue=parseInt(toaObj.colorBlue*factor);
-
-								debug("imachnaTextManager","new marker: "+toaObj.colorRed+","+toaObj.colorGreen+","+toaObj.colorBlue);
+								debug("imachinaTextManager","----- new marker: "+toaObj.colorRed+","+toaObj.colorGreen+","+toaObj.colorBlue);
 
 								var divId="imt"+textwordObj.textobjectId+"_"+textwordObj.textwordId;
 								$('#'+divId).css("background",'rgb('+toaObj.colorRed+','+toaObj.colorBlue+','+toaObj.colorGreen+')');
 
 	//								$('#'+divId).css("background","green");
-							}
+							
+
 						}
 					}
 				}	

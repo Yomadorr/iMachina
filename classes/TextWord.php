@@ -20,10 +20,15 @@
 		{
 			$str=$this->textwordString;
 
-//			$str=str_replace("\"","\\\"",$str);
+			$str=str_replace("\"","\\\"",$str);
+//			$str=str_replace("\"",",$str);
+			$str=str_replace("\r"," ",$str);
+			$str=str_replace("\n"," ",$str);
 
 			return $str;
 		}
+
+
 	}
 
 			// helping class
@@ -34,7 +39,7 @@
 
 				function debug()
 				{
-					return $this->position." :".$this->text."";
+					return "Word(Pos: ".$this->position." / Text: ".$this->text.")";
 				}
 			}
 	

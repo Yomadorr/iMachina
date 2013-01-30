@@ -2,7 +2,7 @@
 
 	class TextObjectView
 	{
-		var $textobjectviewVersion=1.0;
+		var $textobjectviewVersion=1.1;
 
 		var $textobjectviewType="text";
 		var $textobjectviewTypeSub="plain";
@@ -12,10 +12,12 @@
 		var $textobjectviewLabel="Text"; // @textobject.label*
 		var $textobjectviewDescription="Simple Textobject."; // @textobject.description
 
-
 		var $textobjectviewInteractionType="text"; // text|visual // todo: take from object ... 
 
 		var $textobjectObject;
+
+		// visibilty for rendering
+		var $textobjectRenderingMode="normal"; // normal with edit things etc. "normal" | "presentation" | "markingmode"
 
 		// textobjectArgumentEditor 
 		// todo: textobjectviewArgumentEditor
@@ -533,7 +535,7 @@
 									$text=$text.$strScript;
 
 									// ok that was it
-									$strContent="CONVERTTED!<br><div class='detailComponentCommentsTextIcon'>test</div>".$text;
+									$strContent="CONVERTTED!<br>".$text;
 								}
 
 
@@ -927,7 +929,6 @@
 														$str=$str."\n   <div class='detailContainerContentActionsMarkText' id='detailContainerContentActionsMarkText".$this->getIdOrRef()."' onClick=\"doCommandTextObject(".$this->getIdOrRef().",'addmarkmode','detailContainerContentActionsMarkText".$this->getIdOrRef()."')\"  title='TextMarking' >Add Textmarker</div>";
 														$str=$str."\n   <div class='detailContainerContentActionsMarkText' style='display: none;' id='detailContainerContentActionsMarkText".$this->getIdOrRef()."Mode' onClick=\"doCommandTextObject(".$this->getIdOrRef().",'addmarkmodeclose','detailContainerContentActionsMarkText".$this->getIdOrRef()."Mode')\"  title='TextMarking-Mode' >Marking-Mode</div>";
 														// $str=$str."\n   <div class='detailContainerContentActionsMarkText' id='detailContainerContentActionsMarkTextIt".$this->getIdOrRef()."' onClick=\"doCommandTextObject(".$this->getIdOrRef().",'addpostit','detailContainerContentActionsAddPostIt".$this->getIdOrRef()."')\" title='Add Postit' >Display Mode</div>";
-														
 												}
 
 												return $str;
@@ -1164,12 +1165,12 @@
 
 									// add a menu
 										$strMenuTitle="Add";
-										$strIconDelete="<div class='detailComponentFormActionsClose' onClick=\"$('#detailComponentFormAdd').slideToggle('fast');\" > X </div>";
+										$strIconDelete="<div class='detailComponentFormActionsClose' onClick=\"tinyMCE.execCommand('mceRemoveControl', false, 'FormAddDatatextobjectArgument'); $('#detailComponentFormAdd').slideToggle('fast');\" > X </div>";
 											if (!$flagInsert) 
 											{
 												$strMenuTitle="EDIT";
 												$strIconDelete="";
-												$strIconDelete=$strIconDelete."<div class='detailComponentFormActionsClose' onClick=\"$('#detailComponentFormEdit').slideToggle('fast');\" > x </div>";
+												$strIconDelete=$strIconDelete."<div class='detailComponentFormActionsClose' onClick=\"tinyMCE.execCommand('mceRemoveControl', false, 'FormFormDatatextobjectArgument');  $('#detailComponentFormEdit').slideToggle('fast');\" > x </div>";
 												// $strIconDelete=$strIconDelete."<div class='dialogCommandOnObjectRuleContainerIconRule' onClick=\"$('#dialogCommandOnObjectRuleContainer').hide()\"> rules </div>";					
 											}
 
@@ -1190,7 +1191,22 @@
 
 											// $str=$str."\n <br>[MOVE]"; 
 
+											// $str=$str."DBUG: textcursorA: ".$this->textobjectObject->textobjectCursorA." textcursorB: ".$this->textobjectObject->textobjectCursorB;
 											// include javascript ... 
+
+											// textcomment
+											// for all?
+											if ($this->textobjectObject->textobjectCommentType=="text")
+											{
+												$str=$str."\n<div class='detailComponentFormTextComment'>";
+													$str=$str."\n <div class='detailComponentFormTextCommentTitle'>TextMarker</div> ";
+													$str=$str."\n 	<div class='detailComponentFormTextCommentButton' onclick=\"onTextCommand( 'insert', ".$this->textobjectObject->textobjectRef.", 'setCursorA' )\">&lt;</div> ";
+													$str=$str."\n 	<div class='detailComponentFormTextCommentButton' onclick=\"onTextCommand( 'insert', ".$this->textobjectObject->textobjectRef.", 'setCursorB' )\">&gt</div> ";
+													$str=$str."\n 	<div class='detailComponentFormTextCommentButton' onclick=\"onTextCommand( 'insert', ".$this->textobjectObject->textobjectRef.", 'reset' )\">x</div> ";
+												$str=$str."\n</div>";
+											}
+
+
 
 											// add
 											// delete
@@ -1444,6 +1460,9 @@
 													$str=$str."\n 	<input type=hidden id='Form".$strFormAdd."DatatextobjectTypeSub' value='".$this->textobjectObject->textobjectTypeSub."'> ";
 													$str=$str."\n 	<input type=hidden id='Form".$strFormAdd."DatatextobjectPositionX' value='".$this->textobjectObject->textobjectPositionX."'> ";
 													$str=$str."\n 	<input type=hidden id='Form".$strFormAdd."DatatextobjectPositionY' value='".$this->textobjectObject->textobjectPositionY."'> ";
+
+													$str=$str."\n 	<input type=hidden id='Form".$strFormAdd."DatatextobjectCursorA' value='".$this->textobjectObject->textobjectCursorA."'> ";
+													$str=$str."\n 	<input type=hidden id='Form".$strFormAdd."DatatextobjectCursorB' value='".$this->textobjectObject->textobjectCursorB."'> ";
 												}
 
 												// the content ... 
@@ -1505,11 +1524,15 @@
 
 											// infos
 											// $str=$str."\n <br><br>";
-											$str=$str."\n<div style='font-size: 10px'>";
+											$str=$str."\n<div style='font-size: 10px; ' onClick=\"$('#dialogUpdateDebug').toggle();\">DBUG-Details ></div>";
+											$str=$str."\n<div id='dialogUpdateDebug' style='font-size: 10px; display:none; '>";
+
 												if ($this->getId()!=-1) $str=$str."\n Id: ".$this->getId();
 												$str=$str."\n <br>Ref: ".$this->textobjectObject->textobjectRef." (RefName: ".$this->textobjectObject->textobjectRefName.") ";
 												$str=$str."\n <br>Status: ".$this->textobjectObject->textobjectStatus."";
 												$str=$str."\n <br>Type: ".$this->textobjectObject->textobjectType."/".$this->textobjectObject->textobjectTypeSub."";
+
+												$str=$str."\n <br>CommentType: ".$this->textobjectObject->textobjectCommentType;
 
 												$rootObj=$app->getRootObject( $this->textobjectObject, $userId  );
 												$str=$str."\n <br>Root: ".$rootObj->textobjectId."  {";
@@ -1517,6 +1540,9 @@
 												$str=$str."\n  RootUserType: ".$rootObj->textobjectUserRef."  ";
 												$str=$str."\n  TreeLength: ".count($arrTree)."  ";
 												if (($userId!=-1)&&($rootObj->textobjectUserRef==$userId)) $str=$str."\n<br> YOU ARE IN YOUR DOMAIN!  ";
+												$str=$str."\n <br>Argument: <br>";
+												$str=$str."\n ".TextObjectView::textToHtml($this->textobjectObject->getArgument());
+
 												$str=$str."\n }";
 											$str=$str."\n</div>";
 

@@ -67,6 +67,9 @@ php_value log_errors_max_len 0
 		// members fors complex ...	
 		include_once("./classes/TextObjectComplexMember.php"); 
 
+		// document types 
+		include_once("./classes/DocumentType.php");
+
 		// textword
 		include_once("./classes/TextWord.php");
 //		 include_once("./classes/TextWordFound.php")
@@ -170,6 +173,7 @@ php_value log_errors_max_len 0
 
 	// start
 	$app->start();
+
 
 	// get user Id things
 	// check for session set and update here ..
@@ -284,8 +288,10 @@ php_value log_errors_max_len 0
 		$userAnonymousObj=$app->getUserAnonymous();
 		// print_r($userAnonymousObj);
 		$_SESSION["userId"]=$userAnonymousObj->userId;
+
 	} 
 
+// print_r($app->getUserAnonymous());	
 
 	// redirect to front site if not yet set ...
 	

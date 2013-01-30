@@ -166,11 +166,9 @@
 				function viewContainerLoggedInUserPortrait( $app, $userId )
 				{
 					$str="";
-
 					if ($userId!=-1)
 					{
 						$userObject=$app->getUserById($userId);
-
 						$str=$str."\n<div class='userPortrait' >";
 
 							// users ... 

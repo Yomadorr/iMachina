@@ -167,6 +167,7 @@
 		// version 
     var $version=0.78; // versions ... 
 
+    // 0.79 first implementation of add textmarkings 
     // 0.78 implemented all classes for textmarking
     // 0.77 invite front-end implemented (not yet login etc...)
     // 0.76 imported div. javascripts for textmarking & new text for hyperthreads
@@ -1560,6 +1561,7 @@ echo("<br>App.install().<br>");
                 // error 
             }
 
+
             // events
             // onInsert
             $argObj->onInsert($this,$userId);
@@ -1572,6 +1574,45 @@ echo("<br>App.install().<br>");
             // todo: do it correctly with table etc ... 
             $newTextObjectId = mysql_insert_id();
             $newTextObject=$this->getTextObjectById($newTextObjectId,$userId);
+
+            /*
+                case: textcomments
+            */
+            // special things
+            // case: new object is a textcomment 
+            //       textcomments can only be done on texts converted into wordtext
+            //       check if the object is transformed! otherwise transform!!
+            // todo: *
+            // comment
+            if ($argObj->textobjectCommentType=="text")
+            {
+                // get parent object and transform it ....
+                // in case text/plain > text/rtf!!!
+                $parentObj=$this->getTextObjectById($argObj->textobjectRef,$userId); 
+
+                // is parent text-commentable?
+                if ($parentObj!=null)
+                {
+                    // todo: security
+                    //if ($parentObj->innerCommentType=="text")
+                    //{
+
+                      if (($parentObj->textobjectType=="text")&&($parentObj->textobjectTypeSub=="plain"))
+                      {
+                          $parentObj->textobjectType=="text";
+                          $parentObj->textobjectTypeSub=="rtf";
+                          $this->updateTextObjectTypeToTextHtml($parentObj,$userId);
+                      }
+
+                      // convert here and now to wordtext!...
+                      $parentObj->updateArgumentAsWordText();
+                      $this->updateTextObject($parentObj,$userId);
+
+                    //}
+                }
+
+            }
+
 
             // add this rule
             if ($userId!=-1) $this->insertRuleByValueFor("collaborator",$newTextObject->textobjectId,$userId,$userId);
@@ -1757,6 +1798,10 @@ echo("<br>App.install().<br>");
             $this->fundamentalUpdateTextObjectUpdateComments( $textobjectId );
         }
 
+        function updateTextObjectTypeToTextHtml($textobjectId,$userId)
+        {
+            $this->fundamentalUpdateTextObjectTypeToTextHtml( $textobjectId );
+        }
 
       // more raw ...
 
@@ -2971,6 +3016,17 @@ echo("<br>App.install().<br>");
                     echo mysql_errno($this->dbconnect) . ": " . mysql_error($this->dbconnect) . " --- ".$sql. "\n";
                 }
             }
+
+    private function fundamentalUpdateTextObjectTypeToTextHtml($argObj)
+    {
+         $sql=$argObj->updateTypeToTextHtml();
+         mysql_query($sql, $this->dbconnect); 
+             if (mysql_errno())
+             {
+                echo mysql_errno($this->dbconnect) . ": " . mysql_error($this->dbconnect) . " --- ".$sql. "\n";
+            }
+    }
+
 
      	// change this!!!
      	// get latest !!!

@@ -388,8 +388,8 @@
 
 							// children ...
 							// version 1.0
-							// $arrChildren=$app->getTextObjectChildrenById( $this->getId(), $userId );
-							// $str=$str.$this->showChildren( $this->getId(), $arrChildren, $app, $userId );
+							$arrChildren=$app->getTextObjectChildrenById( $this->getId(), $userId );
+							$str=$str.$this->showChildren( $this->getId(), $arrChildren, $app, $userId );
 
 							
 

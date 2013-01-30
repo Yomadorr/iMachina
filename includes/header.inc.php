@@ -34,15 +34,50 @@
     {
         if (typeof console != 'undefined') 
         {
-            console.log(area+"--"+strLog);
+            console.log("["+area+"]:"+strLog);
         }
     }
 </script>
 <!-- including timeline etc. scripts -->
 <script src="jclasses.js"></script> 
 
+<!-- tinymce -->
 <script type="text/javascript" src="tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script type="text/javascript">
+
+
+tinyMCE.init({
+        mode : "textareas",
+        theme : "advanced",
+        verify_html : false,
+       verify_css_classes : false,
+        cleanup : false,
+        cleanup_on_startup : false,
+        auto_cleanup_word: false,
+      // ,
+      //  theme_advanced_toolbar_location: "bottom",
+      //  valid_children : "+body[style],-body[div],p[strong|a|#text]"
+      //  content_css : "tinymceaddons.css"
+});
+
+
+// imachinaText
+/*
+tinyMCE.init({
+    mode : "none", // none
+    theme : "advanced", // 
+    // editor_selector : "tinymceRtf",
+    plugins : "autolink,lists,spellchecker,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable",
+        // Theme options
+        theme_advanced_buttons1 : "save,newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,fontselect,fontsizeselect",
+        theme_advanced_toolbar_location : "top",
+        theme_advanced_toolbar_align : "left",
+        // theme_advanced_statusbar_location : "bottom",
+        theme_advanced_resizing : true,
+    width: "100%"
+    //,height: "400"    
+});
+*/
 
 // simple ... 
 /*
@@ -457,10 +492,16 @@ tinyMCE.init({
         /*
             actual
         */
+        // selection mode [insert][update?]
+        var textobjectSelectionMode="insert";
+
+        // actual action type
+        var textobjectSelectionType="cursorA"; // cursorA default | cursorB
+
         // selected text
         var textobjectSelection=new TextObject();
             textobjectSelection.textobjectId=15001; // default
-            textobjectSelection.textobjectRef=1001; // default
+            textobjectSelection.textobjectRef=3132; // default
 
             textobjectSelection.textobjectTextWordAttribute.colorRed=255;
             textobjectSelection.textobjectCursorA=-1;
@@ -470,23 +511,161 @@ tinyMCE.init({
         
         // debug
         var debugComments=imachinaTextManager.debugTextComments();
-        // console.debug(""+debugComments);            
+        // console.debug(""+debugComments);  
+
+        function onTextWorkflowStart()
+        {
+            textobjectSelectionType="cursorA";
+            textobjectSelection.textobjectCursorA=-1;
+            textobjectSelection.textobjectCursorB=-1;           
+        }
+
+
+        // 
+        function onTextCommand( insertOrUpdate, textobjectId, actionType )
+        {
+            // if action type==
+            alert("onTextCommand( "+insertOrUpdate+", "+textobjectId+", "+actionType+" )");
+
+            if (actionType=="clear")
+            {
+                onTextWorkflowStart();
+                imachinaTextManager.renderTextObjectById(textobjectSelection.textobjectRef);   
+            }
+        }
 
         // todo: remove this here ... 
-        function onTextClick( textobjectId, textId)
+        function onTextClick( textobjectId, textId )
         {
-            // alert("onTextClick( "+textobjectId+","+ textId+")");
-            debug("imachnaTextManager","onTextClick("+textobjectId+","+textId+")");
+            var debugThis=true;
 
+            // alert("onTextClick( "+textobjectId+","+ textId+")");
+            if (debugThis) debug("onTextClick","onTextClick("+textobjectId+","+textId+")");
+
+            // ref ...
+            
             // clear
             if (textobjectId!=textobjectSelection.textobjectRef)
             {
+                if (debugThis) debug("onTextClick","newTextObject selected");
+
+
+  /*              textobjectSelection.textobjectCursorA=-1;
+                textobjectSelection.textobjectCursorB=-1;
+
                 imachinaTextManager.clearCommentAttributesForId( textobjectSelection.textobjectRef );
+*/
+                onTextWorkflowStart()
+        
+
+
+                // todo: render old now !!! if available!
+                var textobjectNotAnymoreId=textobjectSelection.textobjectRef;
+
+                // change 
+                textobjectSelection.textobjectRef=textobjectId;
+                imachinaTextManager.renderTextObjectById(textobjectNotAnymoreId);   
+
             }
 
-            if (textobjectSelection.textobjectCursorA==-1)textobjectSelection.textobjectCursorA=textId;
+            if (textobjectSelection.textobjectCursorA==-1)
+            {
+                if (debugThis) debug("onTextClick","set first selected word");
+
+                textobjectSelection.textobjectCursorA=textId;
+                
+                // open directly the add-dialog here! - evtl. addtextcomment
+                doCommandTextObject(textobjectSelection.textobjectRef,'addtextmark','imt'+textobjectId+'_'+textId);
+            }
             else
             {
+                // version 2.0
+                if (debugThis) debug("onTextClick","select second word");
+
+                // first entry of cursor b
+                
+                var indexNewCursorA=imachinaTextManager.getIndexOfWordId(textobjectSelection.textobjectRef,textobjectSelection.textobjectCursorA);
+                var indexNewCursorB=imachinaTextManager.getIndexOfWordId(textobjectSelection.textobjectRef,textId);
+
+                if (textobjectSelection.textobjectCursorB==-1)
+                {
+                    // cursorB is less than cursorA > cursorA=cursorB > cursorB = -1
+                    if (debugThis) debug("onTextClick","first selction of 2nd word");
+                    
+                    if (indexNewCursorB!=-1)
+                    {
+
+                        if (indexNewCursorB<indexNewCursorA)
+                        {
+                            if (debugThis) debug("onTextClick"," ? [   ");
+                            // B < A 
+                            textobjectSelection.textobjectCursorA=textId;
+                            alert("smaller now!!!");
+                        }
+                        else
+                        {
+                            if (debugThis) debug("onTextClick"," [  ? ");
+                            // cases 
+                            textobjectSelection.textobjectCursorB=textId;
+                        }
+                    
+                    }
+                }
+                else
+                {
+                // both are filled in > update !
+                    if (debugThis) debug("onTextClick"," [  |  ] ? ");
+
+                       // cases:  NewClick1 [A  NewClick2   |MidAB|  NewClick3  B] NewClick4 
+                    var indexNewCursorA=imachinaTextManager.getIndexOfWordId(textobjectSelection.textobjectRef,textobjectSelection.textobjectCursorA);
+                    var indexNewCursorB=imachinaTextManager.getIndexOfWordId(textobjectSelection.textobjectRef,textobjectSelection.textobjectCursorB);
+                    var indexNewCursorMidAB=(indexNewCursorA+indexNewCursorB)/2;
+                    var indexNewCursorNewClick=imachinaTextManager.getIndexOfWordId(textobjectSelection.textobjectRef,textId);
+
+                        // frame
+                        if ((indexNewCursorA!=-1)&&(indexNewCursorB!=-1))
+                        {
+                              var parsed=false;
+
+                              // case NewClick1
+                              if (indexNewCursorNewClick<indexNewCursorA) 
+                              { 
+                                textobjectSelection.textobjectCursorA=textId;                     
+                                if (debugThis) debug("onTextClick"," * [  |  ]");
+                                parsed=true;
+                              }
+
+                              // case NewClick4
+                              if (indexNewCursorNewClick>indexNewCursorB) 
+                              { 
+                                textobjectSelection.textobjectCursorB=textId; 
+                                parsed=true;   
+                                if (debugThis) debug("onTextClick","[  |  ]*");
+                              }
+
+
+                              // case NewClick2
+                              if (!parsed)
+                              {
+                                  if (indexNewCursorNewClick<indexNewCursorMidAB)
+                                  {
+                                    if (debugThis) debug("onTextClick","[ * |  ]");
+                                      textobjectSelection.textobjectCursorA=textId; 
+                                  }
+                                  // case NewClick3
+                                  else
+                                  {
+                                    if (debugThis) debug("onTextClick","[  | * ]");
+                                      textobjectSelection.textobjectCursorB=textId;
+                                  }
+
+                              }
+                        }
+
+                }
+                // alert("WordIndexOfNewWord: "+);
+
+                // version 1.0
                 //if (textobjectSelection.textobjectCursorA!=-1) 
                 //{
                     /*
@@ -494,7 +673,8 @@ tinyMCE.init({
                     else
                     if (selectionRangeA>selectionRangeA) selectionRangeA=textId;
                     */
-                    textobjectSelection.textobjectCursorB=textId;
+                    //textobjectSelection.textobjectCursorB=textId;
+
                 //}
             }
             // alert("onTextClick( "+textobjectId+","+ textId+")");
@@ -502,8 +682,19 @@ tinyMCE.init({
             // todo: deselect old version
             // console.debug("onTextClick() "+textobjectSelection.textobjectCursorA+"  "+textobjectSelection.textobjectCursorB);
 
+            // todo: push this to dialog divs!
+            // if (textobjectSelectionMode=="insert")
+            // {
+
+                  // alert("---"+$("#FormAddDatatextobjectCursorA").val());
+                  $("#FormAddDatatextobjectCursorA").val(textobjectSelection.textobjectCursorA);
+                  $("#FormAddDatatextobjectCursorB").val(textobjectSelection.textobjectCursorB);
+            // }
+
+            // render 
             imachinaTextManager.renderTextObjectById(textobjectSelection.textobjectRef);
-            debug("imachnaTextManager",imachinaTextManager.debugText());
+            debug("imachnaTextManager",imachinaTextManager.debugText()+"\n"+imachinaTextManager.debugTextComments());
+            
 
         }
 
@@ -525,6 +716,8 @@ tinyMCE.init({
                 // divIdAttach=divTextobjectId;
 
                 // alert('doCommandTextObject( '+textobjectId+', '+command+', '+divId+' )');
+                tinyMCE.execCommand('mceRemoveControl', false, 'FormAddDatatextobjectArgument');
+                tinyMCE.execCommand('mceRemoveControl', false, 'FormEditDatatextobjectArgument');
 
                 if (command=='edit')
                 {
@@ -574,7 +767,7 @@ tinyMCE.init({
                         selectTextObjectAdd( textobjectId, 'text', 'plain', 'visual' );
                     }
                     
-                                    // mark
+                    // textmark mode
                     if (command=='addmarkmode')
                     {
                         // alert("markmode "+textobjectId);
@@ -596,6 +789,18 @@ tinyMCE.init({
                         $('#'+divId).show();                      
                         $('#'+divId+"Mode").hide();                      
                     } 
+
+                    // add a textmark!
+                     if (command=='addtextmark')
+                    {
+                         if (divIdAttach!="") setDivPositionToDiv( 'detailComponentFormAdd', divIdAttach );
+                        //$('#detailComponentFormEdit').hide();
+                        $('#detailComponentFormAdd').show();
+                        $('#detailComponentFormAdd').css( 'z-index',$.topZIndex()+10);
+                        $('#detailComponentFormAdd').html( "<div class='dialogCommandOnObjectRuleContainerEventLoading'>loading</div>" );
+                        selectTextObjectAdd( textobjectId, 'text', 'plain', 'text' );
+                   }
+
 
                 if (command=='timeline')
                 {
@@ -712,8 +917,16 @@ tinyMCE.init({
                          {
                               addSelectObject.textobjectRef=textobjectId; 
                               addSelectObject.textobjectType=type; 
-                              addSelectObject.textobjectTypeSub=typesub; 
+                              addSelectObject.textobjectTypeSub=typesub;
                               if (commentType!='*') addSelectObject.textobjectCommentType=commentType; 
+
+                              // textcomment
+                              addSelectObject.textobjectCursorA=textobjectSelection.textobjectCursorA;
+                              addSelectObject.textobjectCursorB=textobjectSelection.textobjectCursorB;
+
+                              // textcomment
+                              // if (commentType=="text") alert("cursorA:"+addSelectObject.textobjectCursorA);
+
                               // alert('textobjectCommentType='+$javascriptObj.textobjectCommentType); 
                              loadTextObjectAdd( textobjectId ); 
                          } 
@@ -721,7 +934,8 @@ tinyMCE.init({
                              // todo!
                              function loadTextObjectAdd( textobjectId ) // commentType: "" (AddComment) | "visual" (VisualComment)
                              {
-                                    var url='webservice.rest.php?area=textobjectdetail&action=insert&actionsub=form&textobjectType='+addSelectObject.textobjectType+'&textobjectTypeSub='+addSelectObject.textobjectTypeSub+'&textobjectRef='+addSelectObject.textobjectRef+'&textobjectCommentType='+addSelectObject.textobjectCommentType; 
+
+                                    var url='webservice.rest.php?area=textobjectdetail&action=insert&actionsub=form&textobjectType='+addSelectObject.textobjectType+'&textobjectTypeSub='+addSelectObject.textobjectTypeSub+'&textobjectRef='+addSelectObject.textobjectRef+'&textobjectCommentType='+addSelectObject.textobjectCommentType+'&textobjectCursorA='+addSelectObject.textobjectCursorA+'&textobjectCursorB='+addSelectObject.textobjectCursorB; 
                                     // ."&textobjectPositionX='+x+'&textobjectPositionY='+y; 
                                      // alert(''+url); 
                                     // alert(\"select".$this->getDivId()."FormAdd( type, typesub )\"+url);
@@ -790,12 +1004,15 @@ if (tinyMCE.getInstanceById('FormAddDatatextobjectArgument'))
                                            textobjectPositionX=$('#FormAddDatatextobjectPositionX').val();
                                            textobjectPositionY=$('#FormAddDatatextobjectPositionY').val();
 
+                                           textobjectCursorA=$('#FormAddDatatextobjectCursorA').val();
+                                           textobjectCursorB=$('#FormAddDatatextobjectCursorB').val();
+
                                         // alert("insertTextObject() textobjectArgument= "+textobjectArgument+" textobjectType="+textobjectType+" / textobjectTypeSub="+textobjectTypeSub+" textobjectCommentType="+textobjectCommentType);
                                         
                                            $.ajax({
                                             url: 'webservice.rest.php',
                                             post: 'post',
-                                            data:  { area: 'textobjectdetail', action: 'insert', actionsub: '', textobjectRef: textobjectRef, textobjectType: textobjectType,  textobjectTypeSub: textobjectTypeSub, textobjectCommentType: textobjectCommentType,  textobjectPositionX: textobjectPositionX, textobjectPositionY: textobjectPositionY,  textobjectArgument: textobjectArgument  },
+                                            data:  { area: 'textobjectdetail', action: 'insert', actionsub: '', textobjectRef: textobjectRef, textobjectType: textobjectType,  textobjectTypeSub: textobjectTypeSub, textobjectCommentType: textobjectCommentType,  textobjectPositionX: textobjectPositionX, textobjectPositionY: textobjectPositionY,  textobjectArgument: textobjectArgument, textobjectCursorA: textobjectCursorA, textobjectCursorB: textobjectCursorB  },
                                             context: document.body
                                            }).done(function( result ) { 
 
@@ -1490,7 +1707,18 @@ if (tinyMCE.getInstanceById('FormAddDatatextobjectArgument'))
             for ($z=0;$z<count($app->arrPublicTypes);$z++)
             {
                 $obj=$app->arrPublicTypes[$z];
-                if ($obj->textobjectDocument==1) echo("\n documentAddMimeType( '".$obj->textobjectType."', '".$obj->textobjectTypeSub."' ); ");
+                if ($obj->textobjectDocument==1) 
+                {
+                    echo("\n documentAddMimeType( '".$obj->textobjectType."', '".$obj->textobjectTypeSub."' ); ");
+                    // add alternatives
+                    $arrAlternativeTypes=$obj->arrAlternativeTextobjectTypes;
+                    for ($alt=0;$alt<count($arrAlternativeTypes);$alt++)
+                    {
+                        $documentTypeAlt=$arrAlternativeTypes[$alt];
+                        echo("\n documentAddMimeType( '".$documentTypeAlt->documentType."', '".$documentTypeAlt->documentTypeSub."' ); ");
+                    }
+
+                }
             }
 
         ?>

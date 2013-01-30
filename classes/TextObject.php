@@ -51,10 +51,12 @@
 		var $needsThreadAsParent=false; // *
  
  		// REF TEXT (Cursor) *
- 		var $textobjectCursorA=-1; // name for 
-    	var $textobjectCursorB=-1; // name for 
+ 		// textcomment system with words...
+ 		var $textobjectCursorA=-1; // word cursors! it is the id of div (=word)
+    	var $textobjectCursorB=-1; // word cursors! it is the id of div (=word)
 
-// todo: not used? > innercommentType
+		// todo: check all
+		// as a comment - what type of coment is ist?
 		var $textobjectCommentType="text"; // *** ... "","visual","text"
 
     	// REF GRAFIC (Pos) *
@@ -77,10 +79,18 @@
     	var $textobjectType="text"; // name for 
     	var $textobjectTypeSub="plain"; // name for 
 
-					// overview type selection [add view]
-					// var $textobjectviewTypes="text";
-					var $textobjectviewTypeCategory="text";
-					var $textobjectviewTypeCategoryLabel="Texts";
+    		// arrTypeAlter. ...
+	    	var $arrAlternativeTextobjectTypes=Array();
+    		function addAlternativeType($atype,$atypeSub)
+    		{
+	    		$newType=new DocumentType($atype,$atypeSub);
+	    		$this->arrAlternativeTextobjectTypes[count($this->arrAlternativeTextobjectTypes)]=$newType;
+    		}
+
+				// overview type selection [add view]
+				// var $textobjectviewTypes="text";
+				var $textobjectviewTypeCategory="text";
+				var $textobjectviewTypeCategoryLabel="Texts";
 
 	    	// documents ...
     		var $textobjectDocument=0; // 0/1 has a document like .jpg etc.
@@ -146,7 +156,7 @@
 
 		var $textobjectBackground=""; // * ... 
 
-		// comment
+		// comment - what is possible? !!! exampl. text/plain > can be commented by text!
 		var $innerCommentType="text"; // text/visual/none	
 			var $innerCommentable=false; // * commentable ... 
 
@@ -425,6 +435,18 @@
 			return $sqlUpdate;
 		}
 
+		function updateTypeToTextHtml()
+		{
+			$sqlUpdate="UPDATE TextObject ";
+	
+			$sqlUpdate=$sqlUpdate." set textobjectTypeSub='html'";
+			$sqlUpdate=$sqlUpdate.    ",textobjectUpdate=Now() ";
+
+			// $sqlUpdate=$sqlUpdate." textobjectModify = Now() ";
+			$sqlUpdate=$sqlUpdate." where textobjectId=".Converter::escapeSql($this->textobjectId)."   ";
+			return $sqlUpdate;
+		}
+
 		// deleteRecord 
 		function deleteRecord( )
 		{
@@ -626,16 +648,25 @@
 	    	return true;
 	    }
 
+	    	// disable hrefs etc for textmarking-mode
+	     	function updateArgumentDeactivateInteractivity()
+	     	{
+	     		$this->setArgument(str_replace(" href="," _href",$this->getArgument()));
+	 		}
    
 	      function updateArgumentAsWordText()
 	      {
 	      		$debugThis=false;
 
 	      		// check if is Wordtext
-	      		if (!$this->isWordText()) $this->convertToWordText( );
+	      		if (!$this->isWordText()) 
+	      		{
+	      			// text/plain? add \n > <br>!
+	      			if (($this->textobjectType=="text")&&($this->textobjectTypeSub=="plain")) { $this->setArgument(str_replace("\r","<br />",$this->getArgument())); $this->setArgument(str_replace("\n","<br />",$this->getArgument())); }
+	      			$this->convertToWordText( );
+	      		}
 
 	      		$selectableText=$this->getArgument();
-
 
 
 				   // 1. find not imachinaTextId tagged object
@@ -643,7 +674,7 @@
 					preg_match_all($pattern, $selectableText, $matches, PREG_OFFSET_CAPTURE, 3);
 
 					// 2. take the foundings... 
-						
+					if ($debugThis) { echo("<hr><strong>STEP 1: FIND 'TEXT-SNIPPETS' (>Der Baum<) NOT IN TAGS! AND SPLIT</strong><hr>"); }
 
 					$arrMatches=$matches[1];
 					$arrFound=array();
@@ -664,6 +695,8 @@
 						$textObj=$arrFound[$i];
 						// echo("<br>$i ".$textObj->debug());
 					}
+
+					if ($debugThis) { echo("<hr><strong>STEP 2: FIND MAX WORDID</strong><hr>"); }
 
 					// get max imachinaTextId	
 					$imachinaTextId=0;
@@ -687,6 +720,8 @@
 					// imachinaTextId
 					$imachinaTextId++;
 
+					if ($debugThis) { echo("<hr><strong>STEP 3: GO BACKWARDS THROUGH FOUND TEXT-SNIPPETS</strong><hr>"); }
+
 					// go from back to top 
 					if (count($arrFound)>0)
 					{
@@ -694,7 +729,7 @@
 						{
 							$textObj=$arrFound[$i];
 							// check 
-							if ($debugThis) echo("\n<br><br>$i ".$textObj->debug());
+							if ($debugThis) echo("\n<br><br><strong>TEXT-SNIPPET: $i: ".$textObj->debug()."</strong><br>");
 
 							$inlineText=$textObj->text;
 
@@ -706,6 +741,8 @@
 							$checkForThisTag="imachinaTag>";
 
 							// case: "wordonly" > is it a imachinatext-div?
+							if ($debugThis) echo("\n<br>CHECK 1: Is it already a marked textmachina-word? (imachinaTag - at the end?)<br>");
+							
 							$pos=$textObj->position;
 							if ($pos>strlen($checkForThisTag))
 							{
@@ -713,15 +750,17 @@
 								$posStart=$pos-strlen($checkForThisTag);
 								// ok get thext
 								$tag=substr($selectableText,$posStart,strlen($checkForThisTag));
-								if ($debugThis) echo("---{$tag}---");
+								if ($debugThis) echo("<br>---------------- SUBSTRING BACK---<strike>{$tag}</strike>");
 								if ($tag==$checkForThisTag)
 								{
 									$isInSystem=true;
 								}
 
 								// echo("------TAG: ".$tag);
-								if ($debugThis) if ($isInSystem) echo("\n---TAGFOUND---");
+								if ($debugThis) if ($isInSystem) echo("\n<br>-------------------> TAGFOUND > is part of imachinaWordText");
+								if ($debugThis) if (!$isInSystem) echo("\n<br>-------------------> TAGNOTFOUND > not part of imachinaWordText yet");
 
+								if ($debugThis) if (!$isInSystem) echo("\n<br><br>------------> WORDMODE (Splitted by words)");
 								$commentMode="word";
 								// mode: word - do it 
 								// $app->
@@ -729,6 +768,8 @@
 								{
 									$strReplace="";
 
+									if ($debugThis) if (!$isInSystem) echo("\n<br>------------> EXPLODE WORDS ...");
+	
 									// explode
 									$arrWords=explode(" ",$inlineText);
 									// = one
@@ -737,23 +778,28 @@
 										// in system?
 										if (!$isInSystem)
 										{
+	  										if ($debugThis) if (!$isInSystem) echo("\n<br><br>----------> HANDLE SINGLE WORD: ".$arrWords[0]);
+
 											// add div here ... 
 											// addTextObject()
 											// $strReplace="\n-REPLACEONEWORD-";
 											// <div class='imachinaText' id='imt".$textobjectId."_16' imachinaTag>
-											$strReplace=$strReplace.$this->addTextWord( $this->textobjectId, $imachinaTextId, $inlineText );
+	  										if ($debugThis) if (!$isInSystem) echo("\n<br>---------------> ONLY ONE WORD > ADD ...");
+											$strReplace=$strReplace.$this->addTextWord( $this->textobjectId, $imachinaTextId, $inlineText, $debugThis );
 											$imachinaTextId++;
 										}
 										
 										if ($isInSystem)
 										{
-											if ($debugThis) echo(" IN SYSTEM ");
+											if ($debugThis) echo("<br>---------------> DON'T ADD IS IN SYSTEM IN SYSTEM ");
 											$strReplace="";
 										}
 									}
 									// on or more?
 									if (count($arrWords)>1)
 									{
+										if ($debugThis) if (!$isInSystem) echo("\n<br><br>----------> HANDLE MULTIPLE WORDS: ".count($arrWords)." WORDS");
+
 										// add all now ... 
 										$strReplace=""; // \n(-REPLACEMORETHANONEWORD-)";
 
@@ -775,19 +821,31 @@
 										for ($wordIndex=0;$wordIndex<count($arrWords);$wordIndex++)
 										{
 											$singleWord=$arrWords[$wordIndex];
-											// echo($singleWord);
-											if (($isInSystem)&&($wordIndex==0)) { $strReplace=$strReplace.$singleWord."</div>"; } // end div in original!
 
-											if ((!$isInSystem)&&($wordIndex==0)) { $strReplace=$strReplace.$this->addTextWord( $this->textobjectId, $imachinaTextId, $singleWord ); } // end div in original!
+	  										if ($debugThis) if (!$isInSystem) echo("\n<br><br>-------------> WORD $wordIndex: ".$singleWord);
 
-											if (($wordIndex>0))
-											{ 
-												$strReplace=$strReplace.$this->addTextWord( $this->textobjectId, $imachinaTextId, $singleWord );
+	  										if ($singleWord!="")
+	  										{
+												// echo($singleWord);
+												if (($isInSystem)&&($wordIndex==0)) { $strReplace=$strReplace.$singleWord."</div>"; } // end div in original!
+
+												if ((!$isInSystem)&&($wordIndex==0)) { $strReplace=$strReplace.$this->addTextWord( $this->textobjectId, $imachinaTextId, $singleWord, $debugThis  ); } // end div in original!
+
+												if (($wordIndex>0))
+												{ 
+													$strReplace=$strReplace.$this->addTextWord( $this->textobjectId, $imachinaTextId, $singleWord, $debugThis );
+												}
+												$imachinaTextId++;
 											}
-											$imachinaTextId++;
 
-											$strReplace=$strReplace.$this->addTextWord( $this->textobjectId, $imachinaTextId, " " );
-											$imachinaTextId++;
+												// add space?
+												if ($wordIndex!=(count($arrWords)-1)) 
+												{
+													$strReplace=$strReplace.$this->addTextWord( $this->textobjectId, $imachinaTextId, " ", $debugThis );
+													$imachinaTextId++;
+												}
+											
+
 
 										}
 
@@ -796,16 +854,19 @@
 									// replace this here and now ...
 									if ($strReplace!="")
 									{
+										if ($debugThis) if (!$isInSystem) echo("\n<br><br>---------------> REPLACEMENT WORDS TO DIVS");
+
 										// cutoff ..
 										$wordsLength=strlen($inlineText);
 										$tmpText=$selectableText;
 											$textA=substr($selectableText,0,$pos);
-											if ($debugThis) echo("\n<br>POS: ".$pos);
+											if ($debugThis) echo("\n<br>-----------------------> ATPOS: ".$pos);
 											$textB=substr($selectableText,$pos+$wordsLength);
-											if ($debugThis) echo("\n<br>TEXTA: ".$textA);
-											if ($debugThis) echo("\n<br>TEXTB:".$textB);
+											if ($debugThis) echo("\n[".$this->convertHtmlToSourceCode($textA)." [REPLACING] ");
+											if ($debugThis) echo("\n".$this->convertHtmlToSourceCode($textB)." ]");
 										$selectableText=$textA.$strReplace.$textB;
-										if ($debugThis) echo("\n<br>!!!!!!!!!!!!!!!!!!!!CHANGED");
+											if ($debugThis) echo("\n<br><br><br>-----------------------> RESULT: ".$this->convertHtmlToSourceCode($selectableText.""));
+										// if ($debugThis) echo("\n!!!!!!!!!!!!!!!!!!!!CHANGED");
 									}
 
 								}
@@ -832,16 +893,38 @@
 				$this->setArgument($selectableText);
 			}
 
+					function convertHtmlToSourceCode( $text )
+					{
+						$text=str_replace("<","&lt;",$text);
+						$text=str_replace(">","&gt;",$text);
+						return $text;
+					}
+
 				function convertToWordText( )
 			    {
+			    	
+			    	// todo: replace returns? <br/> - only in the direct .. text/plain
+
+// check for textplain!			    	
+// text/plain > text/rtf !!!!!
+// if there is a comment on this!!!
+
+    	            $this->setArgument( str_replace("\r"," ",$this->getArgument()) );
+					$this->setArgument( str_replace("\n"," ",$this->getArgument()) );
+				
 			    	// add ...
 			    	$this->setArgument("<imachinaTextDiv>".$this->getArgument()."</imachinaTextDiv>");
 			    }
 
 						// function
-						function addTextWord( $textobjectId, $imachinaTextId, $word )
+						function addTextWord( $textobjectId, $imachinaTextId, $word, $debugThisMethode=false )
 						{
-							return "<div class='imachinaText'  id='imt".$textobjectId."_".$imachinaTextId."' imachinaTag>".$word."</div id='endimt".$textobjectId."_".$imachinaTextId."'>";
+							if ($debugThisMethode) echo("<br>---------------------> ADDWORD: ($word) as WORDID: imt".$textobjectId."_".$imachinaTextId."");
+							return "<span id='imt".$textobjectId."_".$imachinaTextId."' imachinaTag>".$word."</span>";
+							// version 2.0
+							//		return "<div class='imachinaText'  id='imt".$textobjectId."_".$imachinaTextId."' imachinaTag>".$word."</div>";
+							// version 1.0
+							// return "<div class='imachinaText'  id='imt".$textobjectId."_".$imachinaTextId."' imachinaTag>".$word."</div id='endimt".$textobjectId."_".$imachinaTextId."'>";
 						}
 
 
@@ -850,8 +933,14 @@
 		          { 
 		          	  $textwordText=$this->getArgument();
 
+
+
 		              $arr=array();
 
+						// get the things ... 
+		                // version 1.0
+		                // preg_match_all("/ id='imt([0-9]+)_([0-9]+)' imachinaTag>([^<]+)/", $textwordText, $arrWords, PREG_OFFSET_CAPTURE, 3);
+		                // version 2.0
 		                preg_match_all("/ id='imt([0-9]+)_([0-9]+)' imachinaTag>([^<]+)/", $textwordText, $arrWords, PREG_OFFSET_CAPTURE, 3);
 		                //echo("<pre>");
 		                // print_r($arrWords);

@@ -11,6 +11,13 @@
     				var $textobjectviewTypeCategory="image";
 					var $textobjectviewTypeCategoryLabel="Images";
 
+
+		function TextObjectImagePng()
+		{
+			// add aleternative types ...
+			$this->addAlternativeType("image","jpg");
+			$this->addAlternativeType("image","jpeg");
+		}
 	}
 	
     

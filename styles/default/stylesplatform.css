@@ -82,6 +82,9 @@ input[type=textarea] {
 			 			.detailComponentForm { display: none; position: absolute;  background: #cccccc; border: 1px solid solid;  }
 			 				.detailComponentFormContainerManualUpdate {  }
 					 			.detailComponentFormDeleteSpace { padding-top: 20px; }
+					 		.detailComponentFormTextComment { border: 2px dotted black; padding-left: 5px;  margin-top: 10px; padding-top: 5px; padding-bottom: 5px;}
+						 		.detailComponentFormTextCommentTitle {  display: inline; background: #ddaaaa; font-size: 18px;}
+								 	 .detailComponentFormTextCommentButton { border: 1px solid black; display: inline; margin-right: 0px; padding-left: 10px; padding-right: 10px; background: #999999; }
 
 			 			.detailComponentAdd {  display: none; width: 800px; position: absolute; background: #dddddd; border: 1px solid dotted; }
 							.detailComponentFormContainerManualAdd { width: 500px; }
@@ -125,12 +128,12 @@ input[type=textarea] {
 									.detailComponentCommentsVisualToggle { display:inline; font-size: 12px; background: #eeee00; border: 1px solid black; width: 50px;}
 									.detailComponentCommentsVisualBringToFront { display:inline; font-size: 12px; background: #eeee00; border: 1px solid black; }
 						/* visual 1. a container absolute and 2. the innercomments absolute positioned */
-						.detailComponentCommentsTextIcon { display: inline; }
-						.detailComponentCommentsText { position: relative; display: inline;  }
+						.detailComponentCommentsTextIcon { display: inline;  }
+						.detailComponentCommentsText { position: relative; background: red; display: inline;  }
 							.detailComponentCommentsTextEntity { position: absolute; display: inline; _left: 20xp; top: 10px; border: 1px solid black; background: white; opacity: 0.5; }
 
 							/* used in textes */
-							.imachinaText { display: inline; background: green; /*float: left; */ }
+							.imachinaText { display: inline; background: #dddddd; /*float: left; */ }
 						  		.imachinaTextSelected { display: inline; background: red; }
 
 					
