@@ -435,17 +435,19 @@
 			return $sqlUpdate;
 		}
 
-		function updateTypeToTextHtml()
+		function updateTypeToTextRtf()
 		{
 			$sqlUpdate="UPDATE TextObject ";
 	
-			$sqlUpdate=$sqlUpdate." set textobjectTypeSub='html'";
+			$sqlUpdate=$sqlUpdate." set textobjectTypeSub='rtf'";
 			$sqlUpdate=$sqlUpdate.    ",textobjectUpdate=Now() ";
 
 			// $sqlUpdate=$sqlUpdate." textobjectModify = Now() ";
 			$sqlUpdate=$sqlUpdate." where textobjectId=".Converter::escapeSql($this->textobjectId)."   ";
 			return $sqlUpdate;
 		}
+
+		
 
 		// deleteRecord 
 		function deleteRecord( )

@@ -26,8 +26,6 @@
 				// todo: escape html-entities
 				// $str="\n 	<input type=hidden id='".$this->getDivId()."FormDatatextobjectId".$addDivAction."' value='".$this->textobjectObject->textobjectId."'> ";
 				$strTextarea=$this->textobjectObject->getArgument();
-				$strTextarea=str_replace("<imachinaTextDiv>","",$strTextarea);
-				$strTextarea=str_replace("</imachinaTextDiv>","",$strTextarea);
 				$str=$str."\n  <textarea cols=50 id='Form".$addDivAction."DatatextobjectArgument'  rows=10  style='width: 100%'  _class='tinymceRtf'  >".$strTextarea."</textarea>";
 
 				// replace textareaId by the id of your textarea

@@ -1599,9 +1599,7 @@ echo("<br>App.install().<br>");
 
                       if (($parentObj->textobjectType=="text")&&($parentObj->textobjectTypeSub=="plain"))
                       {
-                          $parentObj->textobjectType=="text";
-                          $parentObj->textobjectTypeSub=="rtf";
-                          $this->updateTextObjectTypeToTextHtml($parentObj,$userId);
+                          $this->updateTextObjectTypeToTextRtf($parentObj,$userId);
                       }
 
                       // convert here and now to wordtext!...
@@ -1798,9 +1796,9 @@ echo("<br>App.install().<br>");
             $this->fundamentalUpdateTextObjectUpdateComments( $textobjectId );
         }
 
-        function updateTextObjectTypeToTextHtml($textobjectId,$userId)
+        function updateTextObjectTypeToTextRtf($textobjectId,$userId)
         {
-            $this->fundamentalUpdateTextObjectTypeToTextHtml( $textobjectId );
+            $this->fundamentalUpdateTextObjectTypeToTextRtf( $textobjectId );
         }
 
       // more raw ...
@@ -3017,9 +3015,9 @@ echo("<br>App.install().<br>");
                 }
             }
 
-    private function fundamentalUpdateTextObjectTypeToTextHtml($argObj)
+    private function fundamentalUpdateTextObjectTypeToTextRtf($argObj)
     {
-         $sql=$argObj->updateTypeToTextHtml();
+         $sql=$argObj->updateTypeToTextRtf();
          mysql_query($sql, $this->dbconnect); 
              if (mysql_errno())
              {
