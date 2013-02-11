@@ -78,6 +78,9 @@ php_value log_errors_max_len 0
 	include_once("./classes/TextObject.php"); 
 		include_once("./classes/TextObjectView.php"); 
 
+	include_once("./classes/TextObjectTextPlain.php"); 
+		include_once("./classes/TextObjectTextPlainView.php"); 
+
 	// objects
 	include_once("./classes/TextObjectThread.php"); // subclasses
 		include_once("./classes/TextObjectThreadView.php"); // subclassesview

@@ -22,9 +22,17 @@ if (true)
     // generate this
     // $selectableText="Wir sind die <strong>Welt und</strong> Du bist tot und noch da! <a href='http://www.heise.de'>Lang lebe die</a> Menscheit!";
 
+	// <p><span id="imt3288_1">das</span><span id="imt3288_2"> </span><span id="imt3288_3">ist</span><span id="imt3288_4"> </span><span id="imt3288_5">wahr!</span></p>
+
     $selectableText="Das ist <br>Text, der <a href='http://www.heise.de'>wartet</a> auf dich! ";
+    $selectableText="Das ist <br>Text, der <span id=\"imt3288_7\">TOD</span> <a href='http://www.heise.de'>wartet</a> auf <span id=\"imt3288_9\">dich!</span> ";
+    $selectableText="<span id='imt3142_20'>Das</span><span id='imt3142_21'> </span><span id='imt3142_22'>ist</span><span id='imt3142_23'> </span><br><span id='imt3142_16'>Text,</span><span id='imt3142_17'> </span><span id='imt3142_18'>der</span><span id='imt3142_19'> </span><span><span id='imt3288_7'>TOD</span><span id='imt3142_15'> </span><a href='http://www.heise.de'><span id='imt3142_14'>wartet</span></a><span id='imt3142_11'> </span><span id='imt3142_12'>auf</span><span id='imt3142_13'> </span><span><span id='imt3288_9'>dich!</span><span id='imt3142_10'> </span>";
 
 	$textobjectObj=new TextObject();
+
+	echo("\n\n<hr><div style='border: 1px solid black'>ORIGINAL-HTML:<br>".TextObjectView::textToHtml($selectableText)."</div><hr>");
+
+
 	$textobjectObj->textobjectId=3142;
 	$textobjectObj->setArgument($selectableText);
 	$text=$textobjectObj->getArgument();
@@ -34,12 +42,18 @@ if (true)
 	$textobjectObjView=$app->getTextObjectViewFor($textobjectObj, $userId);		
 	$textobjectObj->updateArgumentAsWordText();
 	$text=$textobjectObj->getArgument();
+	echo("\n\n\n<hr>CONVERTED/CLEANUP: Source: <br>".TextObjectView::textToHtml($text)."</div><hr>");
 
 	// some add ons
-//	$text=$textobjectObjView->textInsertTextCommentContainer( $text );
-//	$text=$textobjectObjView->textInserJavascriptOnClick( $text );	
+	$text=$textobjectObjView->textInsertTextCommentContainer( $text );
+	echo("\n\n\n<hr>INSERTEXTCOMMENT: Source: <br>".TextObjectView::textToHtml($text)."</div><hr>");
 
-	echo("\n\n\n<hr><div style='border: 1px solid black'>ADDON:<br>".$text."</div><hr>");
+	$text=$textobjectObjView->textInserJavascriptOnClick( $text );	
+	echo("\n\n\n<hr>INSERTJAVASCRIPT: Source: <br>".TextObjectView::textToHtml($text)."</div><hr>");
+
+	echo("\n\n\n<hr><div style='border: 1px solid black'>ADDON (Comments/onClicks):<br>".$text."</div><hr>");
+
+	echo("\n\n\n<hr>Source: <br>".TextObjectView::textToHtml($text)."</div><hr>");
 
 	echo("\n\n\n");
 	// textobjectview .... 
@@ -61,6 +75,7 @@ if (false)
 	$textobjectObjView=$app->getTextObjectViewFor($textobjectObj, $userId);		
 	$textobjectObj->updateArgumentAsWordText();	
 	echo($textobjectObjView->viewDetail($app, $userId));
+
 }
 ?>
  

@@ -18,6 +18,16 @@
 
 		// visibilty for rendering
 		var $textobjectRenderingMode="normal"; // normal with edit things etc. "normal" | "presentation" | "markingmode"
+		var $textobjectRenderingModeSub=""; // normal with edit things etc. "normal" | "presentation" | "markingmode"
+			
+			// todo: set rendering or renderingMethode ... ? renderTextObject("normal");
+			// change rendering type
+			function setRenderMode($renderType,$renderTypeSub)
+			{
+				// render mode
+				$this->textobjectRenderingMode=$renderType;
+				$this->textobjectRenderingModeSub=$renderTypeSub;
+			}
 
 		// textobjectArgumentEditor 
 		// todo: textobjectviewArgumentEditor
@@ -308,6 +318,8 @@
 					$str=$str."\n   ".$this->viewCommentsCommentTypeVisual( $app, $userId )."";	
 
 					// mouse over toolbar js
+					// not used at the moment!
+					/*
 					$str=$str."\n<script>";
 					$str=$str."\n    function showActionToolbar".$this->getDivId()."(){";
 					$str=$str."\n        $('#".$this->getDivId()."Core .detailContainerContentActionsTop').show();";
@@ -316,9 +328,10 @@
 					$str=$str."\n        $('#".$this->getDivId()."Core .detailContainerContentActionsTop').hide();";
 					$str=$str."\n    }";
 					$str=$str."\n</script>";
+					*/
 
 					// get core info 
-					$str=$str."\n <div id='".$this->getDivId()."Core' onmouseover=\"showActionToolbar".$this->getDivId()."();\" onmouseout=\"hideActionToolbar".$this->getDivId()."();\" onResize=\"debug('Resize');\">";
+					$str=$str."\n <div id='".$this->getDivId()."Core' _onmouseover=\"alert('over');showActionToolbar".$this->getDivId()."();\" _onmouseout=\"hideActionToolbar".$this->getDivId()."();\"  onResize=\"debug('Resize');\">";
 
 						// add core ... 
 						$str=$str.$this->viewDetailCore( $app, $userId );
@@ -473,89 +486,147 @@
 							return $str;
 						}
 					
-
-						// detail is all together ... 
+						// view content
 						function viewContent( $app, $userId )
 						{
-
-							// $str="\n  <div  class='detailContainerContent' id='".$this->getDivId()."Content'>".$this->textobjectObject->textobjectArgument."</div>";
-							$strContent="";
-
-							$strContendDefault=TextObjectView::textToHtml($this->textobjectObject->getArgument());
-							$strContendDefault=str_replace("\n","<br>",$strContendDefault);
-
-// echo("Is wordtext: [".$this->textobjectObject->isWordText()."]");
-
-								// default: not yet commented and converted
-								if (!$this->textobjectObject->isWordText())
-								{
-									$strContent="".$strContendDefault."";
-									// todo: also possible just do like comment and
-									// only add if there is really a comment!
-									// 
-								}
-
-								// converted with comments?
-								if ($this->textobjectObject->isWordText())
-								{
-
-									// update this object
-									$this->textobjectObject->updateArgumentAsWordText();
-
-// echo("*****".$this->textobjectObject->getArgument());
-
-									// conversion done - go on with this here ..
-									$text=$this->textobjectObject->getArgument();
-// echo("*****".$text);
-
-// todo: put into a own methode
-									// $text="OKDOIT<br>".$text;
-									// add the rest things here ... 
-
-									// add comments div container
-									$text=$this->textInsertTextCommentContainer( $text );
-
-									// javascripts ...
-
-									// add onClicks
-									$text=$this->textInserJavascriptOnClick( $text );
-
-									// add the text
-									$strScript="<script>";
-									// todo: delete old words !!!! > do it javascript
-//									$strScript=$strScript."\n imachinaTextManager.deleteTextWordsByTextObjectId( ".$this->textobjectObject->textobjectId." ); ";
-
-									$arrWords=$this->textobjectObject->getTextWords( );
-									for ($t=0;$t<count($arrWords);$t++)
-									{
-										$wordObj=$arrWords[$t];
-										$strScript=$strScript."\n imachinaTextManager.addTextWord( ".$wordObj->textwordTextObjectId.", ".$wordObj->textwordId.", \"".$wordObj->getWordJavascriptFormat()."\" ); ";
-									}
-									$strScript=$strScript."</script>";
-									$text=$text.$strScript;
-
-									// ok that was it
-									$strContent="CONVERTTED!<br>".$text;
-								}
-
-
-							$str="\n  <div  class='detailContainerContent' id='".$this->getDivId()."Content' >";
-							    
-								// side actions
-								// $str=$str."".$this->viewSideActions($app,$userId);
-								// the content
-								$str=$str.$strContent;
-								// add members here ... 
-								$str=$str.$this->viewMembers( $app, $userId );
-
-							$str=$str."</div>";
-
-
-							// comments
-							// $str=$str.$this->viewSideActionsComments( $app, $userId );
-
-							return $str;
+							// return $this->viewContentAsWordText( true, $app, $userId );
+							return $this->textobjectObject->getArgument();
 						}
+
+							// detail is all together ... 
+							function viewContentAsWordText(  $flagConvertTextarea, $app, $userId )
+							{
+
+								// $str="\n  <div  class='detailContainerContent' id='".$this->getDivId()."Content'>".$this->textobjectObject->textobjectArgument."</div>";
+								$strContent="";
+
+								$strContendDefault=$this->textobjectObject->getArgument();
+
+								if ($flagConvertTextarea)
+								{
+									$strContendDefault=str_replace("\r\n","<br>",$strContendDefault);
+									$strContendDefault=str_replace("\n","<br>",$strContendDefault);
+									$strContendDefault=str_replace("\r","<br>",$strContendDefault);
+								}
+
+	// echo("Is wordtext: [".$this->textobjectObject->isWordText()."]");
+
+									// default: not yet commented and converted
+									if (!$this->textobjectObject->textobjectFormat=="wordtext")
+									{
+										// $strContendDefault=TextObjectView::textToHtml($strContendDefault);
+										$strContent="".$strContendDefault."";
+										// todo: also possible just do like comment and
+										// only add if there is really a comment!
+										// 
+									}
+
+									// converted with comments?
+									if ($this->textobjectObject->textobjectFormat=="wordtext")
+									{
+
+										// update this object
+										$this->textobjectObject->updateArgumentAsWordText();
+
+	// echo("*****".$this->textobjectObject->getArgument());
+
+										// conversion done - go on with this here ..
+										$text=$this->textobjectObject->getArgument();
+	// echo("*****".$text);
+
+	// todo: put into a own methode
+										// $text="OKDOIT<br>".$text;
+										// add the rest things here ... 
+
+										// add comments div container
+										$text=$this->textInsertTextCommentContainer( $text );
+
+										// javascripts ...
+
+										// add onClicks
+										$text=$this->textInserJavascriptOnClick( $text );
+
+										// add the text
+										$strScript="<script>";
+										// todo: delete old words !!!! > do it javascript
+	//									$strScript=$strScript."\n imachinaTextManager.deleteTextWordsByTextObjectId( ".$this->textobjectObject->textobjectId." ); ";
+
+										$arrWords=$this->textobjectObject->getTextWords( );
+										for ($t=0;$t<count($arrWords);$t++)
+										{
+											$wordObj=$arrWords[$t];
+											$strScript=$strScript."\n imachinaTextManager.addTextWord( ".$wordObj->textwordTextObjectId.", ".$wordObj->textwordId.", \"".$wordObj->getWordJavascriptFormat()."\" ); ";
+										}
+										$strScript=$strScript."</script>";
+										$text=$text.$strScript;
+
+										/*
+											TextComments
+										*/
+										// comments
+										// 1. approach ... 
+										// get comments here ...
+										// add them to show  
+										// $text=$text."<br><hr>Comments: ";
+
+										$arrTextCommentType=$app->getAllCommentsCommentTypeTextByRef($this->textobjectObject->textobjectId,$userId);
+										
+										// debug this here ..
+											// $text=$text."".count($arrTextCommentType);
+											// $text=$text."<br>-- $indexCommentText: [".$textObject->textobjectCursorA."/".$textObject->textobjectCursorB."] ".$textObject->getArgument();
+											// add this comment here ...
+
+										// show all 
+										for ($indexCommentText=0;$indexCommentText<count($arrTextCommentType);$indexCommentText++)
+										{
+											$textObject=$arrTextCommentType[$indexCommentText];
+											
+											// the comments
+
+												// comments add
+											//	$text=preg_replace("/( id='imt(\d+)_(\d+)'>)/", "$1<div class='detailComponentCommentsText'  id='commentimt$2_$3'>[cm]</div>", $text);
+											//	$text=preg_replace("/( id=\"imt(\d+)_(\d+)\">)/", "$1<div class='detailComponentCommentsText'  id='commentimt$2_$3'>[cm]</div>", $text);
+
+											// commentX
+											$textobjectView=$app->getTextObjectViewFor($textObject,$userId); 										
+											$strTextObject=$textobjectView->viewDetail($app,$userId);	
+												$strTextObjectView="<div style='position: absolute; background: green; border: 1px solid black; top: 20px; '>".$strTextObject."</div>";
+												$textcursorA=$textObject->textobjectCursorA;
+												$textcursorB=$textObject->textobjectCursorB;
+											$text=preg_replace("/( id=\'commentimt".$this->textobjectObject->textobjectId."_".$textcursorA."\'>)/", "$1".$strTextObjectView, $text);
+
+
+
+												// script
+
+
+										}
+
+										// ...
+
+
+										// ok that was it
+										$strContent="CONVERTTED!<br>".$text;
+									}
+
+
+								$str="\n  <div  class='detailContainerContent' id='".$this->getDivId()."Content' >";
+								    
+									// side actions
+									// $str=$str."".$this->viewSideActions($app,$userId);
+									// the content
+									$str=$str.$strContent;
+									// add members here ... 
+									$str=$str.$this->viewMembers( $app, $userId );
+
+								$str=$str."</div>";
+
+
+								// comments
+								// $str=$str.$this->viewSideActionsComments( $app, $userId );
+
+								return $str;
+							}
 
 										// html output
 										function textInsertTextCommentContainer( $text )
@@ -569,7 +640,10 @@
 												// $selectableText=preg_replace("/( id='imt(\d+)_(\d+)' imachinaTag>([^<]+))/", "$1<div style='display: inline; position: relative;'><div  style='position: absolute; display: inline; top: 20px; opacity: 1.0;' id='imcommentt$2_$3'></div></div>", $selectableText);
 												// $selectableText=preg_replace("/( id='imt(\d+)_(\d+)' imachinaTag>([^<]+))/", "$1<div style='display: inline; position: relative;'><div  style='position: absolute; display: inline; top: 20px; opacity: 1.0;' id='imcommentt$2_$3'></div></div>", $selectableText);
 												// version 2
-												$text=preg_replace("/( id='endimt(\d+)_(\d+)'>)/", "$1<div class='detailComponentCommentsText'  id='commentimt$2_$3'></div>", $text);
+												// $text=preg_replace("/( id='endimt(\d+)_(\d+)'>)/", "$1<div class='detailComponentCommentsText'  id='commentimt$2_$3'></div>", $text);
+												// version 3
+												$text=preg_replace("/( id='imt(\d+)_(\d+)'>)/", "$1<div class='detailComponentCommentsText'  id='commentimt$2_$3'></div>", $text);
+												$text=preg_replace("/( id=\"imt(\d+)_(\d+)\">)/", "$1<div class='detailComponentCommentsText'  id='commentimt$2_$3'></div>", $text);
 
 												return $text;
 
@@ -1531,6 +1605,7 @@
 												$str=$str."\n <br>Ref: ".$this->textobjectObject->textobjectRef." (RefName: ".$this->textobjectObject->textobjectRefName.") ";
 												$str=$str."\n <br>Status: ".$this->textobjectObject->textobjectStatus."";
 												$str=$str."\n <br>Type: ".$this->textobjectObject->textobjectType."/".$this->textobjectObject->textobjectTypeSub."";
+												$str=$str."\n <br>Format: ".$this->textobjectObject->textobjectFormat;
 
 												$str=$str."\n <br>CommentType: ".$this->textobjectObject->textobjectCommentType;
 
@@ -1944,6 +2019,14 @@
         // -----------------------------
         // Helpers
         // -----------------------------
+		static function returnsToHtml( $htmlText )
+        {
+        	$htmlText=str_replace("\r\n","<br/>",$htmlText);
+        	$htmlText=str_replace("\r","<br/>",$htmlText);
+        	$htmlText=str_replace("\n","<br/>",$htmlText);
+            return $htmlText;
+        }
+
 		static function textToHtml( $htmlText )
         {
         	$htmlText=str_replace("<","&lt;",$htmlText);

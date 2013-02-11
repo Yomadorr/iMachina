@@ -165,8 +165,10 @@
 
 
 		// version 
-    var $version=0.78; // versions ... 
+    var $version=0.81; // versions ... 
 
+    // 0.81 textobject is now [text/] new [text/plain] > problem with word
+    // 0.8 first second implementaiton 
     // 0.79 first implementation of add textmarkings 
     // 0.78 implemented all classes for textmarking
     // 0.77 invite front-end implemented (not yet login etc...)
@@ -1604,6 +1606,7 @@ echo("<br>App.install().<br>");
 
                       // convert here and now to wordtext!...
                       $parentObj->updateArgumentAsWordText();
+                      $parentObj->textobjectFormat="wordtext";
                       $this->updateTextObject($parentObj,$userId);
 
                     //}
@@ -1690,6 +1693,12 @@ echo("<br>App.install().<br>");
     {
         return $this->fundamentalGetAllCommentsCommentTypeVisualByRef( $refId );
     }
+
+    function getAllCommentsCommentTypeTextByRef( $refId, $userId )
+    {
+        return $this->fundamentalGetAllCommentsCommentTypeTextByRef( $refId );
+    }
+
 
     function getAllCommentsTimedByRef( $refId, $userId )
     {
@@ -1782,6 +1791,14 @@ echo("<br>App.install().<br>");
 
 		    $this->fundamentalUpdateTextObject($argObj); 	
 
+        // format wordtext
+        if ($argObj->textobjectFormat=="wordtext") // special update ...
+        {
+          // echo("-----error-----------");
+            $argObj->updateArgumentAsWordText();
+            $this->fundamentalUpdateTextObject($argObj); 
+        }
+        
         // complex
         // update if there is more
         // todo: update  members > update update-date in textobject!
@@ -2770,8 +2787,9 @@ echo("<br>App.install().<br>");
             // text 
             if ($argObj->textobjectType=="text")
             {
+                if ($argObj->textobjectTypeSub=="") {  $newObj=new TextObject(); $newObj->updateTo($argObj, $updateArguments); return $this->addMembers($newObj); }
                 if ($argObj->textobjectTypeSub=="line") {  $newObj=new TextObjectTextLine(); $newObj->updateTo($argObj, $updateArguments); return $this->addMembers($newObj); }
-                if ($argObj->textobjectTypeSub=="plain") {  $newObj=new TextObject(); $newObj->updateTo($argObj, $updateArguments); return $this->addMembers($newObj); }
+                if ($argObj->textobjectTypeSub=="plain") {  $newObj=new TextObjectTextPlain(); $newObj->updateTo($argObj, $updateArguments); return $this->addMembers($newObj); }
                 if ($argObj->textobjectTypeSub=="html") {  $newObj=new TextObjectTextHtml(); $newObj->updateTo($argObj, $updateArguments); return $this->addMembers($newObj);  }
                 if ($argObj->textobjectTypeSub=="rtf") {  $newObj=new TextObjectTextRtf(); $newObj->updateTo($argObj, $updateArguments); return $this->addMembers($newObj);  }
             }
@@ -2915,8 +2933,9 @@ echo("<br>App.install().<br>");
 
             if ($argObj->textobjectType=="text")
             {
+                if ($argObj->textobjectTypeSub=="") { $viewObject=new TextObjectView(); $viewObject->textobjectObject=$argObj; return $viewObject; }
                 if ($argObj->textobjectTypeSub=="line") { $viewObject=new TextObjectTextLineView(); $viewObject->textobjectObject=$argObj; return $viewObject; }
-                if ($argObj->textobjectTypeSub=="plain") { $viewObject=new TextObjectView(); $viewObject->textobjectObject=$argObj; return $viewObject; }
+                if ($argObj->textobjectTypeSub=="plain") { $viewObject=new TextObjectTextPlainView(); $viewObject->textobjectObject=$argObj; return $viewObject; }
                 if ($argObj->textobjectTypeSub=="html") { $viewObject=new TextObjectTextHTMLView(); $viewObject->textobjectObject=$argObj; return $viewObject; }
                 if ($argObj->textobjectTypeSub=="rtf") { $viewObject=new TextObjectTextRtfView(); $viewObject->textobjectObject=$argObj; return $viewObject; }
             }
@@ -3122,6 +3141,13 @@ echo("<br>App.install().<br>");
       {
         // echo("fundamentalGetAllCommentsNoVisualNoMarkerByRef ( $refId )");
         $arr = $this->fundamentalGetTheseTextObjects(" where textobjectRef=$refId and textobjectRefName='' and (textobjectStatus='published' OR textobjectStatus='draft') and  textobjectCommentType='visual'   ", " order by textobjectOrder");
+        return $arr;
+      } 
+
+      private function fundamentalGetAllCommentsCommentTypeTextByRef( $refId )
+      {
+        // echo("fundamentalGetAllCommentsNoVisualNoMarkerByRef ( $refId )");
+        $arr = $this->fundamentalGetTheseTextObjects(" where textobjectRef=$refId and textobjectRefName='' and (textobjectStatus='published' OR textobjectStatus='draft') and  textobjectCommentType='text'   ", " order by textobjectOrder");
         return $arr;
       } 
 

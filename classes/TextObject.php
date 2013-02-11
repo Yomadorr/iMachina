@@ -57,7 +57,9 @@
 
 		// todo: check all
 		// as a comment - what type of coment is ist?
-		var $textobjectCommentType="text"; // *** ... "","visual","text"
+		// default is not commentable!
+		// text/comment
+		var $textobjectCommentType=""; // *** ... "","visual","text"
 
     	// REF GRAFIC (Pos) *
  		var $textobjectPositionX=50; // name for 
@@ -77,7 +79,7 @@
 
 		// type
     	var $textobjectType="text"; // name for 
-    	var $textobjectTypeSub="plain"; // name for 
+    	var $textobjectTypeSub=""; // plain ... add /text/plain
 
     		// arrTypeAlter. ...
 	    	var $arrAlternativeTextobjectTypes=Array();
@@ -159,6 +161,9 @@
 		// comment - what is possible? !!! exampl. text/plain > can be commented by text!
 		var $innerCommentType="text"; // text/visual/none	
 			var $innerCommentable=false; // * commentable ... 
+
+			// is the info somehow encrypted
+			var $textobjectFormat=""; // * WordText
 
 		// gps lat/lng*
 
@@ -357,6 +362,9 @@
 
 			$this->textobjectType=$copyFromObject->textobjectType;
 			$this->textobjectTypeSub=$copyFromObject->textobjectTypeSub;
+
+			$this->textobjectFormat=$copyFromObject->textobjectFormat;
+
 			// $this->textobjectDefintion=$copyFromObject->textobjectDefintion; // *
 
 			$this->textobjectName=$copyFromObject->textobjectName;
@@ -391,9 +399,9 @@
 		function insertRecord()
 		{
 			$sqlInsert="INSERT INTO TextObject ";
-			$sqlInsert=$sqlInsert."(textobjectStatus,textobjectType,textobjectTypeSub,textobjectRefName,textobjectName,textobjectRef,textobjectUserRef,textobjectCommentType,textobjectCursorA,textobjectCursorB,textobjectPositionX,textobjectPositionY,textobjectPositionZ,textobjectTimeA,textobjectTimeB,textobjectTimeLength,textobjectArgumentText,textobjectOrder,textobjectCreate, textobjectUpdate, textobjectVersionType, textobjectVersionUserRef) ";
+			$sqlInsert=$sqlInsert."(textobjectStatus,textobjectType,textobjectTypeSub,textobjectRefName,textobjectName,textobjectRef,textobjectUserRef,textobjectCommentType,textobjectCursorA,textobjectCursorB,textobjectPositionX,textobjectPositionY,textobjectPositionZ,textobjectTimeA,textobjectTimeB,textobjectTimeLength,textobjectArgumentText,textobjectOrder,textobjectCreate, textobjectUpdate, textobjectVersionType, textobjectVersionUserRef, textobjectFormat) ";
 			$sqlInsert=$sqlInsert." values ";
-			$sqlInsert=$sqlInsert."('".Converter::escapeSql($this->textobjectStatus)."','".Converter::escapeSql($this->textobjectType)."','".Converter::escapeSql($this->textobjectTypeSub)."','".Converter::escapeSql($this->textobjectRefName)."','".Converter::escapeSql($this->textobjectName)."',".Converter::escapeSql($this->textobjectRef).",".Converter::escapeSql($this->textobjectUserRef).",'".Converter::escapeSql($this->textobjectCommentType)."',".Converter::escapeSql($this->textobjectCursorA).",".Converter::escapeSql($this->textobjectCursorB).",".Converter::escapeSql($this->textobjectPositionX).",".Converter::escapeSql($this->textobjectPositionY).",".Converter::escapeSql($this->textobjectPositionZ).",".Converter::escapeSql($this->textobjectTimeA).",".Converter::escapeSql($this->textobjectTimeB).",".Converter::escapeSql($this->textobjectTimeLength).",'".Converter::escapeSql($this->textobjectArgumentText)."',".Converter::escapeSql($this->textobjectOrder).",Now(),Now(),'".Converter::escapeSql($this->textobjectVersionType)."','".Converter::escapeSql($this->textobjectVersionUserRef)."')   "; // textobjectOrder
+			$sqlInsert=$sqlInsert."('".Converter::escapeSql($this->textobjectStatus)."','".Converter::escapeSql($this->textobjectType)."','".Converter::escapeSql($this->textobjectTypeSub)."','".Converter::escapeSql($this->textobjectRefName)."','".Converter::escapeSql($this->textobjectName)."',".Converter::escapeSql($this->textobjectRef).",".Converter::escapeSql($this->textobjectUserRef).",'".Converter::escapeSql($this->textobjectCommentType)."',".Converter::escapeSql($this->textobjectCursorA).",".Converter::escapeSql($this->textobjectCursorB).",".Converter::escapeSql($this->textobjectPositionX).",".Converter::escapeSql($this->textobjectPositionY).",".Converter::escapeSql($this->textobjectPositionZ).",".Converter::escapeSql($this->textobjectTimeA).",".Converter::escapeSql($this->textobjectTimeB).",".Converter::escapeSql($this->textobjectTimeLength).",'".Converter::escapeSql($this->textobjectArgumentText)."',".Converter::escapeSql($this->textobjectOrder).",Now(),Now(),'".Converter::escapeSql($this->textobjectVersionType)."','".Converter::escapeSql($this->textobjectVersionUserRef)."','".Converter::escapeSql($this->textobjectFormat)."')   "; // textobjectFormat
 
 			return $sqlInsert;
 		}
@@ -413,6 +421,8 @@
 			$sqlUpdate=$sqlUpdate.    ",textobjectTimeB=".Converter::escapeSql($this->textobjectTimeB)." ";
 
 			$sqlUpdate=$sqlUpdate.    ",textobjectCommentType='".Converter::escapeSql($this->textobjectCommentType)."' ";
+
+			$sqlUpdate=$sqlUpdate.    ",textobjectFormat='".Converter::escapeSql($this->textobjectFormat)."' ";
 
 			$sqlUpdate=$sqlUpdate.    ",textobjectCursorA=".Converter::escapeSql($this->textobjectCursorA)." ";
 			$sqlUpdate=$sqlUpdate.    ",textobjectCursorB=".Converter::escapeSql($this->textobjectCursorB)." ";
@@ -446,7 +456,6 @@
 			$sqlUpdate=$sqlUpdate." where textobjectId=".Converter::escapeSql($this->textobjectId)."   ";
 			return $sqlUpdate;
 		}
-
 		
 
 		// deleteRecord 
@@ -479,6 +488,8 @@
 			$this->textobjectName=Converter::unescapesql(mysql_result($result, $index,"textobjectName"));
 			$this->textobjectType=Converter::unescapesql(mysql_result($result, $index,"textobjectType"));
 			$this->textobjectTypeSub=Converter::unescapesql(mysql_result($result, $index,"textobjectTypeSub"));
+
+			$this->textobjectFormat=Converter::unescapesql(mysql_result($result, $index,"textobjectFormat"));
 
 			$this->textobjectArgumentText=Converter::unescapesql(mysql_result($result, $index,"textobjectArgumentText"));
 			$this->textobjectArgumentInt=Converter::unescapesql(mysql_result($result, $index,"textobjectArgumentInt"));
@@ -643,11 +654,16 @@
 	      // entity: <div class='detailComponentCommentsText'  id='commentimt1001_35'>ABC</div><div class='imachinaText'   onClick="onTextClick( 1001, 36 )"  id='imt1001_36' imachinaTag> </div id='endimt1001_36'><div class='detailComponentCommentsText'  id='commentimt1001_36'></div>
 
 	    // convert and update it ...
+	    // not used anymore
 	    function isWordText()
 	    {
+	    	/*
 	    	if (stristr($this->getArgument(),"<imachinaTextDiv>")===FALSE) { return false; }
-
 	    	return true;
+	    	*/
+
+	    	if ($this->textobjectFormat=="wordtext") return true;
+	    	return false;
 	    }
 
 	    	// disable hrefs etc for textmarking-mode
@@ -661,17 +677,23 @@
 	      		$debugThis=false;
 
 	      		// check if is Wordtext
-	      		if (!$this->isWordText()) 
+	      		// version
+	      		// if (!$this->isWordText()) 
+				if ($this->textobjectFormat=="")
 	      		{
 	      			// text/plain? add \n > <br>!
 	      			if (($this->textobjectType=="text")&&($this->textobjectTypeSub=="plain")) { $this->setArgument(str_replace("\r","<br />",$this->getArgument())); $this->setArgument(str_replace("\n","<br />",$this->getArgument())); }
-	      			$this->convertToWordText( );
+	      			$this->replaceReturns( );
 	      		}
 
 	      		$selectableText=$this->getArgument();
 
+	      		// envel. for simpler processing
+	      		$selectableText="<imachina>".$selectableText."</imachina>";
+
 
 				   // 1. find not imachinaTextId tagged object
+	      			// remark: preg_match matches to (0)(1) > arr[0]
 					$pattern = '/>([^<]+)/s';
 					preg_match_all($pattern, $selectableText, $matches, PREG_OFFSET_CAPTURE, 3);
 
@@ -702,15 +724,18 @@
 
 					// get max imachinaTextId	
 					$imachinaTextId=0;
-					preg_match_all("/id='imt([^']+)'/", $selectableText, $arrImachinaIds, PREG_OFFSET_CAPTURE, 3);
+					preg_match_all("/imt[0-9]+_([0-9]+)/", $selectableText, $arrImachinaIds, PREG_OFFSET_CAPTURE, 3);
 					if ($debugThis)  { echo("<hr>ID<hr>");echo("<pre>");print_r($arrImachinaIds);echo("</pre>"); echo("<hr>"); }
 					for ($i=0;$i<count($arrImachinaIds[1]);$i++)
 					{
 						$val=$arrImachinaIds[1][$i][0];
 						if ($debugThis) echo("\n<br>-----VAL:".$val);
+						$valInt=intval($val);
+						/*
 						$arrVal=explode("_",$val);
 						if (count($arrVal)>0) { $val=$arrVal[1]; } 
 						$valInt=intval($val);
+						*/
 						if ($valInt>$imachinaTextId) $imachinaTextId=$valInt;
 					}
 					if ($debugThis) echo("\n<br><hr>----".$imachinaTextId."---");
@@ -740,15 +765,24 @@
 							// check: "wordonly" > is it a imachinatext-div?
 							//  imachinaTag>
 							$isInSystem=false;
-							$checkForThisTag="imachinaTag>";
+							// version 1
+							// $checkForThisTag="imachinaTag>";
+
+							// version 2
+							// search for something like this ...
+							$checkForThisTag="   id='imt234234_2'>";
 
 							// case: "wordonly" > is it a imachinatext-div?
+							// version 1
+							// if ($debugThis) echo("\n<br>CHECK 1: Is it already a marked textmachina-word? (imachinaTag - at the end?)<br>");
+							// version 2
 							if ($debugThis) echo("\n<br>CHECK 1: Is it already a marked textmachina-word? (imachinaTag - at the end?)<br>");
 							
 							$pos=$textObj->position;
 							if ($pos>strlen($checkForThisTag))
 							{
-
+								// version 1
+								/*
 								$posStart=$pos-strlen($checkForThisTag);
 								// ok get thext
 								$tag=substr($selectableText,$posStart,strlen($checkForThisTag));
@@ -757,6 +791,22 @@
 								{
 									$isInSystem=true;
 								}
+								*/
+
+								// version 2
+								// check preg_match
+								$posStart=$pos-strlen($checkForThisTag);
+								$tag=substr($selectableText,$posStart,strlen($checkForThisTag));
+								if (preg_match("/ id='imt[0-9]+_[0-9]+'/", $tag))
+								{
+									$isInSystem=true;
+								}
+								if (preg_match("/ id=\"imt[0-9]+_[0-9]+\"/", $tag))
+								{
+									$isInSystem=true;
+								}
+								// echo("<br>TAGGG: --[".$tag."]--- INSYSTEM: ".$isInSystem);
+							}
 
 								// echo("------TAG: ".$tag);
 								if ($debugThis) if ($isInSystem) echo("\n<br>-------------------> TAGFOUND > is part of imachinaWordText");
@@ -803,7 +853,7 @@
 										if ($debugThis) if (!$isInSystem) echo("\n<br><br>----------> HANDLE MULTIPLE WORDS: ".count($arrWords)." WORDS");
 
 										// add all now ... 
-										$strReplace=""; // \n(-REPLACEMORETHANONEWORD-)";
+										$strReplace="";  // \n(-REPLACEMORETHANONEWORD-)";
 
 										// version one - problem <div id='100'>A B</div>
 										/*
@@ -829,8 +879,8 @@
 	  										if ($singleWord!="")
 	  										{
 												// echo($singleWord);
-												if (($isInSystem)&&($wordIndex==0)) { $strReplace=$strReplace.$singleWord."</div>"; } // end div in original!
-
+												// cases first word!
+												if (($isInSystem)&&($wordIndex==0)) { $strReplace=$strReplace.$singleWord."</span [wordindatabaseadd] >"; } // end div in original!
 												if ((!$isInSystem)&&($wordIndex==0)) { $strReplace=$strReplace.$this->addTextWord( $this->textobjectId, $imachinaTextId, $singleWord, $debugThis  ); } // end div in original!
 
 												if (($wordIndex>0))
@@ -841,16 +891,25 @@
 											}
 
 												// add space?
-												if ($wordIndex!=(count($arrWords)-1)) 
+												if ($wordIndex>0)
 												{
-													$strReplace=$strReplace.$this->addTextWord( $this->textobjectId, $imachinaTextId, " ", $debugThis );
-													$imachinaTextId++;
+													if ($wordIndex!=(count($arrWords)-1)) 
+													{
+														$strReplace=$strReplace.$this->addTextWord( $this->textobjectId, $imachinaTextId, " ", $debugThis );
+														$imachinaTextId++;
+													}
 												}
-											
-
-
+												
 										}
 
+										// not in system
+										// </span> toomuch
+										// todo: change this dirty solution
+										if (!$isInSystem)
+										{
+											// a closing span
+											$strReplace=$strReplace."<span [morethanoneword-cleaner]>";
+										}
 									}
 
 									// replace this here and now ...
@@ -871,7 +930,7 @@
 										// if ($debugThis) echo("\n!!!!!!!!!!!!!!!!!!!!CHANGED");
 									}
 
-								}
+								
 								// mode: char - do every char!
 								// ressource hungry
 								if ($commentMode=="char")
@@ -884,13 +943,26 @@
 						}
 
 						// done ..
-						if ($debugThis) echo("\n\n\n<hr><br><hr>RESULT: <br>".$selectableText);
+						if ($debugThis) echo("\n\n\n<hr><br><hr>RESULT CLEAN (no start/stop-tags!: <br>".$selectableText);
 
 						// add all ids and comments?
 
 
 					}
+				
+					// case: someone is editing and produces more than one _1" by splitting text !!!
+					// todo: go through and kill doubles 
+					// _1 _1
+
+					// envel. for simpler processing
+		      		// $selectableText="<imachina>".$selectableText."</imachina>";
+		      		$selectableText=substr($selectableText,strlen("<imachina>"),strlen($selectableText)-strlen("<imachina>"."</imachina>"));
+		      		if ($debugThis) echo("<br>RESULT CUTTED: ".$selectableText);
+
+					
 					if ($debugThis) echo("<br>parsing done - text updated - done...");
+
+
 
 				$this->setArgument($selectableText);
 			}
@@ -902,7 +974,7 @@
 						return $text;
 					}
 
-				function convertToWordText( )
+				function replaceReturns( )
 			    {
 			    	
 			    	// todo: replace returns? <br/> - only in the direct .. text/plain
@@ -913,16 +985,17 @@
 
     	            $this->setArgument( str_replace("\r"," ",$this->getArgument()) );
 					$this->setArgument( str_replace("\n"," ",$this->getArgument()) );
-				
+
+// add this?				
 			    	// add ...
-			    	$this->setArgument("<imachinaTextDiv>".$this->getArgument()."</imachinaTextDiv>");
+			    	// $this->setArgument($this->getArgument());
 			    }
 
 						// function
 						function addTextWord( $textobjectId, $imachinaTextId, $word, $debugThisMethode=false )
 						{
 							if ($debugThisMethode) echo("<br>---------------------> ADDWORD: ($word) as WORDID: imt".$textobjectId."_".$imachinaTextId."");
-							return "<span id='imt".$textobjectId."_".$imachinaTextId."' imachinaTag>".$word."</span>";
+							return "<span id='imt".$textobjectId."_".$imachinaTextId."'>".$word."</span>";
 							// version 2.0
 							//		return "<div class='imachinaText'  id='imt".$textobjectId."_".$imachinaTextId."' imachinaTag>".$word."</div>";
 							// version 1.0
@@ -943,7 +1016,7 @@
 		                // version 1.0
 		                // preg_match_all("/ id='imt([0-9]+)_([0-9]+)' imachinaTag>([^<]+)/", $textwordText, $arrWords, PREG_OFFSET_CAPTURE, 3);
 		                // version 2.0
-		                preg_match_all("/ id='imt([0-9]+)_([0-9]+)' imachinaTag>([^<]+)/", $textwordText, $arrWords, PREG_OFFSET_CAPTURE, 3);
+		                preg_match_all("/ id='imt([0-9]+)_([0-9]+)'>([^<]+)/", $textwordText, $arrWords, PREG_OFFSET_CAPTURE, 3);
 		                //echo("<pre>");
 		                // print_r($arrWords);
 		                // print_r($arrWords[1]); // every array after $1, $2 etc

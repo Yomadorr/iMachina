@@ -896,7 +896,11 @@
 					$output=$output."MARKMODE";
 					$thisObject=$app->getTextObjectById($textobjectFromWeb->textobjectId, $userId);
 					// convert to markmode
+
+					// convert to rtf?
 					$thisObject->updateArgumentAsWordText();
+					// $thisObject->textobjectTypeSub="rtf";
+					$thisObject->textobjectFormat="wordtext";
 
 
 					// print_r($thisObject);
@@ -909,7 +913,7 @@
 						{
 							// disable interactivity !
 							// href etc...
-							$thisObject->updateArgumentDeactivateInteractivity();
+					//		$thisObject->updateArgumentDeactivateInteractivity();
 
 							// set visibility to markingmode!
 							// 

@@ -48,12 +48,14 @@
 
 tinyMCE.init({
         mode : "textareas",
-        theme : "advanced",
+        theme : "advanced"
+    /*,
         verify_html : false,
        verify_css_classes : false,
         cleanup : false,
         cleanup_on_startup : false,
         auto_cleanup_word: false,
+    */
       // ,
       //  theme_advanced_toolbar_location: "bottom",
       //  valid_children : "+body[style],-body[div],p[strong|a|#text]"
@@ -848,12 +850,9 @@ tinyMCE.init({
                          
                       function reloadTextObject( textobjectId, typ )
                       { 
-<<<<<<< HEAD
-=======
                            // alert("reloadTextObject() "+textobjectId+"-"+typ);
                            //alert("reloadTextObject() "+textobjectId+"-"+typ);
 
->>>>>>> some documents
                             var divTextobjectId=diffPrefix+textobjectId;
                             if (typ=='core') 
                             { 
